@@ -1,0 +1,23 @@
+---
+title: Lab 1
+format:
+  html:
+    embed-resources: true
+
+# Task 1
+
+1.  Aesthetics(visual properties):
+x: income
+y: life expectancy
+bubble sizes: opulation size with 
+vertical translucent lines corresponding to income on the x-axis with a scale of 500: income level categories (1/2/3/4)  
+color: different countries are shown with different colours based on the continent
+watermark: defines the year of the data
+
+
+```{python}
+import pandas as pd
+import plotnine
+
+df= pd.read_csv("q1data.csv")
+```

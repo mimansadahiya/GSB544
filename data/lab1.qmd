@@ -1,0 +1,271 @@
+---
+title: Lab 1
+echo : true
+theme: 
+  light: flatly
+  dark: darkly
+
+format:
+  html:
+    embed-resources: true
+code-block-bg: true
+code-fold: true
+
+---
+### Task 1
+
+
+1.  Aesthetics(visual properties):
+
+x: income
+
+y: life expectancy
+
+bubble sizes: opulation size with 
+
+vertical translucent lines corresponding to income on the x-axis with a scale of 500: income level categories (1/2/3/4)  
+
+color: different countries are shown with different colours based on the continent
+
+watermark: defines the year of the data
+
+2.
+
+```{python}
+import pandas as pd
+df= pd.read_csv("q1data.csv")
+```
+
+3.
+
+```{python}
+import plotnine as p9
+
+four_region_colors = {
+    'asia': '#ff5872',
+    'europe': '#ffec33',
+    'africa': '#00d5e9',
+    'americas': '#99ef33'
+}
+
+(p9.ggplot(df, 
+p9.aes(x='income', y='life_exp'))
++ p9.geom_point(p9.aes(fill='four_regions', size='population'),alpha=1,color='black', stroke= 0.2)
++ p9.scale_x_log10(limits=(0,128000),
+  breaks=[500 , 1000, 2000, 4000, 8000, 16000, 32000, 64000],
+  labels=['500','1000','2000','4000','8000','16k','32k','64k']
+)
++ p9.scale_y_continuous(limits=(20,90),
+breaks =[20,30,40,50,60,70,80,90],
+labels= ['20','30','40','50','60','70','80','90']
+)
++ p9.theme_bw()
++ p9.theme(
+    panel_grid_major=p9.element_line(color='#dddddd', alpha=0.3, size=0.5),
+    panel_grid_minor=p9.element_line(color='#eeeeee', alpha=0.25, size=0.3),
+    axis_ticks_major_x=p9.element_blank(),
+    axis_ticks_major_y=p9.element_blank(),
+    axis_text_x=p9.element_text(color='black', alpha=0.4),
+    axis_text_y=p9.element_text(color='black', alpha=0.4),
+    axis_title_x=p9.element_text(color='black', alpha=0.6),
+    axis_title_y=p9.element_text(color='black', alpha=0.6),
+    panel_border=p9.element_rect(alpha=0.5),
+    figure_size=(7,4))
+
++ p9.annotate(geom='text', label="2010", x=6000, y=50, size=140, color='grey', alpha=0.2, ha='center', va='center')
++ p9.scale_fill_manual(values=four_region_colors)
++ p9.labs(x="Income", y= "Life Expectancy" )
++ p9.scale_size(
+      range=[0.2, 16]    
+  )
+)
+``` 
+
+
+4. We can use geom_boxplotnine to create box plots with 4 variables(income, life_exp, population, regions, population) 
+
+```{python}
+import plotnine as p9
+(p9.ggplot(df, p9.aes(x='income', y='life_exp', fill='four_regions'))
++ p9.geom_boxplot(alpha=0.3)
++ p9.scale_y_continuous(
+  breaks= [20,30,40,50,60,70,80,90])
++p9.theme_bw()
++p9.scale_fill_manual(values=four_region_colors)
+  )
+```
+
+There are multiple other graphs that take inputs from 4 variables like geom_violin plot, similar to boxplot, to show the trends of different levels of income and thier corresonding life expectacy, in different regions of the world and different population.
+
+
+### Task 2
+
+1.  Aesthetics:
+
+x axis: Exports
+
+y axis: Imports
+
+watermark: Year of data
+
+bubble size: Energy use amount in different countries
+
+bubble colour: corresponding to 4 different regions of the world
+
+2. 
+```{python}
+df2= pd.read_csv("q2_data.csv")
+```
+
+3. 
+
+```{python}
+
+four_region_colors = {
+    'asia': '#ff5872',
+    'europe': '#ffec33',
+    'africa': '#00d5e9',
+    'americas': '#99ef33'
+}
+
+(p9.ggplot(df2, p9.aes(
+  x='exports', y='imports'
+))
++p9.geom_point(p9.aes(fill='four_regions', size='energy'), alpha=1, color='black', stroke=0.2)
++ p9.scale_x_continuous(limits=(0,240),
+breaks=[20,40,60,80,100,120,140,160,180,200,220],
+labels=['20','40','60','80','100','120','140','160','180','200','220']
+)
++ p9.scale_y_continuous(limits=(0,450),
+breaks=[50,100,150,200,250,300,350,400],
+labels=['50','100','150','200','250','300','350','400']
+)
++ p9.theme_bw()
++ p9.theme(
+    panel_grid_major=p9.element_line(color='#dddddd', alpha=0.3, size=0.5),
+    panel_grid_minor=p9.element_line(color='#eeeeee', alpha=0.25, size=0.3),
+    axis_ticks_major_x=p9.element_blank(),
+    axis_ticks_major_y=p9.element_blank(),
+    axis_text_x=p9.element_text(color='black', alpha=0.4),
+    axis_text_y=p9.element_text(color='black', alpha=0.4),
+    axis_title_x=p9.element_text(color='black', alpha=0.6),
+    axis_title_y=p9.element_text(color='black', alpha=0.6),
+    panel_border=p9.element_rect(alpha=0.5),
+    figure_size=(7,4)
+)
+
++ p9.annotate(geom='text', label='1997', x=120, y=220, size=140, color='grey', alpha =0.2, ha='center', va='center' )
++ p9.scale_fill_manual(values=four_region_colors)
++ p9.labs(x="Exports(\%GDP)", y= "Imports(\%GDP)" )
++ p9.scale_size(
+  range=[0.2,15])
+)
+```
+
+4.  Similar to the previous question, we can create a boxplot for the 4 variavles we are working with(import,export,four_regions,energy usage).
+
+```{python}
+
+(p9.ggplot(df2, p9.aes(
+  x='imports', y='exports',fill='four_regions'))
++p9.geom_violin(alpha=0.5)
++p9.theme_bw()
++p9.scale_fill_manual(values=four_region_colors)
+)
+```
+
+
+# Task 3
+
+1. Aesthetics:
+
+x: individuals using internet, with scale of 10
+y: GDP/capita 
+bubble size: corresponding to income size
+bubble colour: corresponding to four_regions
+watermark: year of data(2001)
+
+
+```{python}
+import pandas as pd
+df3 = pd.read_csv("q3data.csv")
+```
+
+
+```{python}
+
+four_region_colors = {
+    'asia': '#ff5872',
+    'europe': '#ffec33',
+    'africa': '#00d5e9',
+    'americas': '#99ef33'
+}
+
+(p9.ggplot(df3, p9.aes(
+  x= 'internet_users', y='gdp', fill='four_regions'
+))
++p9.geom_point(p9.aes(alpha='0.8',fill='four_regions', size='income'), color='black', stroke=0.1)
++p9.theme_bw()
++ p9.theme(
+  panel_grid_major=p9.element_line(color='#dddddd', alpha=0.3, size=0.5),
+  panel_grid_minor=p9.element_line(color='#eeeeee', alpha=0.25, size=0.3),
+  axis_text_x=p9.element_text(color='black', alpha=0.3),
+  axis_text_y=p9.element_text(color='black', alpha=0.3),
+  axis_title_x=p9.element_text(color='black', alpha=0.6),
+  axis_title_y=p9.element_text(color='black', alpha=0.6),
+  panel_border=p9.element_rect(color='black', alpha=0.3),
+  axis_ticks_major_x=p9.element_blank(),
+  axis_ticks_major_y=p9.element_blank(),
+  figure_size=(7,4)
+
+)
++p9.scale_x_continuous(limits=(0,100),
+breaks=[10,20,30,40,50,60,70,80,90],
+labels=['10','20','30','40','50','60','70','80','90'])
+
++p9.scale_y_log10(
+breaks=[200,500,1000,2000,5000,10000,20000,50000,100000],
+labels=['200','500','1000','2000','5000','10k','20k','50k','100k']
+)
++p9.scale_fill_manual(values=four_region_colors)
++p9.annotate(geom='text', label='2001', x=55, y=4000, size=140, alpha=0.1, va='center', ha='center')
++ p9.labs(x='Individuals using internet',y='GDP/Capita')
++ p9.scale_size(
+  [0.1,15]
+)
+)
+```
+
+4. Same as the previous tasks, we can use boxplot or violin plot to plot the 4 variables(internet usage, GDP/capita, income, four_regions)
+
+
+```{python}
+(p9.ggplot(df3, p9.aes(
+  x='internet_users', y='gdp', fill= 'four_regions'))
++p9.geom_violin(alpha=0.5)
++p9.theme_bw()
++p9.scale_fill_manual(values=four_region_colors)
+)
+```
+
+The violin plot shows us the same data as bubble plot, or what boxplot would give us, but violin plot does a better job in visualizing the spread of GDP among different regions. 
+
+
+### Annotation:
+
+AI(ChatGPT 5.0 and Perplixity AI was(Study: Step-by-Step Learning)) was used to complete this project, specifically in the following ways:
+
+1. Looking up solutions to fix errors.
+
+2. Brain-storming about usecase of different graphs.
+
+3. Looking up correct syntax for functions
+
+4. Understanding the use case of different functoins in plotnine.
+
+
+References:
+
+1. <https://www.data-to-viz.com/> for graphing ideas for part 4 of the tasks.
+
+2. <https://plotnine.org/reference/> to look up correct syntax for functions. 
