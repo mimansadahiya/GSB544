@@ -8,10 +8,14 @@ theme:
 format:
   html:
     embed-resources: true
-code-block-bg: true
 code-fold: true
 
 ---
+link to github:
+
+<https://github.com/mimansadahiya/GSB544/tree/main/data>
+
+
 ### Task 1
 
 
@@ -47,6 +51,7 @@ four_region_colors = {
     'africa': '#00d5e9',
     'americas': '#99ef33'
 }
+df = df.dropna(subset=['income', 'life_exp', 'population','four_regions'], how='any')
 
 (p9.ggplot(df, 
 p9.aes(x='income', y='life_exp'))
@@ -127,6 +132,7 @@ four_region_colors = {
     'africa': '#00d5e9',
     'americas': '#99ef33'
 }
+df2=df2.dropna(subset=["imports","exports","energy","four_regions"], how='any')
 
 (p9.ggplot(df2, p9.aes(
   x='exports', y='imports'
@@ -175,7 +181,7 @@ labels=['50','100','150','200','250','300','350','400']
 ```
 
 
-# Task 3
+### Task 3
 
 1. Aesthetics:
 
@@ -200,6 +206,7 @@ four_region_colors = {
     'africa': '#00d5e9',
     'americas': '#99ef33'
 }
+df3=df3.dropna(subset=['internet_users', 'gdp', 'income','four_regions'], how='any')
 
 (p9.ggplot(df3, p9.aes(
   x= 'internet_users', y='gdp', fill='four_regions'
