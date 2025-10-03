@@ -1,0 +1,12 @@
+---
+title: Lab 02
+format:
+    html:
+        embed-resources: true
+---
+
+
+```{python}
+import pandas as pd
+import numpy as np
+```
