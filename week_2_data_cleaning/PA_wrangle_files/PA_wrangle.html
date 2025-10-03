@@ -137,7 +137,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This section will walk you through some steps to clean up today’s dataset, so that you can use it more easily in Part Two.</p>
 <p>First, we declare our package dependencies and load the data.</p>
 <p>(Note that the data loading function <code>read_csv</code> will give you an outpouring of helpful information about the dataset. If you do not see the word “error”, there is nothing to be concerned about.)</p>
-<div id="caa08af4" class="cell" data-execution_count="1">
+<div id="208875a0" class="cell" data-execution_count="1">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -149,10 +149,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h4 class="anchored" data-anchor-id="narrow-down-the-columns-to-variables-of-interest">1. Narrow down the columns to variables of interest</h4>
 <p>There are too many variables in this dataset. We don’t need all of them. We will limit our dataset down to only:</p>
 <p>Name of the institution City, State, and ZIP code of the institution The Admissions Rate The average SAT score The number of undergraduate students The in and out of state tuitions Whether the school is public or private The “REGION” variable.</p>
-<div id="78e562db" class="cell" data-execution_count="2">
+<div id="31598f51" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>colleges_clean <span class="op">=</span> colleges[[<span class="st">'INSTNM'</span>, <span class="st">'CITY'</span>, <span class="st">'STABBR'</span>, <span class="st">'ZIP'</span>, <span class="st">'CONTROL'</span>, <span class="st">'ADM_RATE'</span>, <span class="st">'SAT_AVG'</span>, <span class="st">'TUITIONFEE_IN'</span>, <span class="st">'TUITIONFEE_OUT'</span>, <span class="st">'UGDS'</span>, <span class="st">'REGION'</span>]]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c3b3b5f4" class="cell" data-execution_count="3">
+<div id="57045032" class="cell" data-execution_count="3">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>colleges_clean.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="3">
 <pre><code>Index(['INSTNM', 'CITY', 'STABBR', 'ZIP', 'CONTROL', 'ADM_RATE', 'SAT_AVG',
@@ -164,7 +164,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="remove-observations-that-arent-needed" class="level4">
 <h4 class="anchored" data-anchor-id="remove-observations-that-arent-needed">2. Remove observations that aren’t needed</h4>
 <p>Drop the schools that are “private for-profit” (category 3). We will not need these for the puzzle.</p>
-<div id="5efe2ada" class="cell" data-execution_count="4">
+<div id="70bc756b" class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#colleges_clean = colleges_clean[(colleges_clean['CONTROL'] == 1) | (colleges_clean['CONTROL'] == 2) ]</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>colleges_clean <span class="op">=</span> colleges_clean[colleges_clean[<span class="st">'CONTROL'</span>] <span class="op">!=</span> <span class="dv">3</span>]</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#colleges_clean.describe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -174,13 +174,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h3 class="anchored" data-anchor-id="adjust-variable-types-numeric">3. Adjust variable types: Numeric</h3>
 <p>Some of the columns of the dataset were automatically understood by the computer to be categorical, due to missing data appearing like strings.</p>
 <p>Adjust the appropriate columns to be numeric.</p>
-<div id="a04c18cc" class="cell" data-execution_count="5">
+<div id="fbc94bac" class="cell" data-execution_count="5">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'TUITIONFEE_IN'</span>] <span class="op">=</span> colleges_clean[<span class="st">'TUITIONFEE_IN'</span>].astype(<span class="st">'float'</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'TUITIONFEE_OUT'</span>] <span class="op">=</span> colleges_clean[<span class="st">'TUITIONFEE_OUT'</span>].astype(<span class="st">'float'</span>)</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'SAT_AVG'</span>] <span class="op">=</span> colleges_clean[<span class="st">'SAT_AVG'</span>].astype(<span class="st">'float'</span>)</span>
 <span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'ADM_RATE'</span>] <span class="op">=</span> colleges_clean[<span class="st">'ADM_RATE'</span>].astype(<span class="st">'float'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="cb396602" class="cell" data-execution_count="6">
+<div id="4f956e73" class="cell" data-execution_count="6">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>colleges_clean.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
 <pre><code>INSTNM             object
@@ -203,11 +203,11 @@ dtype: object</code></pre>
 <p>Similarly, columns of the dataset that are not numbers are automatically understood by the computer to be strings.</p>
 <p>We know, however, that some variables are truly <em>categorical</em>, in that there are only a few categories (or “levels”) that can be values of the column.</p>
 <p>Adjust the appropriate columns to be understood as categorical.</p>
-<div id="282e35af" class="cell" data-execution_count="7">
+<div id="9664877c" class="cell" data-execution_count="7">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'CONTROL'</span>]<span class="op">=</span> colleges_clean[<span class="st">'CONTROL'</span>].astype(<span class="st">'category'</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'REGION'</span>]<span class="op">=</span> colleges_clean[<span class="st">'REGION'</span>].astype(<span class="st">'category'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="bdfe2ccf" class="cell" data-execution_count="8">
+<div id="925500c0" class="cell" data-execution_count="8">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>colleges_clean.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>INSTNM              object
@@ -227,7 +227,7 @@ dtype: object</code></pre>
 <section id="calculate-new-variables" class="level4">
 <h4 class="anchored" data-anchor-id="calculate-new-variables">5. Calculate new variables</h4>
 <p>Create a new variable called TUITION_DIFF which contains the difference between in and out of state costs.</p>
-<div id="9196a32f" class="cell" data-execution_count="9">
+<div id="8ed4275b" class="cell" data-execution_count="9">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>colleges_clean[<span class="st">'TUITION_DIFF'</span>] <span class="op">=</span> colleges_clean[<span class="st">'TUITIONFEE_OUT'</span>]<span class="op">-</span>colleges_clean[<span class="st">'TUITIONFEE_IN'</span>]</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>colleges_clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="9">
@@ -430,7 +430,7 @@ dtype: object</code></pre>
 <h4 class="anchored" data-anchor-id="deal-with-missing-data">6. Deal with missing data</h4>
 <p>Drop all the rows with missing data.</p>
 <p>(It is often a terrible idea to simply drop all rows with <em>any</em> missing data! Usually, even if <em>some</em> of the information is missing, we don’t want to throw out the entire row. In this example, however, we’ll be lazy.)</p>
-<div id="54b01c55" class="cell" data-execution_count="10">
+<div id="0156a286" class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>colleges_clean <span class="op">=</span> colleges_clean.dropna(axis <span class="op">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
@@ -450,7 +450,7 @@ dtype: object</code></pre>
 <li><p>Ephelia is not going to an Ivy League school.</p></li>
 <li><p>Of the two options remaining at this step, Ephelia will attend the cheaper one.</p></li>
 </ol>
-<div id="214140b1" class="cell" data-execution_count="11">
+<div id="de31da41" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">#dataframe with only region 1</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>colleges_region1 <span class="op">=</span> (colleges_clean[colleges_clean[<span class="st">"REGION"</span>] <span class="op">==</span> <span class="dv">1</span>]).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>colleges_region1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -649,7 +649,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="25cb72dc" class="cell" data-execution_count="12">
+<div id="a79286f1" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using ADM_RATE as the reference column to get first quartile becuase REGION is not numeric</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>colleges_region1[<span class="st">"ADM_RATE"</span>] <span class="op">=</span> pd.to_numeric(colleges_region1[<span class="st">"ADM_RATE"</span>], errors<span class="op">=</span><span class="st">"coerce"</span>) <span class="co"># errors="coerce" means missing value = NaN instead of showing errors</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1036,7 +1036,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="687bbc6e" class="cell" data-execution_count="13">
+<div id="ff9328c8" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filter where schools' instate and out of state tuition are same</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>private_quartile_schools <span class="op">=</span> first_quartile_schools[</span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>    first_quartile_schools[<span class="st">"TUITIONFEE_IN"</span>] <span class="op">==</span> first_quartile_schools[<span class="st">"TUITIONFEE_OUT"</span>]</span>
@@ -1402,7 +1402,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="68e98403" class="cell" data-execution_count="14">
+<div id="f599f677" class="cell" data-execution_count="14">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>with_odd_SAT <span class="op">=</span> private_quartile_schools[private_quartile_schools[<span class="st">"SAT_AVG"</span>] <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span>].reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>with_odd_SAT</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="14">
@@ -1569,7 +1569,7 @@ dtype: object</code></pre>
 </div>
 </div>
 </div>
-<div id="3d94babb" class="cell" data-execution_count="15">
+<div id="126620a4" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make a copy of dataframe to filter from 2 columns, makes it less messy, and we get to name the dataframe according to the current action</span></span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>above_3000 <span class="op">=</span> with_odd_SAT.copy()</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -1578,13 +1578,13 @@ dtype: object</code></pre>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>     (with_odd_SAT[<span class="st">'STABBR'</span>] <span class="op">==</span> <span class="st">'NH'</span>))</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>     ]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e4433c1f" class="cell" data-execution_count="16">
+<div id="c4e324d0" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>above_3000[<span class="st">'freshmen'</span>] <span class="op">=</span> above_3000[<span class="st">'UGDS'</span>] <span class="op">/</span> <span class="dv">4</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>above_3000[<span class="st">'applicants'</span>] <span class="op">=</span> above_3000[<span class="st">'freshmen'</span>] <span class="op">/</span> above_3000[<span class="st">'ADM_RATE'</span>]</span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>above_3000 <span class="op">=</span> above_3000[above_3000[<span class="st">'applicants'</span>] <span class="op">&gt;</span> <span class="dv">3000</span>]</span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>above_3000</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/var/folders/v2/gg49l1j9111642t06mrct14r0000gn/T/ipykernel_69811/2181284839.py:1: SettingWithCopyWarning:
+<pre><code>/var/folders/v2/gg49l1j9111642t06mrct14r0000gn/T/ipykernel_95896/2181284839.py:1: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -1592,7 +1592,7 @@ Try using .loc[row_indexer,col_indexer] = value instead
 
 See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
 
-/var/folders/v2/gg49l1j9111642t06mrct14r0000gn/T/ipykernel_69811/2181284839.py:2: SettingWithCopyWarning:
+/var/folders/v2/gg49l1j9111642t06mrct14r0000gn/T/ipykernel_95896/2181284839.py:2: SettingWithCopyWarning:
 
 
 A value is trying to be set on a copy of a slice from a DataFrame.
@@ -1683,7 +1683,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 </div>
-<div id="4c5eea5e" class="cell" data-execution_count="17">
+<div id="159105ac" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>not_ivy <span class="op">=</span> above_3000.copy()</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co">#create a list of all ivy league universities</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>ivy_league <span class="op">=</span>[ </span>
@@ -1763,7 +1763,7 @@ See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stab
 </div>
 </div>
 </div>
-<div id="fed45600" class="cell" data-execution_count="18">
+<div id="122def2a" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>cheaper_school <span class="op">=</span> not_ivy.nsmallest(<span class="dv">1</span>, <span class="st">"TUITIONFEE_IN"</span>)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>cheaper_school</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="18">
