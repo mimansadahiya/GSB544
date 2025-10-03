@@ -1,0 +1,141 @@
+---
+title: Week 2
+format: html
+---
+
+melt function: many columns= long skinny table(it unpivoting a dataframe, reshape thee table, essentially flip rows and columns)
+
+
+# Tabular Data And Basic Data Opertions
+
+working more with pandas for data wrangling  and numpy for mathematical operation
+
+tidy data:
+
+1. every column= variable 
+2. every row= observation
+3. every cell= single value
+
+ggplot is for tidy data
+
+view data:
+
+df_titanic.head()  - preffered with large dataset
+
+df_titanic
+
+select,
+
+.loc is for both rows and column
+df_titanic.loc[:, "age"]
+
+ filter, 
+
+ .iloc attribute
+ df_titanic.iloc[3]  a series from data frame
+
+ arrager, 
+
+ sort by one or more variables of interest .sort_values (ascending or descending )
+
+ df_titanic.sort_values(by = ["age"], ascending=False)
+
+### we have not made any permanent changes to the df_titanic object.
+
+mutate,
+
+transformations of those variables(change the measurement units  df_titanic["age"] = df_titanic["age"] / 10   log)
+
+created the new variable = 
+
+cut (create a new variable by categorizing (or discretizing) the values of a quantitative variable (i.e. convert a quantitative variable to a categorical variable))
+
+df_titanic["age_cat"] = pd.cut(df_titanic["age"],
+                              bins = [0, 18, 100],
+                              labels = ["child", "adult"])
+
+
+transformation(0,1)
+
+df_titanic["female"] = 1 * (df_titanic["gender"] == "female")
+
+multiple K 
+
+pd.get_dummies(df_titanic["embarked"])
+
+ summarize
+
+ .describe()
+
+Summarizing a numeric Variable
+
+ df_titanic[["age", "survived"]].groupby("survived").mean()
+
+ Summarizing a Categorical Variable
+
+ .unique()
+
+ df_titanic["class"].unique()
+
+df_titanic["class"].describe()
+
+count of var from column:
+
+df_titanic["class"].value_counts()
+
+proportions :
+
+df_titanic["class"].value_counts(normalize=True)
+
+Cross-tabulations of two categorical variables: contingency table or a two-way table.
+
+pd.crosstab(df_titanic["survived"], df_titanic["gender"])
+
+prob:
+
+pd.crosstab(df_titanic["survived"], df_titanic["gender"], normalize=True)
+
+# pivoting and joining(pandas
+
+data in wide format)
+helps to physically draw/map out what our current dataset looks like 
+
+melt()
+
+long_population = population.melt(id_vars=["country"], var_name="year", value_name="population")
+
+concatenation(for two DataFrames, we simply stack them on top of one another.)
+
+pd.concat([names1995, names2015])
+
+names1995["Year"] = 1995
+names2015["Year"] = 2015
+names = pd.concat([names1995, names2015], ignore_index=True)
+names
+
+Merging(we want to stack them next to each other) : returns a third DataFrame, specify the variables to match across the two DataFrames, ID variable
+
+names1995.merge(names2015, on=["Name", "Sex"])
+
+
+
+One-to-One and Many-to-One Relationships
+
+tidy data
+if i collect piece of informaiton, is it ognna be  arow or a column 
+
+
+```{python}
+import numpy as np
+import pandas as pd
+data_dir = "https://dlsun.github.io/pods/data/"
+df_titanic = pd.read_csv(data_dir + "titanic.csv")
+df_titanic
+
+
+```
+
+
+
+
+
