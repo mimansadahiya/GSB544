@@ -3,6 +3,7 @@ title: Lab 1
 format:
   html:
     embed-resources: true
+---
 
 # Task 1
 
