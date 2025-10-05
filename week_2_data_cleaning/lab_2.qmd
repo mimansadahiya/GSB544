@@ -3,10 +3,654 @@ title: Lab 02
 format:
     html:
         embed-resources: true
+code-fold: true
+toc: true
 ---
 
+# 0. 
+## Import the data and declare your package dependencies.
 
+I am importing pandas to clean and pivot the datasets(avocado, housing prices), numpy to do calculations on the datasets, and plotnine library to provide visual data through graphs in this lab. 
+
+Below is the original avocado dataset
 ```{python}
 import pandas as pd
 import numpy as np
+import plotnine as p9
+pd.options.display.float_format = '{:,.2f}'.format 
+df_avacados = pd.read_csv('avocado-updated-2020.csv')
+df_avacados
 ```
+
+# 1. 
+## Briefly describe the data set. What information does it contain?
+
+This dataset provides metrics for avacodos weekely sales from 2015 to 2020 (formerly it had data only till 2018, but it got updated to include years after 2018), specially focusing on 'when' it was sold (years), 'how' much was sold on average(weekly prices and sales volumes), how many were sold based on catagorizes like avocado sizes, bag sized bags, and if they were organic or non-organic, 'where' they were sold (location) as defined in the "geography" column. The geography column contain wide range of cities and regions allowing for detailed geographic analysis.
+
+# 2. 
+## Clean the data in any way you see fit.
+
+Let's clean the dataset in step by first understanding what it contains then figuring out what needs to be changed for analysis.
+
+##### 1. Understanding the data (column name, types, checking missing values, duplicates)
+
+```{python}
+print(df_avacados.dtypes) 
+# Convert 'date' column to datetime
+df_avacados['date'] = pd.to_datetime(df_avacados['date'], errors='coerce')    #errors='coerce' specially for pd.to_datetime(missing = NaN)
+# Check 
+df_avacados.drop_duplicates()
+df_avacados.dropna()
+print(df_avacados.isnull().sum())    #missing values for new dataframe
+```
+
+As the date column was in object format, we changed it into datetime format for convenience.
+
+We also dropped duplicates adn missing values, but this dataset interestingly had no missing or duplicate values, which is uncommon in real world datasets.
+
+```{python}
+# reference code for part 3(below)
+#counting_volume_on_original_dataframe = df_avacados.groupby('geography')['total_volume'].sum().reset_index()
+#counting_volume_on_original_dataframe
+```
+
+##### 2. Renaming confusing columns and melting the data ('4046', '4225', '4770')
+
+```{python}
+# 1. Rename confusing columns
+df_avacados = df_avacados.rename(columns={
+    "4046": "small",         
+    "4225": "large",
+    '4770': "extra_large",
+    'geography' : 'location'
+})
+
+# 2. Melt the data 
+avocado_clean = df_avacados.melt(
+    # all identifier columns
+    id_vars=["date", "average_price", "type", "location", "total_volume", "total_bags", "small_bags", "large_bags", "xlarge_bags"],
+    
+    # columns we want to unpivot
+    value_vars=["small", "large", "extra_large"],
+    
+    var_name="hass_avacado_size",          # Renamed to be more precise
+    value_name="quantity_sold"        # Name for the new column holding the actual count
+)
+
+# Now, avocado_clean is in a "long" format and ready for analysis.
+avocado_clean
+```
+
+##### 3. 'Mapping' new  columns from geography column (added geo_type column with 'city', 'region', 'total US' values)
+
+```{python}
+#create geo_type dictionary for (city, state, region, us)
+geo_type_map = {
+    # --- NATIONAL LEVEL ---
+    'Total U.S.': 'US',
+    
+    # --- STATE/LARGE AREAS (often treated as large regions) ---
+    'California': 'State', 
+    'South Carolina': 'State', 
+    
+    # --- REGIONAL AGGREGATES (Broad marketing regions) ---
+    'West': 'Region',
+    'Northeast': 'Region',
+    'South': 'Region',  # Note: 'South' is implied by the HAB groupings
+    'Midwest': 'Region', # Note: 'Midwest' is implied by the HAB groupings
+    'Great Lakes': 'Region',
+    'Midsouth': 'Region',
+    'Plains': 'Region',
+    'South Central': 'Region',
+    'Southeast': 'Region',
+    'Northern New England': 'Region',
+    'West Tex/New Mexico': 'Region',
+    
+    # --- CITY/METRO AREAS (Specific markets) ---
+    'Albany': 'City', 'Atlanta': 'City', 'Baltimore/Washington': 'City', 'Boise': 'City',
+    'Boston': 'City', 'Buffalo/Rochester': 'City', 'Charlotte': 'City', 'Chicago': 'City',
+    'Cincinnati/Dayton': 'City', 'Columbus': 'City', 'Dallas/Ft. Worth': 'City', 
+    'Denver': 'City', 'Detroit': 'City', 'Grand Rapids': 'City', 'Harrisburg/Scranton': 'City',
+    'Hartford/Springfield': 'City', 'Houston': 'City', 'Indianapolis': 'City', 
+    'Jacksonville': 'City', 'Las Vegas': 'City', 'Los Angeles': 'City', 'Louisville': 'City',
+    'Miami/Ft. Lauderdale': 'City', 'Nashville': 'City', 'New Orleans/Mobile': 'City', 
+    'New York': 'City', 'Orlando': 'City', 'Philadelphia': 'City', 'Phoenix/Tucson': 'City',
+    'Pittsburgh': 'City', 'Portland': 'City', 'Raleigh/Greensboro': 'City', 'Richmond/Norfolk': 'City', 
+    'Roanoke': 'City', 'Sacramento': 'City', 'San Diego': 'City', 'San Francisco': 'City', 
+    'Seattle': 'City', 'Spokane': 'City', 'St. Louis': 'City', 'Syracuse': 'City', 'Tampa': 'City'
+}
+
+#map function to map the dictionary values into a new column
+avocado_clean['geo_type'] = avocado_clean['location'].map(geo_type_map)
+# 3. Verify the result
+print(avocado_clean['geo_type'].value_counts())
+print(avocado_clean['geo_type'].isnull().sum())
+#had 1826 unmapped values of Tampa, fixed in the next code.
+avocado_clean
+```
+
+Created a dictionary to segregate the 'location' column to create another column 'geo_type' to divide locations into 'city', 'state', 'region', and 'US' fo easier analysis.
+
+Verified if we missed any location for our new geo_type columns(used gemini to create the dictionary, and it missed Tampa region, which i had to add into 'south' again.)
+
+##### 4. Standardize 'location' column values to title case for consistency
+
+```{python}
+# Standardize 'location' to lowercase
+avocado_clean['location'] = avocado_clean['location'].str.title()
+
+# Check unique values to find any remaining inconsistencies
+print(avocado_clean['location'].unique())
+```
+
+# 3
+## Which major geographical region sold the most total organic, small Hass avocados in 2017?
+
+Created granular region mapping to segregate major US regions as well(added column "granular_region").
+
+Created a separate dictionary with help of gemini to segregate the 'regions' from geo_type column into 11 granular reions in US to find the region with most sales(to answer question 3) and assigned it to 'granular_region column'.
+
+
+```{python}
+# The 11 distinct regions used in geo_type_map
+granular_region_mapping = {
+    # NORTHEAST REGION
+    'Albany': 'Northern New England', 'Boston': 'Northern New England', 'Buffalo/Rochester': 'Northeast', 'Harrisburg/Scranton': 'Northeast', 'Hartford/Springfield': 'Northeast', 'New York': 'Northeast', 'Northern New England': 'Northern New England', 'Philadelphia': 'Northeast', 'Pittsburgh': 'Northeast', 'Syracuse': 'Northeast', 'Northeast': 'Northeast',
+
+    # MIDWEST REGION
+    'Chicago': 'Great Lakes', 'Cincinnati/Dayton': 'Great Lakes', 'Columbus': 'Great Lakes', 'Detroit': 'Great Lakes', 'Grand Rapids': 'Great Lakes', 'Indianapolis': 'Great Lakes', 'Louisville': 'Midsouth', 'St. Louis': 'Plains', 'Great Lakes': 'Great Lakes', 'Plains': 'Plains', 'Midwest': 'Plains',
+
+    # SOUTH REGION
+    'Atlanta': 'Southeast', 'Baltimore/Washington': 'Southeast', 'Charlotte': 'Southeast', 'Dallas/Ft. Worth': 'South Central', 'Houston': 'South Central', 'Jacksonville': 'Southeast', 'Miami/Ft. Lauderdale': 'Southeast', 'Nashville': 'Midsouth', 'New Orleans/Mobile': 'Midsouth', 'Orlando': 'Southeast', 'Raleigh/Greensboro': 'Southeast', 'Richmond/Norfolk': 'Southeast', 'Roanoke': 'Southeast', 'South Carolina': 'Southeast', 'Midsouth': 'Midsouth', "Tampa" : "Southeast", 'South': 'Southeast', 'South Central': 'South Central', 'Southeast': 'Southeast',
+
+    # WEST REGION
+    'Boise': 'West', 'California': 'West', 'Denver': 'West', 'Las Vegas': 'West', 'Los Angeles': 'West', 'Phoenix/Tucson': 'West', 'Portland': 'West', 'Sacramento': 'West', 'San Diego': 'West', 'San Francisco': 'West', 'Seattle': 'West', 'Spokane': 'West', 'West': 'West', 'West Tex/New Mexico': 'West Tex/New Mexico',
+
+    # NATIONAL TOTAL
+    'Total U.S.': 'National'
+}
+
+# new mapping to a new column
+avocado_clean['granular_region'] = avocado_clean['location'].map(granular_region_mapping)
+avocado_clean
+```
+
+Used the new column "granular_region" to find the region with highest sales.
+
+```{python}
+# ----Find Highest Sales within Granular Regions -----
+
+regional_volume_small = avocado_clean.copy()
+
+# Filter the data (2017 & small & organic)
+filtered_data = regional_volume_small[
+    (regional_volume_small['hass_avacado_size'] == 'small') & 
+    (regional_volume_small['date'].dt.year == 2017) & 
+    (regional_volume_small['type'] == 'organic')
+].copy()
+
+# related columns only
+filtered_data = filtered_data[
+    (filtered_data['geo_type'] == 'Region') | (filtered_data['geo_type'] == 'US')
+].copy()
+
+# Group by granular_region
+regional_volume_summary = filtered_data.groupby('granular_region')['total_volume'].sum().reset_index()
+
+# Rename the column
+regional_volume_summary = regional_volume_summary.rename(columns={'total_volume': 'total_small_units_sold'})
+
+pd.options.display.float_format = '{:,.0f}'.format
+print(regional_volume_summary.sort_values(by='total_small_units_sold', ascending=False))
+```
+
+
+### Answer: 
+Therefore, the major geographical region sold the most total organic, small Hass avocados in 2017 is 'National', which sold 62,923,682 units.
+
+# 4. 
+## Split the date variable into month, day, and year variables. In which month is the highest average volume of avocado sales?
+
+```{python}
+#  'year' column
+avocado_clean['year'] = avocado_clean['date'].dt.year
+
+#  'month' column
+avocado_clean['month'] = avocado_clean['date'].dt.month
+
+#  'day' column
+avocado_clean['day'] = avocado_clean['date'].dt.day
+
+# Display the head of the DataFrame to confirm the new columns
+print(avocado_clean[['date', 'year', 'month', 'day']].head())
+```
+
+Finding highest average volume of avocado sales
+
+```{python}
+highest_monthly_sles = avocado_clean.groupby('month')['total_volume'].sum()
+print(highest_monthly_sles.idxmax())
+print(highest_monthly_sles.max())
+```
+
+### Answer:
+Therefore, the month is the highest average volume of avocado sales is May(5th month) with 9829534960 avacado sales.
+
+
+# 5. 
+## Which metro area geographical regions sold the most total avocados? Plot side-by-side box-plots of the total volume for only the five metro geographical regions with the highest averages for the total_volume variable.
+
+```{python}
+#filter dataset with geo_type = city only
+#using the .copy() method to filter dataframe, making a new dataframe.
+
+# 1. define the filter
+city_filter = avocado_clean['geo_type'] == 'City'
+
+# 2. create a copy of original dataframe, apply filter
+avocado_clean_city = avocado_clean[city_filter].copy()
+
+# groupby() function to take 2 columns and average the values
+total_volume_by_metro = (
+    avocado_clean_city.groupby('location')['total_volume']
+    .sum()
+    .reset_index()                                            #reset index
+    .rename(columns={'total_volume': 'total_volume_sold'})    #rename
+    .sort_values(by='total_volume_sold', ascending=False))    #descending 
+total_volume_by_metro
+```
+
+
+### Answer:
+Therefore, the metro area geographical regions sold the most total avocados is Los Angeles with 2,878,051,464 sales. For the box plot, we need only 5 top cities (Los Angeles, New York, Dallas/Ft. Worth, Houston, Phoenix/Tucson).
+
+Calculating the average of the top 5 sities:
+
+```{python}
+# AVERAGE Volume for top 5 cities
+
+average_volume_by_metro = (
+    avocado_clean_city.groupby('location')['total_volume']
+    .mean() # Calculating the MEAN (average) volume
+    .sort_values(ascending=False))
+average_volume_by_metro
+
+```
+
+### Plotting
+```{python}
+#  Identify the top 5 metro areas (ordered list)
+top_5_metros_avg = average_volume_by_metro.head(5).index.tolist()      #created a list?
+
+#  Filter the city data for only these top 5 for plotting
+df_top_5_avg = avocado_clean_city[avocado_clean_city['location'].isin(top_5_metros_avg)].copy()
+# plotting boxplot
+
+plot = (
+    p9.ggplot(df_top_5_avg, p9.aes(x='location', y='total_volume', fill='location'))
+    
+    + p9.geom_boxplot()
+    # descending order
+    + p9.scale_x_discrete(limits=top_5_metros_avg)
+    + p9.theme_bw()
+    
+    # labels 
+    + p9.labs(
+        title='Total Volume Distribution for Top 5 Metro Areas (Highest Average Sales)',
+        x='Metro Area Geographical Region',
+        y='Total Volume Sold'
+    )
+    + p9.theme(
+        axis_text_x=p9.element_text(angle=45, hjust=1),  #rotated the text on x axis
+        figure_size=(10, 6)
+    )
+)
+plot
+```
+
+The box plot describes the the quantity of avocados sold based on the metro area geographical regions in descending order from left to right. Each region is differentiated by different color (color fill by location). it is apperant in the graph that Los Angele had comparatively much higher overall avocado in the past as compared to the next top cities in avocado sales(New York, Dallas/Ft. Worth, Houston, Phoenix/Tucson), where the rest 4 cities observed quite similar sale amount in the past, according tot he given data. It shows that people in Los Angeles, for some reason, buy more avocadoes as compared to other Califoria cities. This data can be helpful for businesses who want to understand the avocado sales trends in California, specially in Los angeles and its comparison wiht other cities. 
+
+# 6. 
+## From your cleaned data set, create a data set with only these California regions and answer the following questions about these California regions only.
+
+The dataframe below includes the data from only 4 California regions ("Los Angeles", "San Diego", "Sacramento", "San Francisco")
+
+```{python}
+pd.options.display.float_format = '{:,.2f}'.format    #to keep the average price in float
+
+# california regions list
+california_regions = ["Los Angeles", "San Diego", "Sacramento", "San Francisco"]
+
+# Filter with california regions, (used isin function for convenience)
+california_df = avocado_clean[
+    avocado_clean['location'].isin(california_regions)
+].copy()
+
+california_df
+```
+
+# 7. 
+## In which California regions is the price of organic versus conventional avocados most different? Support your answer with a few summary statistics AND a visualization.
+
+## Summary statistics:
+
+Calculating average price in different location catagorized by type i.e. organic/conventional (wide format dataset)
+```{python}
+
+# Calculate average price by location and type (Wide Format)
+price_summary_wide = california_df.groupby(['location', 'type'])['average_price'].mean().unstack()
+print(price_summary_wide)
+```
+
+Calculating the differences between average organic avocado price and average conventional avocado price :
+
+```{python}
+price_summary_wide['price_difference'] = np.abs(price_summary_wide['organic'] - price_summary_wide['conventional'])
+winner_region = price_summary_wide['price_difference'].idxmax()
+print(price_summary_wide.sort_values('price_difference', ascending=False) )
+```
+
+Converting the wide summary into long format for plotting:
+
+```{python}
+# Convert the wide summary table back into the 'long' format required for plotting
+plot_data_long = price_summary_wide[['organic', 'conventional']].stack().reset_index()
+plot_data_long.columns = ['location', 'type', 'average_price']
+print(plot_data_long)
+
+```
+
+Ordered list for plotting:
+
+```{python}
+# Create an ordered list based on the calculated price difference (highest first)
+# This list dictates the order of the bars on the X-axis
+plot_order = price_summary_wide.sort_values(by='price_difference', ascending=False).index.tolist()
+print(plot_order)
+```
+
+
+## Plotting 
+
+```{python}
+plot = (
+    # Map location to X, price to Y, and type to FILL (for grouping)
+    p9.ggplot(plot_data_long, p9.aes(x='location', y='average_price', fill='type'))
+    
+    + p9.geom_col(position='dodge')
+    
+    # Set the order of the bars based on the calculated price difference
+    + p9.scale_x_discrete(limits=plot_order)
+    + p9.theme_bw()
+    + p9.labs(
+        title=f'Price Difference: Organic vs. Conventional Avocados in California (Highest Difference in {winner_region})',
+        x='California Metro Region (Sorted by Price Difference)',
+        y='Average Price (USD)',
+        fill='Avocado Type'
+    )
+    + p9.theme(
+        axis_text_x=p9.element_text(angle=10),
+        figure_size=(10, 6)
+    )
+)
+plot
+```
+
+The box plot uses the means of the weekly prices of both organic and conventional avocadoes to cretaes a distribution to describe the differences between organic and conventional avocado prices in different california cities ("Los Angeles", "San Diego", "Sacramento", "San Francisco"). The difference in prices is shown by the differences in the heights of twin bars(each red and blue pair). The order list of plotting is already defined in the code above, therofore, the left most twin bar shows the highest differences and the right most shows the lowest diferences in sales of orgaic and conventional avocados. 
+
+#### Answer: Therefore, San Fransisco experienced the highest differences in the price between organic and conventional avocados. 
+
+# 8. 
+## The following plot shows, for all four California regions, the proportion of the average Hass avocado sales that are small, large, or extra large; conventional vs. organic. Recreate the plot; you do not have to replicate the exact finishing touches - e.g., color, theme - but your plot should resemble the content of this plot.
+
+Calculate the sum of volume (quantity_sold) for each Location and Type 
+
+```{python}
+# Calculate the sum of volume (quantity_sold) for each Location and Type
+total_volume_by_group = california_df.groupby(['location', 'type'])['quantity_sold'].sum().reset_index()
+
+# Rename the volume column to clearly show it's the total
+total_volume_by_group = total_volume_by_group.rename(columns={'quantity_sold': 'total_volume_group'})
+```
+
+Merge the total volume back into the main DataFrame
+
+```{python}
+# Merge the total volume back into the main DataFrame
+df_proportions = pd.merge(
+    california_df,
+    total_volume_by_group,
+    on=['location', 'type'],
+    how='left'
+)
+
+# Calculate the proportion
+df_proportions['proportion'] = df_proportions['quantity_sold'] / df_proportions['total_volume_group']
+```
+
+## Plotting
+
+```{python}
+
+plot_2 = (
+    p9.ggplot(df_proportions, p9.aes(x='location', y='proportion', fill='hass_avacado_size'))
+    
+    # stat='identity' for pre-calculated proportions
+    + p9.geom_bar(stat='identity', position='stack')
+    
+    # Separate the plot by conventional vs. organic
+    + p9.facet_wrap('~ type') 
+    
+    + p9.theme_bw()
+    
+    + p9.labs(
+        title='Proportion of Sales Volume by Size: Conventional vs. Organic',
+        x='California Region',
+        y='Proportion of Total Volume',
+        fill='Avocado Size'
+    )
+    + p9.theme(figure_size=(12, 6))
+)
+plot_2
+```
+
+# Using Outside Data
+
+I am using monthly housing prices data from redfin as I was unable to find weekly data from 2015 - 2020. Therefore, I will convert the avocado dataset into monthly format by taking the mean sales to make dataset ready for comparitive analysis with housing prices in 4 california cities "Los Angeles", "San Diego", "Sacramento", and "San Francisco".
+
+### Avocado data
+1. Let's create a new dataset (from avocado daatset) with filtered cities, and drop unuseful columns from avocado dataset (new dataset: 'filtered_city_comparion_df'):
+
+
+```{python}
+#filter list
+target_cities = ['San Francisco', 'San Diego', 'Sacramento', 'Los Angeles']
+# boolean masking
+city_filter = (
+    (avocado_clean_city['geo_type'] == 'City') &
+    (avocado_clean_city['location'].isin(target_cities))
+)
+#apply filter to new dataframe filtered_city_df
+filtered_city_df = avocado_clean_city[city_filter].copy()
+#copy 'filtered_city_df' to new datadframe 'filtered_city_comparion_df' to do the comparisons
+filtered_city_comparion_df = filtered_city_df[['date', 'location', 'total_volume']].copy().reset_index()
+filtered_city_comparion_df
+```
+
+2. Calculating mean based on months and years
+
+```{python}
+#convert date, month, year in right format
+filtered_city_comparion_df['date'] = pd.to_datetime(filtered_city_comparion_df['date'], errors='coerce')
+#filter year and month
+filtered_city_comparion_df['year'] = filtered_city_comparion_df['date'].dt.year
+filtered_city_comparion_df['month'] = filtered_city_comparion_df['date'].dt.month
+
+#apply filters in the new dataframe
+
+monthly_city_mean = (
+    filtered_city_comparion_df
+    .groupby(['location', 'year', 'month'])['total_volume']
+    .mean()
+    .reset_index()
+    .rename(columns={'total_volume': 'monthly_mean_total_volume'})
+)
+print(monthly_city_mean)
+```
+
+### Housing price data (from Redfin)
+
+cleaning the data (filtering the required cities, melting the dataset to long format, getting rid of $, K, ',' and conveting the 'date format to datetime)
+
+```{python}
+import pandas as pd
+
+# 1. read data
+housing_sales_df = pd.read_csv('housing_sales.csv', encoding='utf-16', delimiter='\t')  #data was not separated with ',' 
+
+# list of the desired cities
+target_housing_cities = [
+    'Los Angeles, CA metro area', 'Sacramento, CA',
+    'San Diego, CA', 'San Francisco, CA'
+]
+# filtering location column(unnamed:0) with the list 'target_housing_cities'
+housing_sales_df = housing_sales_df[housing_sales_df['Unnamed: 0'].isin(target_housing_cities)]
+
+
+# 2. Get value columns and mapping for month/year
+value_columns = [col for col in housing_sales_df.columns if col != 'Unnamed: 0']
+date_range = pd.date_range('2015-01-01', '2020-12-01', freq='MS')
+col_to_date = dict(zip(value_columns, date_range))
+
+# 3. Melt to tidy long format and map column names to real dates
+housing_sales_long = pd.melt(
+    housing_sales_df,
+    id_vars=['Unnamed: 0'],
+    value_vars=value_columns,
+    var_name='date_col',
+    value_name='housing_price'
+)
+housing_sales_long = housing_sales_long.rename(columns={'Unnamed: 0': 'location'})
+housing_sales_long['date'] = housing_sales_long['date_col'].map(col_to_date)
+housing_sales_long = housing_sales_long.drop(columns=['date_col'])
+
+# 4. Filter only rows that contain $ (i.e., real price values)
+housing_sales_long = housing_sales_long[
+    housing_sales_long['housing_price'].str.contains(r'\$', na=False, regex=True)
+]
+
+# 5. Clean, remove $/K/commas, and convert to float dollars
+housing_sales_long['housing_price'] = (
+    housing_sales_long['housing_price']
+        .str.replace('$', '', regex=False)
+        .str.replace('K', '', regex=False)
+        .str.replace(',', '', regex=False)
+        .astype(float) * 1000
+)
+
+# 6. Add year and month columns for easy merging/aggregation
+housing_sales_long['year'] = housing_sales_long['date'].dt.year
+housing_sales_long['month'] = housing_sales_long['date'].dt.month
+
+print(housing_sales_long.head())
+```
+
+### Comparing the 2 datastes (Avocado and housing price in California cities)
+
+Merging the 2 dataset on similar cities(merging the city names from both datasets)
+
+```{python}
+
+# dictionary to merge city names from both datasets
+city_name_map = {
+    'Los Angeles': 'Los Angeles, CA metro area',
+    'Sacramento': 'Sacramento, CA',
+    'San Diego': 'San Diego, CA',
+    'San Francisco': 'San Francisco, CA'
+}
+# 'monthly_city_mean' from avocado dataset
+#mapping the new dict to avocado dataset
+monthly_city_mean['location_mapped'] = monthly_city_mean['location'].map(city_name_map)
+
+# Merge avocado and housing data on matching columns
+joined_df = pd.merge(
+    monthly_city_mean,
+    housing_sales_long,
+    left_on=['location_mapped', 'year', 'month'],
+    right_on=['location', 'year', 'month'],
+    how='inner'
+)
+```
+
+### Plotting 
+
+```{python}
+# Scatter plot: avocado sales vs. house prices, faceted by CA city
+(
+    p9.ggplot(joined_df, p9.aes(x='monthly_mean_total_volume', y='housing_price')) +
+    p9.geom_point(alpha=0.5) +
+    p9.facet_wrap('~location_y', scales='free') +   # <-- use location_y for faceting!
+    p9.labs(
+        title='Monthly Avocado Sales vs Housing Prices by City (CA)',
+        x='Average Monthly Avocado Sales Volume',
+        y='Median Housing Price (USD)'
+    ) +
+    p9.theme_minimal()
+)
+```
+
+
+A common joke in popular media is that Millennials are unable to afford homes because they spend too much on avocado toast. To critically assess this claim, I analyzed real sales data for both avocados and housing prices across four major California cities: Los Angeles, Sacramento, San Diego, and San Francisco. After joining these datasets and visualizing the relationship, the evidence tells a very different story. The scatter plots show no consistent trend. House prices and avocado sales volumes fluctuate independently, with no clear positive or negative correlation in any of the cities. Whether monthly avocado sales were high or low, housing prices continued to follow their own patterns, especially in high-cost cities like San Francisco. This analysis strongly suggests that the notion of avocado purchases affecting housing affordability is not reliable, far more complex economic factors drive house prices.
+
+```{python}
+import pandas as pd
+from scipy.stats import pearsonr
+import statsmodels.api as sm
+
+correlation_results = []
+regression_results = []
+
+for city in joined_df['location_y'].unique():
+    subset = joined_df[joined_df['location_y'] == city].dropna(subset=['monthly_mean_total_volume', 'housing_price'])
+    if len(subset) >= 2:  # avoid too short
+        # Pearson correlation
+        corr, pval = pearsonr(subset['monthly_mean_total_volume'], subset['housing_price'])
+        correlation_results.append({'city': city, 'pearson_r': corr, 'p_value': pval})
+        # Linear regression (housing_price ~ monthly_mean_total_volume)
+        X = subset['monthly_mean_total_volume']
+        y = subset['housing_price']
+        X = sm.add_constant(X)
+        model = sm.OLS(y, X).fit()
+        regression_results.append({
+            'city': city,
+            'reg_coef': model.params['monthly_mean_total_volume'],
+            'intercept': model.params['const'],
+            'r_squared': model.rsquared,
+            'p_value': model.pvalues['monthly_mean_total_volume']
+        })
+        
+pd.DataFrame(correlation_results)
+pd.DataFrame(regression_results)
+
+```
+
+
+
+
+
+
+
+
+# Annotatons:
+
+1. Used Gemini to understand the dataset(avocado time series dataset), specifically the columns with small_bags, large-bags,..etc and how they differ from the 'total_volumns', '4046', '4225',..etc. 
+
+2. used gemini to create the dictionaries for queston 3 and 5 to assign the reions and geo_types from 'locatoion' column from the original dataset.
+
+3. used gemini to debug the code, understand the porcess, get insights and ideas for how to approach the problem. 
+
+4. in a few problems, i asked gemini to provide me with the code and explain it to me with context. I used that code after modifying it to answer the question.
+
+5. used perplexity to code for last part(using outside data), but understood what it is doing
+
+6. imported housing price data from Redfin
