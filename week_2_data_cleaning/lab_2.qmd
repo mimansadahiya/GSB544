@@ -7,6 +7,10 @@ code-fold: true
 toc: true
 ---
 
+GitHub Link to html: 
+
+<https://github.com/mimansadahiya/GSB544/blob/main/week_2_data_cleaning/lab_2.html>
+
 # 0. 
 ## Import the data and declare your package dependencies.
 
@@ -459,7 +463,8 @@ plot_2
 I am using monthly housing prices data from redfin as I was unable to find weekly data from 2015 - 2020. Therefore, I will convert the avocado dataset into monthly format by taking the mean sales to make dataset ready for comparitive analysis with housing prices in 4 california cities "Los Angeles", "San Diego", "Sacramento", and "San Francisco".
 
 ### Avocado data
-1. Let's create a new dataset (from avocado daatset) with filtered cities, and drop unuseful columns from avocado dataset (new dataset: 'filtered_city_comparion_df'):
+
+##### 1. Let's create a new dataset (from avocado daatset) with filtered cities, and drop unuseful columns from avocado dataset (new dataset: 'filtered_city_comparion_df'):
 
 
 ```{python}
@@ -477,7 +482,7 @@ filtered_city_comparion_df = filtered_city_df[['date', 'location', 'total_volume
 filtered_city_comparion_df
 ```
 
-2. Calculating mean based on months and years
+##### 2. Calculating mean based on months and years
 
 ```{python}
 #convert date, month, year in right format
@@ -495,7 +500,7 @@ monthly_city_mean = (
     .reset_index()
     .rename(columns={'total_volume': 'monthly_mean_total_volume'})
 )
-print(monthly_city_mean)
+monthly_city_mean
 ```
 
 ### Housing price data (from Redfin)
@@ -552,7 +557,7 @@ housing_sales_long['housing_price'] = (
 housing_sales_long['year'] = housing_sales_long['date'].dt.year
 housing_sales_long['month'] = housing_sales_long['date'].dt.month
 
-print(housing_sales_long.head())
+housing_sales_long
 ```
 
 ### Comparing the 2 datastes (Avocado and housing price in California cities)
@@ -601,44 +606,6 @@ joined_df = pd.merge(
 
 
 A common joke in popular media is that Millennials are unable to afford homes because they spend too much on avocado toast. To critically assess this claim, I analyzed real sales data for both avocados and housing prices across four major California cities: Los Angeles, Sacramento, San Diego, and San Francisco. After joining these datasets and visualizing the relationship, the evidence tells a very different story. The scatter plots show no consistent trend. House prices and avocado sales volumes fluctuate independently, with no clear positive or negative correlation in any of the cities. Whether monthly avocado sales were high or low, housing prices continued to follow their own patterns, especially in high-cost cities like San Francisco. This analysis strongly suggests that the notion of avocado purchases affecting housing affordability is not reliable, far more complex economic factors drive house prices.
-
-```{python}
-import pandas as pd
-from scipy.stats import pearsonr
-import statsmodels.api as sm
-
-correlation_results = []
-regression_results = []
-
-for city in joined_df['location_y'].unique():
-    subset = joined_df[joined_df['location_y'] == city].dropna(subset=['monthly_mean_total_volume', 'housing_price'])
-    if len(subset) >= 2:  # avoid too short
-        # Pearson correlation
-        corr, pval = pearsonr(subset['monthly_mean_total_volume'], subset['housing_price'])
-        correlation_results.append({'city': city, 'pearson_r': corr, 'p_value': pval})
-        # Linear regression (housing_price ~ monthly_mean_total_volume)
-        X = subset['monthly_mean_total_volume']
-        y = subset['housing_price']
-        X = sm.add_constant(X)
-        model = sm.OLS(y, X).fit()
-        regression_results.append({
-            'city': city,
-            'reg_coef': model.params['monthly_mean_total_volume'],
-            'intercept': model.params['const'],
-            'r_squared': model.rsquared,
-            'p_value': model.pvalues['monthly_mean_total_volume']
-        })
-        
-pd.DataFrame(correlation_results)
-pd.DataFrame(regression_results)
-
-```
-
-
-
-
-
-
 
 
 # Annotatons:

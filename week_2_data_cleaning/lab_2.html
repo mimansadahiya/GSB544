@@ -2225,10 +2225,7 @@ vertical-align: -.125em;
   <ul class="collapse">
   <li><a href="#in-which-california-regions-is-the-price-of-organic-versus-conventional-avocados-most-different-support-your-answer-with-a-few-summary-statistics-and-a-visualization." id="toc-in-which-california-regions-is-the-price-of-organic-versus-conventional-avocados-most-different-support-your-answer-with-a-few-summary-statistics-and-a-visualization." class="nav-link" data-scroll-target="#in-which-california-regions-is-the-price-of-organic-versus-conventional-avocados-most-different-support-your-answer-with-a-few-summary-statistics-and-a-visualization.">In which California regions is the price of organic versus conventional avocados most different? Support your answer with a few summary statistics AND a visualization.</a></li>
   <li><a href="#summary-statistics" id="toc-summary-statistics" class="nav-link" data-scroll-target="#summary-statistics">Summary statistics:</a></li>
-  <li><a href="#plotting-1" id="toc-plotting-1" class="nav-link" data-scroll-target="#plotting-1">Plotting</a>
-  <ul class="collapse">
-  <li><a href="#answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados." id="toc-answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados." class="nav-link" data-scroll-target="#answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados.">Answer: Therefore, San Fransisco experienced the highest differences in the price between organic and conventional avocados.</a></li>
-  </ul></li>
+  <li><a href="#plotting-1" id="toc-plotting-1" class="nav-link" data-scroll-target="#plotting-1">Plotting</a></li>
   </ul></li>
   <li><a href="#section-8" id="toc-section-8" class="nav-link" data-scroll-target="#section-8">8.</a>
   <ul class="collapse">
@@ -2267,13 +2264,15 @@ vertical-align: -.125em;
 </header>
 
 
+<p>GitHub Link to html:</p>
+<p><a href="https://github.com/mimansadahiya/GSB544/blob/main/week_2_data_cleaning/lab_2.html" class="uri">https://github.com/mimansadahiya/GSB544/blob/main/week_2_data_cleaning/lab_2.html</a></p>
 <section id="section" class="level1">
 <h1>0.</h1>
 <section id="import-the-data-and-declare-your-package-dependencies." class="level2">
 <h2 class="anchored" data-anchor-id="import-the-data-and-declare-your-package-dependencies.">Import the data and declare your package dependencies.</h2>
 <p>I am importing pandas to clean and pivot the datasets(avocado, housing prices), numpy to do calculations on the datasets, and plotnine library to provide visual data through graphs in this lab.</p>
 <p>Below is the original avocado dataset</p>
-<div id="c5d48173" class="cell" data-execution_count="1">
+<div id="bf0d6b49" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2283,7 +2282,7 @@ vertical-align: -.125em;
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>df_avacados <span class="op">=</span> pd.read_csv(<span class="st">&#39;avocado-updated-2020.csv&#39;</span>)</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>df_avacados</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="1">
+<div class="cell-output cell-output-display" data-execution_count="169">
 <div>
 
 
@@ -2506,7 +2505,7 @@ vertical-align: -.125em;
 <p>Let’s clean the dataset in step by first understanding what it contains then figuring out what needs to be changed for analysis.</p>
 <section id="understanding-the-data-column-name-types-checking-missing-values-duplicates" class="level5">
 <h5 class="anchored" data-anchor-id="understanding-the-data-column-name-types-checking-missing-values-duplicates">1. Understanding the data (column name, types, checking missing values, duplicates)</h5>
-<div id="62d2f713" class="cell" data-execution_count="2">
+<div id="eeb85b49" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_avacados.dtypes) </span>
@@ -2550,7 +2549,7 @@ dtype: int64</code></pre>
 </div>
 <p>As the date column was in object format, we changed it into datetime format for convenience.</p>
 <p>We also dropped duplicates adn missing values, but this dataset interestingly had no missing or duplicate values, which is uncommon in real world datasets.</p>
-<div id="eb7c8ef4" class="cell" data-execution_count="3">
+<div id="2aae7076" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># reference code for part 3(below)</span></span>
@@ -2561,7 +2560,7 @@ dtype: int64</code></pre>
 </section>
 <section id="renaming-confusing-columns-and-melting-the-data-4046-4225-4770" class="level5">
 <h5 class="anchored" data-anchor-id="renaming-confusing-columns-and-melting-the-data-4046-4225-4770">2. Renaming confusing columns and melting the data (‘4046’, ‘4225’, ‘4770’)</h5>
-<div id="35109101" class="cell" data-execution_count="4">
+<div id="308d532e" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Rename confusing columns</span></span>
@@ -2587,7 +2586,7 @@ dtype: int64</code></pre>
 <span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Now, avocado_clean is in a &quot;long&quot; format and ready for analysis.</span></span>
 <span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>avocado_clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="172">
 <div>
 
 
@@ -2773,7 +2772,7 @@ dtype: int64</code></pre>
 </section>
 <section id="mapping-new-columns-from-geography-column-added-geo_type-column-with-city-region-total-us-values" class="level5">
 <h5 class="anchored" data-anchor-id="mapping-new-columns-from-geography-column-added-geo_type-column-with-city-region-total-us-values">3. ‘Mapping’ new columns from geography column (added geo_type column with ‘city’, ‘region’, ‘total US’ values)</h5>
-<div id="403ebe54" class="cell" data-execution_count="5">
+<div id="7aed1270" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#create geo_type dictionary for (city, state, region, us)</span></span>
@@ -2829,7 +2828,7 @@ US         1836
 Name: count, dtype: int64
 0</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display" data-execution_count="173">
 <div>
 
 
@@ -3029,7 +3028,7 @@ Name: count, dtype: int64
 </section>
 <section id="standardize-location-column-values-to-title-case-for-consistency" class="level5">
 <h5 class="anchored" data-anchor-id="standardize-location-column-values-to-title-case-for-consistency">4. Standardize ‘location’ column values to title case for consistency</h5>
-<div id="cab4adc6" class="cell" data-execution_count="6">
+<div id="9c750bd8" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Standardize &#39;location&#39; to lowercase</span></span>
@@ -3062,7 +3061,7 @@ Name: count, dtype: int64
 <h2 class="anchored" data-anchor-id="which-major-geographical-region-sold-the-most-total-organic-small-hass-avocados-in-2017">Which major geographical region sold the most total organic, small Hass avocados in 2017?</h2>
 <p>Created granular region mapping to segregate major US regions as well(added column “granular_region”).</p>
 <p>Created a separate dictionary with help of gemini to segregate the ‘regions’ from geo_type column into 11 granular reions in US to find the region with most sales(to answer question 3) and assigned it to ‘granular_region column’.</p>
-<div id="6218e3ac" class="cell" data-execution_count="7">
+<div id="56a96076" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># The 11 distinct regions used in geo_type_map</span></span>
@@ -3087,7 +3086,7 @@ Name: count, dtype: int64
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>avocado_clean[<span class="st">&#39;granular_region&#39;</span>] <span class="op">=</span> avocado_clean[<span class="st">&#39;location&#39;</span>].<span class="bu">map</span>(granular_region_mapping)</span>
 <span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>avocado_clean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display" data-execution_count="175">
 <div>
 
 
@@ -3295,7 +3294,7 @@ Name: count, dtype: int64
 </div>
 </div>
 <p>Used the new column “granular_region” to find the region with highest sales.</p>
-<div id="1f55dfbb" class="cell" data-execution_count="8">
+<div id="3480cc72" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ----Find Highest Sales within Granular Regions -----</span></span>
@@ -3347,7 +3346,7 @@ Name: count, dtype: int64
 <h1>4.</h1>
 <section id="split-the-date-variable-into-month-day-and-year-variables.-in-which-month-is-the-highest-average-volume-of-avocado-sales" class="level2">
 <h2 class="anchored" data-anchor-id="split-the-date-variable-into-month-day-and-year-variables.-in-which-month-is-the-highest-average-volume-of-avocado-sales">Split the date variable into month, day, and year variables. In which month is the highest average volume of avocado sales?</h2>
-<div id="fe5052d2" class="cell" data-execution_count="9">
+<div id="6512e32c" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  &#39;year&#39; column</span></span>
@@ -3372,7 +3371,7 @@ Name: count, dtype: int64
 </div>
 </div>
 <p>Finding highest average volume of avocado sales</p>
-<div id="ba1dabbb" class="cell" data-execution_count="10">
+<div id="1eb3fad0" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>highest_monthly_sles <span class="op">=</span> avocado_clean.groupby(<span class="st">&#39;month&#39;</span>)[<span class="st">&#39;total_volume&#39;</span>].<span class="bu">sum</span>()</span>
@@ -3394,7 +3393,7 @@ Name: count, dtype: int64
 <h1>5.</h1>
 <section id="which-metro-area-geographical-regions-sold-the-most-total-avocados-plot-side-by-side-box-plots-of-the-total-volume-for-only-the-five-metro-geographical-regions-with-the-highest-averages-for-the-total_volume-variable." class="level2">
 <h2 class="anchored" data-anchor-id="which-metro-area-geographical-regions-sold-the-most-total-avocados-plot-side-by-side-box-plots-of-the-total-volume-for-only-the-five-metro-geographical-regions-with-the-highest-averages-for-the-total_volume-variable.">Which metro area geographical regions sold the most total avocados? Plot side-by-side box-plots of the total volume for only the five metro geographical regions with the highest averages for the total_volume variable.</h2>
-<div id="a53a0be2" class="cell" data-execution_count="11">
+<div id="ae7858b1" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filter dataset with geo_type = city only</span></span>
@@ -3415,7 +3414,7 @@ Name: count, dtype: int64
 <span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>    .sort_values(by<span class="op">=</span><span class="st">&#39;total_volume_sold&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>))    <span class="co">#descending </span></span>
 <span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>total_volume_by_metro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="179">
 <div>
 
 
@@ -3648,7 +3647,7 @@ Name: count, dtype: int64
 <h3 class="anchored" data-anchor-id="answer-2">Answer:</h3>
 <p>Therefore, the metro area geographical regions sold the most total avocados is Los Angeles with 2,878,051,464 sales. For the box plot, we need only 5 top cities (Los Angeles, New York, Dallas/Ft. Worth, Houston, Phoenix/Tucson).</p>
 <p>Calculating the average of the top 5 sities:</p>
-<div id="3ff56f92" class="cell" data-execution_count="12">
+<div id="f3508bad" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># AVERAGE Volume for top 5 cities</span></span>
@@ -3659,7 +3658,7 @@ Name: count, dtype: int64
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>    .sort_values(ascending<span class="op">=</span><span class="va">False</span>))</span>
 <span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>average_volume_by_metro</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display" data-execution_count="180">
 <pre><code>location
 Los Angeles            1,567,566
 New York                 863,146
@@ -3709,7 +3708,7 @@ Name: total_volume, dtype: float64</code></pre>
 </section>
 <section id="plotting" class="level3">
 <h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
-<div id="393f1cb2" class="cell" data-execution_count="13">
+<div id="5b090a65" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co">#  Identify the top 5 metro areas (ordered list)</span></span>
@@ -3757,7 +3756,7 @@ Name: total_volume, dtype: float64</code></pre>
 <section id="from-your-cleaned-data-set-create-a-data-set-with-only-these-california-regions-and-answer-the-following-questions-about-these-california-regions-only." class="level2">
 <h2 class="anchored" data-anchor-id="from-your-cleaned-data-set-create-a-data-set-with-only-these-california-regions-and-answer-the-following-questions-about-these-california-regions-only.">From your cleaned data set, create a data set with only these California regions and answer the following questions about these California regions only.</h2>
 <p>The dataframe below includes the data from only 4 California regions (“Los Angeles”, “San Diego”, “Sacramento”, “San Francisco”)</p>
-<div id="072a01e3" class="cell" data-execution_count="14">
+<div id="f2998007" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pd.options.display.float_format <span class="op">=</span> <span class="st">&#39;</span><span class="sc">{:,.2f}</span><span class="st">&#39;</span>.<span class="bu">format</span>    <span class="co">#to keep the average price in float</span></span>
@@ -3772,7 +3771,7 @@ Name: total_volume, dtype: float64</code></pre>
 <span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>california_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="182">
 <div>
 
 
@@ -4025,7 +4024,7 @@ Name: total_volume, dtype: float64</code></pre>
 <section id="summary-statistics" class="level2">
 <h2 class="anchored" data-anchor-id="summary-statistics">Summary statistics:</h2>
 <p>Calculating average price in different location catagorized by type i.e. organic/conventional (wide format dataset)</p>
-<div id="f8fc5ac1" class="cell" data-execution_count="15">
+<div id="72cbcc28" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate average price by location and type (Wide Format)</span></span>
@@ -4042,7 +4041,7 @@ San Francisco          1.40     2.12</code></pre>
 </div>
 </div>
 <p>Calculating the differences between average organic avocado price and average conventional avocado price :</p>
-<div id="f13a3569" class="cell" data-execution_count="16">
+<div id="8c516697" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>price_summary_wide[<span class="st">&#39;price_difference&#39;</span>] <span class="op">=</span> np.<span class="bu">abs</span>(price_summary_wide[<span class="st">&#39;organic&#39;</span>] <span class="op">-</span> price_summary_wide[<span class="st">&#39;conventional&#39;</span>])</span>
@@ -4059,7 +4058,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </div>
 </div>
 <p>Converting the wide summary into long format for plotting:</p>
-<div id="74555175" class="cell" data-execution_count="17">
+<div id="575ba026" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert the wide summary table back into the &#39;long&#39; format required for plotting</span></span>
@@ -4080,7 +4079,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </div>
 </div>
 <p>Ordered list for plotting:</p>
-<div id="7d8dca4f" class="cell" data-execution_count="18">
+<div id="18dea74f" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an ordered list based on the calculated price difference (highest first)</span></span>
@@ -4095,7 +4094,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </section>
 <section id="plotting-1" class="level2">
 <h2 class="anchored" data-anchor-id="plotting-1">Plotting</h2>
-<div id="49ed536b" class="cell" data-execution_count="19">
+<div id="7c71f5c5" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>plot <span class="op">=</span> (</span>
@@ -4129,8 +4128,8 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </div>
 </div>
 <p>The box plot uses the means of the weekly prices of both organic and conventional avocadoes to cretaes a distribution to describe the differences between organic and conventional avocado prices in different california cities (“Los Angeles”, “San Diego”, “Sacramento”, “San Francisco”). The difference in prices is shown by the differences in the heights of twin bars(each red and blue pair). The order list of plotting is already defined in the code above, therofore, the left most twin bar shows the highest differences and the right most shows the lowest diferences in sales of orgaic and conventional avocados.</p>
-<section id="answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados." class="level3">
-<h3 class="anchored" data-anchor-id="answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados.">Answer: Therefore, San Fransisco experienced the highest differences in the price between organic and conventional avocados.</h3>
+<section id="answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados." class="level4">
+<h4 class="anchored" data-anchor-id="answer-therefore-san-fransisco-experienced-the-highest-differences-in-the-price-between-organic-and-conventional-avocados.">Answer: Therefore, San Fransisco experienced the highest differences in the price between organic and conventional avocados.</h4>
 </section>
 </section>
 </section>
@@ -4139,7 +4138,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 <section id="the-following-plot-shows-for-all-four-california-regions-the-proportion-of-the-average-hass-avocado-sales-that-are-small-large-or-extra-large-conventional-vs.-organic.-recreate-the-plot-you-do-not-have-to-replicate-the-exact-finishing-touches---e.g.-color-theme---but-your-plot-should-resemble-the-content-of-this-plot." class="level2">
 <h2 class="anchored" data-anchor-id="the-following-plot-shows-for-all-four-california-regions-the-proportion-of-the-average-hass-avocado-sales-that-are-small-large-or-extra-large-conventional-vs.-organic.-recreate-the-plot-you-do-not-have-to-replicate-the-exact-finishing-touches---e.g.-color-theme---but-your-plot-should-resemble-the-content-of-this-plot.">The following plot shows, for all four California regions, the proportion of the average Hass avocado sales that are small, large, or extra large; conventional vs. organic. Recreate the plot; you do not have to replicate the exact finishing touches - e.g., color, theme - but your plot should resemble the content of this plot.</h2>
 <p>Calculate the sum of volume (quantity_sold) for each Location and Type</p>
-<div id="46c7a066" class="cell" data-execution_count="20">
+<div id="14912bc5" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate the sum of volume (quantity_sold) for each Location and Type</span></span>
@@ -4150,7 +4149,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </details>
 </div>
 <p>Merge the total volume back into the main DataFrame</p>
-<div id="b2894505" class="cell" data-execution_count="21">
+<div id="f48eed58" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge the total volume back into the main DataFrame</span></span>
@@ -4168,7 +4167,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </section>
 <section id="plotting-2" class="level2">
 <h2 class="anchored" data-anchor-id="plotting-2">Plotting</h2>
-<div id="fb610250" class="cell" data-execution_count="22">
+<div id="1c8e89f7" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>plot_2 <span class="op">=</span> (</span>
@@ -4207,10 +4206,9 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 <p>I am using monthly housing prices data from redfin as I was unable to find weekly data from 2015 - 2020. Therefore, I will convert the avocado dataset into monthly format by taking the mean sales to make dataset ready for comparitive analysis with housing prices in 4 california cities “Los Angeles”, “San Diego”, “Sacramento”, and “San Francisco”.</p>
 <section id="avocado-data" class="level3">
 <h3 class="anchored" data-anchor-id="avocado-data">Avocado data</h3>
-<ol type="1">
-<li>Let’s create a new dataset (from avocado daatset) with filtered cities, and drop unuseful columns from avocado dataset (new dataset: ‘filtered_city_comparion_df’):</li>
-</ol>
-<div id="c154dd21" class="cell" data-execution_count="23">
+<section id="lets-create-a-new-dataset-from-avocado-daatset-with-filtered-cities-and-drop-unuseful-columns-from-avocado-dataset-new-dataset-filtered_city_comparion_df" class="level5">
+<h5 class="anchored" data-anchor-id="lets-create-a-new-dataset-from-avocado-daatset-with-filtered-cities-and-drop-unuseful-columns-from-avocado-dataset-new-dataset-filtered_city_comparion_df">1. Let’s create a new dataset (from avocado daatset) with filtered cities, and drop unuseful columns from avocado dataset (new dataset: ‘filtered_city_comparion_df’):</h5>
+<div id="a2c69262" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co">#filter list</span></span>
@@ -4226,7 +4224,7 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 <span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>filtered_city_comparion_df <span class="op">=</span> filtered_city_df[[<span class="st">&#39;date&#39;</span>, <span class="st">&#39;location&#39;</span>, <span class="st">&#39;total_volume&#39;</span>]].copy().reset_index()</span>
 <span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a>filtered_city_comparion_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display" data-execution_count="191">
 <div>
 
 
@@ -4325,10 +4323,10 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </div>
 </div>
 </div>
-<ol start="2" type="1">
-<li>Calculating mean based on months and years</li>
-</ol>
-<div id="3de9b811" class="cell" data-execution_count="24">
+</section>
+<section id="calculating-mean-based-on-months-and-years" class="level5">
+<h5 class="anchored" data-anchor-id="calculating-mean-based-on-months-and-years">2. Calculating mean based on months and years</h5>
+<div id="1c9cf846" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co">#convert date, month, year in right format</span></span>
@@ -4346,138 +4344,323 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 <span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
 <span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    .rename(columns<span class="op">=</span>{<span class="st">&#39;total_volume&#39;</span>: <span class="st">&#39;monthly_mean_total_volume&#39;</span>})</span>
 <span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(monthly_city_mean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true" tabindex="-1"></a>monthly_city_mean</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>          location  year  month  monthly_mean_total_volume
-0      Los Angeles  2015      1               1,340,372.71
-1      Los Angeles  2015      2               1,592,214.84
-2      Los Angeles  2015      3               1,382,745.03
-3      Los Angeles  2015      4               1,354,605.72
-4      Los Angeles  2015      5               1,640,057.84
-..             ...   ...    ...                        ...
-279  San Francisco  2020      7                 569,584.05
-280  San Francisco  2020      8                 586,782.15
-281  San Francisco  2020      9                 539,353.03
-282  San Francisco  2020     10                 511,774.07
-283  San Francisco  2020     11                 456,609.86
+<div class="cell-output cell-output-display" data-execution_count="192">
+<div>
 
-[284 rows x 4 columns]</code></pre>
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">location</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">monthly_mean_total_volume</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Los Angeles</td>
+<td>2015</td>
+<td>1</td>
+<td>1,340,372.71</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Los Angeles</td>
+<td>2015</td>
+<td>2</td>
+<td>1,592,214.84</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>Los Angeles</td>
+<td>2015</td>
+<td>3</td>
+<td>1,382,745.03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>Los Angeles</td>
+<td>2015</td>
+<td>4</td>
+<td>1,354,605.72</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Los Angeles</td>
+<td>2015</td>
+<td>5</td>
+<td>1,640,057.84</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">279</td>
+<td>San Francisco</td>
+<td>2020</td>
+<td>7</td>
+<td>569,584.05</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">280</td>
+<td>San Francisco</td>
+<td>2020</td>
+<td>8</td>
+<td>586,782.15</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">281</td>
+<td>San Francisco</td>
+<td>2020</td>
+<td>9</td>
+<td>539,353.03</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">282</td>
+<td>San Francisco</td>
+<td>2020</td>
+<td>10</td>
+<td>511,774.07</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">283</td>
+<td>San Francisco</td>
+<td>2020</td>
+<td>11</td>
+<td>456,609.86</td>
+</tr>
+</tbody>
+</table>
+
+<p>284 rows × 4 columns</p>
 </div>
 </div>
+</div>
+</section>
 </section>
 <section id="housing-price-data-from-redfin" class="level3">
 <h3 class="anchored" data-anchor-id="housing-price-data-from-redfin">Housing price data (from Redfin)</h3>
 <p>cleaning the data (filtering the required cities, melting the dataset to long format, getting rid of $, K, ‘,’ and conveting the ’date format to datetime)</p>
-<div id="3743f94d" class="cell" data-execution_count="25">
+<div id="d78bf53c" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. read data</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>housing_sales_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;housing_sales.csv&#39;</span>, encoding<span class="op">=</span><span class="st">&#39;utf-16&#39;</span>, delimiter<span class="op">=</span><span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)  <span class="co">#data was not separated with &#39;,&#39; </span></span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a><span class="co"># list of the desired cities</span></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>target_housing_cities <span class="op">=</span> [</span>
-<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Los Angeles, CA metro area&#39;</span>, <span class="st">&#39;Sacramento, CA&#39;</span>,</span>
-<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Diego, CA&#39;</span>, <span class="st">&#39;San Francisco, CA&#39;</span></span>
-<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering location column(unnamed:0) with the list &#39;target_housing_cities&#39;</span></span>
-<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>housing_sales_df <span class="op">=</span> housing_sales_df[housing_sales_df[<span class="st">&#39;Unnamed: 0&#39;</span>].isin(target_housing_cities)]</span>
-<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Get value columns and mapping for month/year</span></span>
-<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>value_columns <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> housing_sales_df.columns <span class="cf">if</span> col <span class="op">!=</span> <span class="st">&#39;Unnamed: 0&#39;</span>]</span>
-<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>date_range <span class="op">=</span> pd.date_range(<span class="st">&#39;2015-01-01&#39;</span>, <span class="st">&#39;2020-12-01&#39;</span>, freq<span class="op">=</span><span class="st">&#39;MS&#39;</span>)</span>
-<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>col_to_date <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(value_columns, date_range))</span>
-<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Melt to tidy long format and map column names to real dates</span></span>
-<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> pd.melt(</span>
-<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>    housing_sales_df,</span>
-<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>[<span class="st">&#39;Unnamed: 0&#39;</span>],</span>
-<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>    value_vars<span class="op">=</span>value_columns,</span>
-<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>    var_name<span class="op">=</span><span class="st">&#39;date_col&#39;</span>,</span>
-<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">&#39;housing_price&#39;</span></span>
-<span id="cb37-27"><a href="#cb37-27" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb37-28"><a href="#cb37-28" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long.rename(columns<span class="op">=</span>{<span class="st">&#39;Unnamed: 0&#39;</span>: <span class="st">&#39;location&#39;</span>})</span>
-<span id="cb37-29"><a href="#cb37-29" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;date&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date_col&#39;</span>].<span class="bu">map</span>(col_to_date)</span>
-<span id="cb37-30"><a href="#cb37-30" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long.drop(columns<span class="op">=</span>[<span class="st">&#39;date_col&#39;</span>])</span>
-<span id="cb37-31"><a href="#cb37-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-32"><a href="#cb37-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Filter only rows that contain $ (i.e., real price values)</span></span>
-<span id="cb37-33"><a href="#cb37-33" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long[</span>
-<span id="cb37-34"><a href="#cb37-34" aria-hidden="true" tabindex="-1"></a>    housing_sales_long[<span class="st">&#39;housing_price&#39;</span>].<span class="bu">str</span>.contains(<span class="vs">r&#39;</span><span class="ch">\$</span><span class="vs">&#39;</span>, na<span class="op">=</span><span class="va">False</span>, regex<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb37-35"><a href="#cb37-35" aria-hidden="true" tabindex="-1"></a>]</span>
-<span id="cb37-36"><a href="#cb37-36" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-37"><a href="#cb37-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Clean, remove $/K/commas, and convert to float dollars</span></span>
-<span id="cb37-38"><a href="#cb37-38" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;housing_price&#39;</span>] <span class="op">=</span> (</span>
-<span id="cb37-39"><a href="#cb37-39" aria-hidden="true" tabindex="-1"></a>    housing_sales_long[<span class="st">&#39;housing_price&#39;</span>]</span>
-<span id="cb37-40"><a href="#cb37-40" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;$&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb37-41"><a href="#cb37-41" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;K&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb37-42"><a href="#cb37-42" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;,&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb37-43"><a href="#cb37-43" aria-hidden="true" tabindex="-1"></a>        .astype(<span class="bu">float</span>) <span class="op">*</span> <span class="dv">1000</span></span>
-<span id="cb37-44"><a href="#cb37-44" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb37-45"><a href="#cb37-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-46"><a href="#cb37-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Add year and month columns for easy merging/aggregation</span></span>
-<span id="cb37-47"><a href="#cb37-47" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;year&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date&#39;</span>].dt.year</span>
-<span id="cb37-48"><a href="#cb37-48" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;month&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date&#39;</span>].dt.month</span>
-<span id="cb37-49"><a href="#cb37-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-50"><a href="#cb37-50" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(housing_sales_long.head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. read data</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>housing_sales_df <span class="op">=</span> pd.read_csv(<span class="st">&#39;housing_sales.csv&#39;</span>, encoding<span class="op">=</span><span class="st">&#39;utf-16&#39;</span>, delimiter<span class="op">=</span><span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)  <span class="co">#data was not separated with &#39;,&#39; </span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># list of the desired cities</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>target_housing_cities <span class="op">=</span> [</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Los Angeles, CA metro area&#39;</span>, <span class="st">&#39;Sacramento, CA&#39;</span>,</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Diego, CA&#39;</span>, <span class="st">&#39;San Francisco, CA&#39;</span></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a><span class="co"># filtering location column(unnamed:0) with the list &#39;target_housing_cities&#39;</span></span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>housing_sales_df <span class="op">=</span> housing_sales_df[housing_sales_df[<span class="st">&#39;Unnamed: 0&#39;</span>].isin(target_housing_cities)]</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Get value columns and mapping for month/year</span></span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>value_columns <span class="op">=</span> [col <span class="cf">for</span> col <span class="kw">in</span> housing_sales_df.columns <span class="cf">if</span> col <span class="op">!=</span> <span class="st">&#39;Unnamed: 0&#39;</span>]</span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>date_range <span class="op">=</span> pd.date_range(<span class="st">&#39;2015-01-01&#39;</span>, <span class="st">&#39;2020-12-01&#39;</span>, freq<span class="op">=</span><span class="st">&#39;MS&#39;</span>)</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>col_to_date <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(value_columns, date_range))</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Melt to tidy long format and map column names to real dates</span></span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> pd.melt(</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>    housing_sales_df,</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>    id_vars<span class="op">=</span>[<span class="st">&#39;Unnamed: 0&#39;</span>],</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>    value_vars<span class="op">=</span>value_columns,</span>
+<span id="cb36-25"><a href="#cb36-25" aria-hidden="true" tabindex="-1"></a>    var_name<span class="op">=</span><span class="st">&#39;date_col&#39;</span>,</span>
+<span id="cb36-26"><a href="#cb36-26" aria-hidden="true" tabindex="-1"></a>    value_name<span class="op">=</span><span class="st">&#39;housing_price&#39;</span></span>
+<span id="cb36-27"><a href="#cb36-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-28"><a href="#cb36-28" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long.rename(columns<span class="op">=</span>{<span class="st">&#39;Unnamed: 0&#39;</span>: <span class="st">&#39;location&#39;</span>})</span>
+<span id="cb36-29"><a href="#cb36-29" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;date&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date_col&#39;</span>].<span class="bu">map</span>(col_to_date)</span>
+<span id="cb36-30"><a href="#cb36-30" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long.drop(columns<span class="op">=</span>[<span class="st">&#39;date_col&#39;</span>])</span>
+<span id="cb36-31"><a href="#cb36-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-32"><a href="#cb36-32" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Filter only rows that contain $ (i.e., real price values)</span></span>
+<span id="cb36-33"><a href="#cb36-33" aria-hidden="true" tabindex="-1"></a>housing_sales_long <span class="op">=</span> housing_sales_long[</span>
+<span id="cb36-34"><a href="#cb36-34" aria-hidden="true" tabindex="-1"></a>    housing_sales_long[<span class="st">&#39;housing_price&#39;</span>].<span class="bu">str</span>.contains(<span class="vs">r&#39;</span><span class="ch">\$</span><span class="vs">&#39;</span>, na<span class="op">=</span><span class="va">False</span>, regex<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb36-35"><a href="#cb36-35" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb36-36"><a href="#cb36-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-37"><a href="#cb36-37" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Clean, remove $/K/commas, and convert to float dollars</span></span>
+<span id="cb36-38"><a href="#cb36-38" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;housing_price&#39;</span>] <span class="op">=</span> (</span>
+<span id="cb36-39"><a href="#cb36-39" aria-hidden="true" tabindex="-1"></a>    housing_sales_long[<span class="st">&#39;housing_price&#39;</span>]</span>
+<span id="cb36-40"><a href="#cb36-40" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;$&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb36-41"><a href="#cb36-41" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;K&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb36-42"><a href="#cb36-42" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">str</span>.replace(<span class="st">&#39;,&#39;</span>, <span class="st">&#39;&#39;</span>, regex<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb36-43"><a href="#cb36-43" aria-hidden="true" tabindex="-1"></a>        .astype(<span class="bu">float</span>) <span class="op">*</span> <span class="dv">1000</span></span>
+<span id="cb36-44"><a href="#cb36-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb36-45"><a href="#cb36-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-46"><a href="#cb36-46" aria-hidden="true" tabindex="-1"></a><span class="co"># 6. Add year and month columns for easy merging/aggregation</span></span>
+<span id="cb36-47"><a href="#cb36-47" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;year&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date&#39;</span>].dt.year</span>
+<span id="cb36-48"><a href="#cb36-48" aria-hidden="true" tabindex="-1"></a>housing_sales_long[<span class="st">&#39;month&#39;</span>] <span class="op">=</span> housing_sales_long[<span class="st">&#39;date&#39;</span>].dt.month</span>
+<span id="cb36-49"><a href="#cb36-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-50"><a href="#cb36-50" aria-hidden="true" tabindex="-1"></a>housing_sales_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>                     location  housing_price       date  year  month
-0  Los Angeles, CA metro area     470,000.00 2015-01-01  2015      1
-1              Sacramento, CA     254,000.00 2015-01-01  2015      1
-2               San Diego, CA     480,000.00 2015-01-01  2015      1
-3           San Francisco, CA   1,133,000.00 2015-01-01  2015      1
-4  Los Angeles, CA metro area     480,000.00 2015-02-01  2015      2</code></pre>
+<div class="cell-output cell-output-display" data-execution_count="193">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">location</th>
+<th data-quarto-table-cell-role="th">housing_price</th>
+<th data-quarto-table-cell-role="th">date</th>
+<th data-quarto-table-cell-role="th">year</th>
+<th data-quarto-table-cell-role="th">month</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>Los Angeles, CA metro area</td>
+<td>470,000.00</td>
+<td>2015-01-01</td>
+<td>2015</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>Sacramento, CA</td>
+<td>254,000.00</td>
+<td>2015-01-01</td>
+<td>2015</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>San Diego, CA</td>
+<td>480,000.00</td>
+<td>2015-01-01</td>
+<td>2015</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>San Francisco, CA</td>
+<td>1,133,000.00</td>
+<td>2015-01-01</td>
+<td>2015</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>Los Angeles, CA metro area</td>
+<td>480,000.00</td>
+<td>2015-02-01</td>
+<td>2015</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">279</td>
+<td>San Francisco, CA</td>
+<td>1,425,000.00</td>
+<td>2020-10-01</td>
+<td>2020</td>
+<td>10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">280</td>
+<td>Los Angeles, CA metro area</td>
+<td>730,000.00</td>
+<td>2020-11-01</td>
+<td>2020</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">281</td>
+<td>Sacramento, CA</td>
+<td>422,000.00</td>
+<td>2020-11-01</td>
+<td>2020</td>
+<td>11</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">282</td>
+<td>San Diego, CA</td>
+<td>693,000.00</td>
+<td>2020-11-01</td>
+<td>2020</td>
+<td>11</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">283</td>
+<td>San Francisco, CA</td>
+<td>1,350,000.00</td>
+<td>2020-11-01</td>
+<td>2020</td>
+<td>11</td>
+</tr>
+</tbody>
+</table>
+
+<p>284 rows × 5 columns</p>
+</div>
 </div>
 </div>
 </section>
 <section id="comparing-the-2-datastes-avocado-and-housing-price-in-california-cities" class="level3">
 <h3 class="anchored" data-anchor-id="comparing-the-2-datastes-avocado-and-housing-price-in-california-cities">Comparing the 2 datastes (Avocado and housing price in California cities)</h3>
 <p>Merging the 2 dataset on similar cities(merging the city names from both datasets)</p>
-<div id="2c715011" class="cell" data-execution_count="26">
+<div id="66bb479d" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dictionary to merge city names from both datasets</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>city_name_map <span class="op">=</span> {</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Los Angeles&#39;</span>: <span class="st">&#39;Los Angeles, CA metro area&#39;</span>,</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Sacramento&#39;</span>: <span class="st">&#39;Sacramento, CA&#39;</span>,</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Diego&#39;</span>: <span class="st">&#39;San Diego, CA&#39;</span>,</span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Francisco&#39;</span>: <span class="st">&#39;San Francisco, CA&#39;</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="co"># &#39;monthly_city_mean&#39; from avocado dataset</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true" tabindex="-1"></a><span class="co">#mapping the new dict to avocado dataset</span></span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true" tabindex="-1"></a>monthly_city_mean[<span class="st">&#39;location_mapped&#39;</span>] <span class="op">=</span> monthly_city_mean[<span class="st">&#39;location&#39;</span>].<span class="bu">map</span>(city_name_map)</span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge avocado and housing data on matching columns</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true" tabindex="-1"></a>joined_df <span class="op">=</span> pd.merge(</span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true" tabindex="-1"></a>    monthly_city_mean,</span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true" tabindex="-1"></a>    housing_sales_long,</span>
-<span id="cb39-16"><a href="#cb39-16" aria-hidden="true" tabindex="-1"></a>    left_on<span class="op">=</span>[<span class="st">&#39;location_mapped&#39;</span>, <span class="st">&#39;year&#39;</span>, <span class="st">&#39;month&#39;</span>],</span>
-<span id="cb39-17"><a href="#cb39-17" aria-hidden="true" tabindex="-1"></a>    right_on<span class="op">=</span>[<span class="st">&#39;location&#39;</span>, <span class="st">&#39;year&#39;</span>, <span class="st">&#39;month&#39;</span>],</span>
-<span id="cb39-18"><a href="#cb39-18" aria-hidden="true" tabindex="-1"></a>    how<span class="op">=</span><span class="st">&#39;inner&#39;</span></span>
-<span id="cb39-19"><a href="#cb39-19" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># dictionary to merge city names from both datasets</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>city_name_map <span class="op">=</span> {</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Los Angeles&#39;</span>: <span class="st">&#39;Los Angeles, CA metro area&#39;</span>,</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Sacramento&#39;</span>: <span class="st">&#39;Sacramento, CA&#39;</span>,</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Diego&#39;</span>: <span class="st">&#39;San Diego, CA&#39;</span>,</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;San Francisco&#39;</span>: <span class="st">&#39;San Francisco, CA&#39;</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a><span class="co"># &#39;monthly_city_mean&#39; from avocado dataset</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="co">#mapping the new dict to avocado dataset</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>monthly_city_mean[<span class="st">&#39;location_mapped&#39;</span>] <span class="op">=</span> monthly_city_mean[<span class="st">&#39;location&#39;</span>].<span class="bu">map</span>(city_name_map)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Merge avocado and housing data on matching columns</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>joined_df <span class="op">=</span> pd.merge(</span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>    monthly_city_mean,</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>    housing_sales_long,</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>    left_on<span class="op">=</span>[<span class="st">&#39;location_mapped&#39;</span>, <span class="st">&#39;year&#39;</span>, <span class="st">&#39;month&#39;</span>],</span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>    right_on<span class="op">=</span>[<span class="st">&#39;location&#39;</span>, <span class="st">&#39;year&#39;</span>, <span class="st">&#39;month&#39;</span>],</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>    how<span class="op">=</span><span class="st">&#39;inner&#39;</span></span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="plotting-3" class="level3">
 <h3 class="anchored" data-anchor-id="plotting-3">Plotting</h3>
-<div id="9edd7f74" class="cell" data-execution_count="27">
+<div id="4df2cdaf" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot: avocado sales vs. house prices, faceted by CA city</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>(</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    p9.ggplot(joined_df, p9.aes(x<span class="op">=</span><span class="st">&#39;monthly_mean_total_volume&#39;</span>, y<span class="op">=</span><span class="st">&#39;housing_price&#39;</span>)) <span class="op">+</span></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    p9.geom_point(alpha<span class="op">=</span><span class="fl">0.5</span>) <span class="op">+</span></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    p9.facet_wrap(<span class="st">&#39;~location_y&#39;</span>, scales<span class="op">=</span><span class="st">&#39;free&#39;</span>) <span class="op">+</span>   <span class="co"># &lt;-- use location_y for faceting!</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    p9.labs(</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">&#39;Monthly Avocado Sales vs Housing Prices by City (CA)&#39;</span>,</span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">&#39;Average Monthly Avocado Sales Volume&#39;</span>,</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">&#39;Median Housing Price (USD)&#39;</span></span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">+</span></span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>    p9.theme_minimal()</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot: avocado sales vs. house prices, faceted by CA city</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>(</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    p9.ggplot(joined_df, p9.aes(x<span class="op">=</span><span class="st">&#39;monthly_mean_total_volume&#39;</span>, y<span class="op">=</span><span class="st">&#39;housing_price&#39;</span>)) <span class="op">+</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>    p9.geom_point(alpha<span class="op">=</span><span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>    p9.facet_wrap(<span class="st">&#39;~location_y&#39;</span>, scales<span class="op">=</span><span class="st">&#39;free&#39;</span>) <span class="op">+</span>   <span class="co"># &lt;-- use location_y for faceting!</span></span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    p9.labs(</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>        title<span class="op">=</span><span class="st">&#39;Monthly Avocado Sales vs Housing Prices by City (CA)&#39;</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>        x<span class="op">=</span><span class="st">&#39;Average Monthly Avocado Sales Volume&#39;</span>,</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>        y<span class="op">=</span><span class="st">&#39;Median Housing Price (USD)&#39;</span></span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    ) <span class="op">+</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    p9.theme_minimal()</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
 <div>
@@ -4488,92 +4671,6 @@ Los Angeles            1.05     1.57              0.53</code></pre>
 </div>
 </div>
 <p>A common joke in popular media is that Millennials are unable to afford homes because they spend too much on avocado toast. To critically assess this claim, I analyzed real sales data for both avocados and housing prices across four major California cities: Los Angeles, Sacramento, San Diego, and San Francisco. After joining these datasets and visualizing the relationship, the evidence tells a very different story. The scatter plots show no consistent trend. House prices and avocado sales volumes fluctuate independently, with no clear positive or negative correlation in any of the cities. Whether monthly avocado sales were high or low, housing prices continued to follow their own patterns, especially in high-cost cities like San Francisco. This analysis strongly suggests that the notion of avocado purchases affecting housing affordability is not reliable, far more complex economic factors drive house prices.</p>
-<div id="e3108854" class="cell" data-execution_count="28">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.stats <span class="im">import</span> pearsonr</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>correlation_results <span class="op">=</span> []</span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>regression_results <span class="op">=</span> []</span>
-<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> city <span class="kw">in</span> joined_df[<span class="st">&#39;location_y&#39;</span>].unique():</span>
-<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>    subset <span class="op">=</span> joined_df[joined_df[<span class="st">&#39;location_y&#39;</span>] <span class="op">==</span> city].dropna(subset<span class="op">=</span>[<span class="st">&#39;monthly_mean_total_volume&#39;</span>, <span class="st">&#39;housing_price&#39;</span>])</span>
-<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(subset) <span class="op">&gt;=</span> <span class="dv">2</span>:  <span class="co"># avoid too short</span></span>
-<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Pearson correlation</span></span>
-<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>        corr, pval <span class="op">=</span> pearsonr(subset[<span class="st">&#39;monthly_mean_total_volume&#39;</span>], subset[<span class="st">&#39;housing_price&#39;</span>])</span>
-<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>        correlation_results.append({<span class="st">&#39;city&#39;</span>: city, <span class="st">&#39;pearson_r&#39;</span>: corr, <span class="st">&#39;p_value&#39;</span>: pval})</span>
-<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Linear regression (housing_price ~ monthly_mean_total_volume)</span></span>
-<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a>        X <span class="op">=</span> subset[<span class="st">&#39;monthly_mean_total_volume&#39;</span>]</span>
-<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>        y <span class="op">=</span> subset[<span class="st">&#39;housing_price&#39;</span>]</span>
-<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>        X <span class="op">=</span> sm.add_constant(X)</span>
-<span id="cb41-18"><a href="#cb41-18" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> sm.OLS(y, X).fit()</span>
-<span id="cb41-19"><a href="#cb41-19" aria-hidden="true" tabindex="-1"></a>        regression_results.append({</span>
-<span id="cb41-20"><a href="#cb41-20" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;city&#39;</span>: city,</span>
-<span id="cb41-21"><a href="#cb41-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;reg_coef&#39;</span>: model.params[<span class="st">&#39;monthly_mean_total_volume&#39;</span>],</span>
-<span id="cb41-22"><a href="#cb41-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;intercept&#39;</span>: model.params[<span class="st">&#39;const&#39;</span>],</span>
-<span id="cb41-23"><a href="#cb41-23" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;r_squared&#39;</span>: model.rsquared,</span>
-<span id="cb41-24"><a href="#cb41-24" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;p_value&#39;</span>: model.pvalues[<span class="st">&#39;monthly_mean_total_volume&#39;</span>]</span>
-<span id="cb41-25"><a href="#cb41-25" aria-hidden="true" tabindex="-1"></a>        })</span>
-<span id="cb41-26"><a href="#cb41-26" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb41-27"><a href="#cb41-27" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(correlation_results)</span>
-<span id="cb41-28"><a href="#cb41-28" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(regression_results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="28">
-<div>
-
-
-<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
-<thead>
-<tr class="header">
-<th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">city</th>
-<th data-quarto-table-cell-role="th">reg_coef</th>
-<th data-quarto-table-cell-role="th">intercept</th>
-<th data-quarto-table-cell-role="th">r_squared</th>
-<th data-quarto-table-cell-role="th">p_value</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>Los Angeles, CA metro area</td>
-<td>0.09</td>
-<td>445,899.52</td>
-<td>0.12</td>
-<td>0.00</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>Sacramento, CA</td>
-<td>0.64</td>
-<td>166,818.48</td>
-<td>0.37</td>
-<td>0.00</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>San Diego, CA</td>
-<td>0.54</td>
-<td>425,029.97</td>
-<td>0.21</td>
-<td>0.00</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>San Francisco, CA</td>
-<td>0.85</td>
-<td>936,065.08</td>
-<td>0.48</td>
-<td>0.00</td>
-</tr>
-</tbody>
-</table>
-
-</div>
-</div>
-</div>
 </section>
 </section>
 <section id="annotatons" class="level1">
