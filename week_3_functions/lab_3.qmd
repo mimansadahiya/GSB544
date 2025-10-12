@@ -1,0 +1,273 @@
+---
+title: Lab 3_Singing a song
+format:
+    html:
+        embed-resources: true
+code-fold: true
+toc: true
+---
+
+### Importing xmas data:
+
+```{python}
+import pandas as pd
+xmas = pd.read_csv("https://www.dropbox.com/scl/fi/qxaslqqp5p08i1650rpc4/xmas.csv?rlkey=erdxi7jbh7pqf9fh4lv4cayp5&dl=1")
+xmas
+```
+
+
+### Function 1: pluralize_gift
+
+```{python}
+
+def pluralize_gift(gift):
+    """
+    Returns plural of a noun
+    
+    Parameters
+    ----------
+    gift: str
+        A noun
+        
+    Return
+    ------
+    str
+        Plural version
+    """
+    if gift == "goose":
+        gift = gift.replace("goose", "geese")
+    elif gift[-1] == 'y':
+        gift = gift[:-1] + 'ies'
+    else:
+        gift = gift + 's'
+    return gift
+```
+##### Testing the function(pluralize_gift)
+
+```{python}
+
+print(pluralize_gift("goose"))
+ 
+xmas['Gift.Item.Plural'] = xmas['Gift.Item'].apply(pluralize_gift)
+xmas
+```
+
+### Function 2: make_phrase
+
+##### Creating a dictionary for ordinal and cardinal numbers and assigning it to different columns
+```{python}
+# Create mapping dictionaries for numbers to words
+num_to_cardinal = {
+    1: "one", 2: "two", 3: "three", 4: "four", 5: "five",
+    6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten",
+    11: "eleven", 12: "twelve"
+}
+
+num_to_ordinal = {
+    1: "first", 2: "second", 3: "third", 4: "fourth", 5: "fifth",
+    6: "sixth", 7: "seventh", 8: "eighth", 9: "ninth", 10: "tenth",
+    11: "eleventh", 12: "twelfth"
+}
+
+# Add necessary columns to xmas dataframe
+xmas['Cardinal_days_in_words'] = xmas['Day'].map(num_to_cardinal)
+xmas['Day.in.Words'] = xmas['Day'].map(num_to_ordinal)
+xmas['Gift.Item.Plural'] = xmas['Gift.Item'].apply(pluralize_gift)
+xmas
+```
+
+
+##### Creating the function(make_phrase):
+```{python}
+def make_phrase(num=1, num_word='', item='', verb='', adjective='', location=''):  
+    """
+    Creates a phrase from given input
+    
+    Parameters
+    ----------
+    num: int
+        The numeric day 
+    num_word: str
+        The gift count as a word (e.g., 'one', 'two')
+    item: str
+        The gift item name (e.g., 'dove', 'bird', etc) 
+    verb: str or pd.Series or None
+        Associated verb for the gift, if any
+    adjective: str or pd.Series or None
+        Associated adjective for the gift, if any
+    location: str or pd.Series or None
+        Associated location for the gift, if any
+    
+    Returns
+    -------
+    str: 
+         a full sentence of the song with parameters
+    """
+
+    # Step 1: Replace NAs with blank strings
+    verb = "" if verb is None or (isinstance(verb, float) and pd.isna(verb)) else str(verb)
+    adjective = "" if adjective is None or (isinstance(adjective, float) and pd.isna(adjective)) else str(adjective)
+    location = "" if location is None or (isinstance(location, float) and pd.isna(location)) else str(location)
+
+    # Step 2: If the day number is larger than 1, pluralize the gift item
+    if num > 1:
+        item = pluralize_gift(item)
+
+    # Step 3: Figure out if the gift item starts with a vowel
+    starts_with_vowel = bool(item) and item[0].lower() in 'aeiou'
+
+    # Step 4: Choose correct article ('a', 'an') or number word
+    if num == 1:   # day 1
+        day_word = "an" if starts_with_vowel else "a"   # starts with vowel, use 'an'
+    else:
+        day_word = num_word  
+        
+    # Step 5: Put all of the pieces together
+    parts = [day_word]
+    if adjective:
+        parts.append(adjective)
+    parts.append(item)
+    if verb:
+        parts.append(verb)
+    if location:
+        parts.append(location)
+    phrase = " ".join([str(p) for p in parts if p]).strip()
+    return phrase
+```
+
+##### Testing the function:
+```{python}
+print("Test 1:", make_phrase(num_word="ten", 
+            item="lords", 
+            verb="a-leaping", 
+            adjective="", 
+            location=""))
+
+print("Test 2:", make_phrase())
+print("Test 3:", make_phrase(num_word='two', item='mice', verb='a running', location='in the house'))
+```
+
+#### Using make_phrase on xmas data
+
+```{python}
+# Now this should work since we created the 'Cardinal_days_in_words' column
+xmas['Phrases'] = xmas.apply(
+    lambda row: make_phrase(
+        num=row['Day'],                    
+        num_word=row['Cardinal_days_in_words'], 
+        adjective=row['Adjective'],     
+        item=row['Gift.Item'],
+        verb=row['Verb'],
+        location=row['Location']
+    ),
+    axis=1
+)
+xmas
+```
+
+
+
+### Function 3: sing_day()
+
+```{python}
+def sing_day(dataset, day_num=None, start_day=1, end_day=12):
+    """
+    Sings the 12 Days of Christmas song for the given dataset
+    
+    Parameters
+    ----------
+    dataset: pandas.DataFrame
+        The Christmas dataset
+    day_num: int or None
+        Specific day to sing (if None, sings range from start_day to end_day)
+    start_day: int
+        First day to sing (default: 1)
+    end_day: int
+        Last day to sing (default: 12)
+        
+    Returns
+    -------
+    None (prints the song)
+    """
+    # Create a copy to avoid modifying original
+    df = dataset.copy()
+    
+    # Add necessary columns if they don't exist
+    if 'Cardinal_days_in_words' not in df.columns:
+        df['Cardinal_days_in_words'] = df['Day'].map(num_to_cardinal)
+    
+    if 'Day.in.Words' not in df.columns:
+        df['Day.in.Words'] = df['Day'].map(num_to_ordinal)
+    
+    # Create phrases column
+    df['Phrases'] = df.apply(
+        lambda row: make_phrase(
+            num=row['Day'],                    
+            num_word=row['Cardinal_days_in_words'], 
+            adjective=row['Adjective'] if 'Adjective' in df.columns else '',     
+            item=row['Gift.Item'],
+            verb=row['Verb'] if 'Verb' in df.columns else '',
+            location=row['Location'] if 'Location' in df.columns else ''
+        ),
+        axis=1
+    )
+    
+    # Determine which days to sing
+    if day_num is not None:
+        days_to_sing = [day_num]
+    else:
+        days_to_sing = range(start_day, end_day + 1)
+    
+    # Sing each day
+    for day in days_to_sing:
+        num_word = df.loc[df['Day'] == day, 'Day.in.Words'].values[0]
+        intro = f"On the {num_word} day of Christmas, my true love sent to me:"
+
+        verses = (df.loc[df['Day'] <= day]
+                         .sort_values('Day', ascending=False)
+                         ['Phrases']
+                         .reset_index(drop=True))
+        
+        # "and" and '.' in last line
+        if day > 1:
+            verses.iloc[-1] = "and " + verses.iloc[-1] + "."
+        else:
+            verses.iloc[-1] = verses.iloc[-1] + "."
+        
+        # Add commas to all but last line
+        if day > 1:
+            verses[:-1] = verses[:-1].apply(lambda x: x + ",")
+        
+        # Join lines with newlines
+        gifts = '\n'.join(verses)
+        print(intro + "\n" + gifts + "\n")
+```
+
+#### Using the sing_day function for 1 stanza
+```{python}
+print("=== 12th Stanza ===")
+print(sing_day(xmas, 12, "Phrases"))
+```
+
+#### Using the sing_day function for full song
+
+```{python}
+# Sing the full song
+print("=== FULL SONG ===")
+print(sing_day(xmas)) 
+```
+
+#### Loading xmas2
+
+```{python}
+xmas2 = pd.read_csv("https://www.dropbox.com/scl/fi/p9x9k8xwuzs9rhp582vfy/xmas_2.csv?rlkey=kvc3j3lmyn4opcidsrhcmrof1&dl=1")
+xmas2
+```
+
+#### Using the sing_day function on xmas2
+
+```{python}
+
+# Test the sing_day function
+sing_day(xmas2)
+```
