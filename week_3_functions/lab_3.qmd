@@ -156,7 +156,7 @@ print("Test 3:", make_phrase(num_word='two', item='mice', verb='a running', loca
 
 ```{python}
 # Now this should work since we created the 'Cardinal_days_in_words' column
-xmas['Phrases'] = xmas.apply(
+xmas['Full.Phrases'] = xmas.apply(
     lambda row: make_phrase(
         num=row['Day'],                    
         num_word=row['Cardinal_days_in_words'], 
@@ -204,8 +204,8 @@ def sing_day(dataset, day_num=None, start_day=1, end_day=12):
     if 'Day.in.Words' not in df.columns:
         df['Day.in.Words'] = df['Day'].map(num_to_ordinal)
     
-    # Create phrases column
-    df['Phrases'] = df.apply(
+    # Create Full.Phrases column
+    df['Full.Phrases'] = df.apply(
         lambda row: make_phrase(
             num=row['Day'],                    
             num_word=row['Cardinal_days_in_words'], 
@@ -230,7 +230,7 @@ def sing_day(dataset, day_num=None, start_day=1, end_day=12):
 
         verses = (df.loc[df['Day'] <= day]
                          .sort_values('Day', ascending=False)
-                         ['Phrases']
+                         ['Full.Phrases']
                          .reset_index(drop=True))
         
         # "and" and '.' in last line
@@ -251,7 +251,7 @@ def sing_day(dataset, day_num=None, start_day=1, end_day=12):
 #### Using the sing_day function for 12th stanza
 ```{python}
 print("=== 12th Stanza ===")
-print(sing_day(xmas, 12, "Phrases"))
+print(sing_day(xmas, 12, "Full.Phrases"))
 ```
 
 #### Using the sing_day function for full song
