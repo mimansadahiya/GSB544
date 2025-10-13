@@ -105,9 +105,10 @@ def make_phrase(num=1, num_word='', item='', verb='', adjective='', location='')
     """
 
     # Step 1: Replace NAs with blank strings
-    verb = "" if verb is None or (isinstance(verb, float) and pd.isna(verb)) else str(verb)
-    adjective = "" if adjective is None or (isinstance(adjective, float) and pd.isna(adjective)) else str(adjective)
-    location = "" if location is None or (isinstance(location, float) and pd.isna(location)) else str(location)
+    verb = "" if pd.isna(verb) else str(verb)
+    adjective = "" if pd.isna(adjective) else str(adjective)
+    location = "" if pd.isna(location) else str(location)
+
 
     # Step 2: If the day number is larger than 1, pluralize the gift item
     if num > 1:
@@ -131,7 +132,7 @@ def make_phrase(num=1, num_word='', item='', verb='', adjective='', location='')
         parts.append(verb)
     if location:
         parts.append(location)
-    phrase = " ".join([str(p) for p in parts if p]).strip()
+    phrase = " ".join([str(p) for p in parts if p])#.strip()
     return phrase
 ```
 
@@ -243,7 +244,7 @@ def sing_day(dataset, day_num=None, start_day=1, end_day=12):
         print(intro + "\n" + gifts + "\n")
 ```
 
-#### Using the sing_day function for 1 stanza
+#### Using the sing_day function for 12th stanza
 ```{python}
 print("=== 12th Stanza ===")
 print(sing_day(xmas, 12, "Phrases"))

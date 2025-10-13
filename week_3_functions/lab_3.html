@@ -2213,14 +2213,14 @@ vertical-align: -.125em;
 
 <section id="importing-xmas-data" class="level3">
 <h3 class="anchored" data-anchor-id="importing-xmas-data">Importing xmas data:</h3>
-<div id="bfce0fe4" class="cell" data-execution_count="1">
+<div id="2d3f7c86" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>xmas <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/scl/fi/qxaslqqp5p08i1650rpc4/xmas.csv?rlkey=erdxi7jbh7pqf9fh4lv4cayp5&amp;dl=1&quot;</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="189">
+<div class="cell-output cell-output-display" data-execution_count="13">
 <div>
 
 
@@ -2354,7 +2354,7 @@ vertical-align: -.125em;
 </section>
 <section id="function-1-pluralize_gift" class="level3">
 <h3 class="anchored" data-anchor-id="function-1-pluralize_gift">Function 1: pluralize_gift</h3>
-<div id="770857a3" class="cell" data-execution_count="2">
+<div id="3729cd66" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pluralize_gift(gift):</span>
@@ -2382,7 +2382,7 @@ vertical-align: -.125em;
 </div>
 <section id="testing-the-functionpluralize_gift" class="level5">
 <h5 class="anchored" data-anchor-id="testing-the-functionpluralize_gift">Testing the function(pluralize_gift)</h5>
-<div id="c1028a0a" class="cell" data-execution_count="3">
+<div id="0fcdb25f" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pluralize_gift(<span class="st">&quot;goose&quot;</span>))</span>
@@ -2393,7 +2393,7 @@ vertical-align: -.125em;
 <div class="cell-output cell-output-stdout">
 <pre><code>geese</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="191">
+<div class="cell-output cell-output-display" data-execution_count="15">
 <div>
 
 
@@ -2543,7 +2543,7 @@ vertical-align: -.125em;
 <h3 class="anchored" data-anchor-id="function-2-make_phrase">Function 2: make_phrase</h3>
 <section id="creating-a-dictionary-for-ordinal-and-cardinal-numbers-and-assigning-it-to-different-columns" class="level5">
 <h5 class="anchored" data-anchor-id="creating-a-dictionary-for-ordinal-and-cardinal-numbers-and-assigning-it-to-different-columns">Creating a dictionary for ordinal and cardinal numbers and assigning it to different columns</h5>
-<div id="3ae57cb9" class="cell" data-execution_count="4">
+<div id="b062e460" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create mapping dictionaries for numbers to words</span></span>
@@ -2565,7 +2565,7 @@ vertical-align: -.125em;
 <span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Gift.Item.Plural&#39;</span>] <span class="op">=</span> xmas[<span class="st">&#39;Gift.Item&#39;</span>].<span class="bu">apply</span>(pluralize_gift)</span>
 <span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="192">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -2725,7 +2725,7 @@ vertical-align: -.125em;
 </section>
 <section id="creating-the-functionmake_phrase" class="level5">
 <h5 class="anchored" data-anchor-id="creating-the-functionmake_phrase">Creating the function(make_phrase):</h5>
-<div id="94f3b13d" class="cell" data-execution_count="5">
+<div id="5a26668a" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_phrase(num<span class="op">=</span><span class="dv">1</span>, num_word<span class="op">=</span><span class="st">&#39;&#39;</span>, item<span class="op">=</span><span class="st">&#39;&#39;</span>, verb<span class="op">=</span><span class="st">&#39;&#39;</span>, adjective<span class="op">=</span><span class="st">&#39;&#39;</span>, location<span class="op">=</span><span class="st">&#39;&#39;</span>):  </span>
@@ -2754,40 +2754,41 @@ vertical-align: -.125em;
 <span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
 <span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Replace NAs with blank strings</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    verb <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> verb <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> (<span class="bu">isinstance</span>(verb, <span class="bu">float</span>) <span class="kw">and</span> pd.isna(verb)) <span class="cf">else</span> <span class="bu">str</span>(verb)</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    adjective <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> adjective <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> (<span class="bu">isinstance</span>(adjective, <span class="bu">float</span>) <span class="kw">and</span> pd.isna(adjective)) <span class="cf">else</span> <span class="bu">str</span>(adjective)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> location <span class="kw">is</span> <span class="va">None</span> <span class="kw">or</span> (<span class="bu">isinstance</span>(location, <span class="bu">float</span>) <span class="kw">and</span> pd.isna(location)) <span class="cf">else</span> <span class="bu">str</span>(location)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    verb <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(verb) <span class="cf">else</span> <span class="bu">str</span>(verb)</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    adjective <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(adjective) <span class="cf">else</span> <span class="bu">str</span>(adjective)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(location) <span class="cf">else</span> <span class="bu">str</span>(location)</span>
 <span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: If the day number is larger than 1, pluralize the gift item</span></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>        item <span class="op">=</span> pluralize_gift(item)</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Figure out if the gift item starts with a vowel</span></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    starts_with_vowel <span class="op">=</span> <span class="bu">bool</span>(item) <span class="kw">and</span> item[<span class="dv">0</span>].lower() <span class="kw">in</span> <span class="st">&#39;aeiou&#39;</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Choose correct article (&#39;a&#39;, &#39;an&#39;) or number word</span></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">==</span> <span class="dv">1</span>:   <span class="co"># day 1</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> <span class="st">&quot;an&quot;</span> <span class="cf">if</span> starts_with_vowel <span class="cf">else</span> <span class="st">&quot;a&quot;</span>   <span class="co"># starts with vowel, use &#39;an&#39;</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> num_word  </span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 5: Put all of the pieces together</span></span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> [day_word]</span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> adjective:</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>        parts.append(adjective)</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    parts.append(item)</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verb:</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>        parts.append(verb)</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> location:</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>        parts.append(location)</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>    phrase <span class="op">=</span> <span class="st">&quot; &quot;</span>.join([<span class="bu">str</span>(p) <span class="cf">for</span> p <span class="kw">in</span> parts <span class="cf">if</span> p]).strip()</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> phrase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: If the day number is larger than 1, pluralize the gift item</span></span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">&gt;</span> <span class="dv">1</span>:</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        item <span class="op">=</span> pluralize_gift(item)</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Figure out if the gift item starts with a vowel</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    starts_with_vowel <span class="op">=</span> <span class="bu">bool</span>(item) <span class="kw">and</span> item[<span class="dv">0</span>].lower() <span class="kw">in</span> <span class="st">&#39;aeiou&#39;</span></span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Choose correct article (&#39;a&#39;, &#39;an&#39;) or number word</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">==</span> <span class="dv">1</span>:   <span class="co"># day 1</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> <span class="st">&quot;an&quot;</span> <span class="cf">if</span> starts_with_vowel <span class="cf">else</span> <span class="st">&quot;a&quot;</span>   <span class="co"># starts with vowel, use &#39;an&#39;</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> num_word  </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 5: Put all of the pieces together</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> [day_word]</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> adjective:</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>        parts.append(adjective)</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    parts.append(item)</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verb:</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>        parts.append(verb)</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> location:</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        parts.append(location)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    phrase <span class="op">=</span> <span class="st">&quot; &quot;</span>.join([<span class="bu">str</span>(p) <span class="cf">for</span> p <span class="kw">in</span> parts <span class="cf">if</span> p])<span class="co">#.strip()</span></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> phrase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="testing-the-function" class="level5">
 <h5 class="anchored" data-anchor-id="testing-the-function">Testing the function:</h5>
-<div id="4d0e9ccc" class="cell" data-execution_count="6">
+<div id="818efebf" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Test 1:&quot;</span>, make_phrase(num_word<span class="op">=</span><span class="st">&quot;ten&quot;</span>, </span>
@@ -2808,7 +2809,7 @@ Test 3: a mice a running in the house</code></pre>
 </section>
 <section id="using-make_phrase-on-xmas-data" class="level4">
 <h4 class="anchored" data-anchor-id="using-make_phrase-on-xmas-data">Using make_phrase on xmas data</h4>
-<div id="c6ad50e9" class="cell" data-execution_count="7">
+<div id="df620273" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now this should work since we created the &#39;Cardinal_days_in_words&#39; column</span></span>
@@ -2825,7 +2826,7 @@ Test 3: a mice a running in the house</code></pre>
 <span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="195">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 
 
@@ -2999,7 +3000,7 @@ Test 3: a mice a running in the house</code></pre>
 </section>
 <section id="function-3-sing_day" class="level3">
 <h3 class="anchored" data-anchor-id="function-3-sing_day">Function 3: sing_day()</h3>
-<div id="8b7a422b" class="cell" data-execution_count="8">
+<div id="6a07090a" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sing_day(dataset, day_num<span class="op">=</span><span class="va">None</span>, start_day<span class="op">=</span><span class="dv">1</span>, end_day<span class="op">=</span><span class="dv">12</span>):</span>
@@ -3075,9 +3076,9 @@ Test 3: a mice a running in the house</code></pre>
 <span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(intro <span class="op">+</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">+</span> gifts <span class="op">+</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<section id="using-the-sing_day-function-for-1-stanza" class="level4">
-<h4 class="anchored" data-anchor-id="using-the-sing_day-function-for-1-stanza">Using the sing_day function for 1 stanza</h4>
-<div id="60b6d1d6" class="cell" data-execution_count="9">
+<section id="using-the-sing_day-function-for-12th-stanza" class="level4">
+<h4 class="anchored" data-anchor-id="using-the-sing_day-function-for-12th-stanza">Using the sing_day function for 12th stanza</h4>
+<div id="d6d1ff0d" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;=== 12th Stanza ===&quot;</span>)</span>
@@ -3105,7 +3106,7 @@ None</code></pre>
 </section>
 <section id="using-the-sing_day-function-for-full-song" class="level4">
 <h4 class="anchored" data-anchor-id="using-the-sing_day-function-for-full-song">Using the sing_day function for full song</h4>
-<div id="7b443bc1" class="cell" data-execution_count="10">
+<div id="52ba5c2d" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sing the full song</span></span>
@@ -3222,13 +3223,13 @@ None</code></pre>
 </section>
 <section id="loading-xmas2" class="level4">
 <h4 class="anchored" data-anchor-id="loading-xmas2">Loading xmas2</h4>
-<div id="387e1742" class="cell" data-execution_count="11">
+<div id="3fb3b7ba" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>xmas2 <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/scl/fi/p9x9k8xwuzs9rhp582vfy/xmas_2.csv?rlkey=kvc3j3lmyn4opcidsrhcmrof1&amp;dl=1&quot;</span>)</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>xmas2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="199">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <div>
 
 
@@ -3362,7 +3363,7 @@ None</code></pre>
 </section>
 <section id="using-the-sing_day-function-on-xmas2" class="level4">
 <h4 class="anchored" data-anchor-id="using-the-sing_day-function-on-xmas2">Using the sing_day function on xmas2</h4>
-<div id="32e3b971" class="cell" data-execution_count="12">
+<div id="12c97a65" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the sing_day function</span></span>
