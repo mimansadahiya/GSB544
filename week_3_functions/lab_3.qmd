@@ -7,6 +7,10 @@ code-fold: true
 toc: true
 ---
 
+Link to github repository:
+
+<https://github.com/mimansadahiya/GSB544/tree/main/week_3_functions>
+
 ### Importing xmas data:
 
 ```{python}
