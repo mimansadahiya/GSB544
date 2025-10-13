@@ -136,7 +136,7 @@ def make_phrase(num=1, num_word='', item='', verb='', adjective='', location='')
         parts.append(verb)
     if location:
         parts.append(location)
-    phrase = " ".join([str(p) for p in parts if p])#.strip()
+    phrase = " ".join([str(p) for p in parts if p]).strip()
     return phrase
 ```
 
