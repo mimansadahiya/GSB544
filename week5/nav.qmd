@@ -1,0 +1,35 @@
+---
+format:
+  html: 
+    embed-resources: true
+echo: true
+code-fold: true
+title: Lab
+author: mimansa dahiya
+---
+
+Setup
+
+```{python}
+import pandas as pd
+import numpy as np
+
+customers = 
+orders = 
+products =
+traffic = 
+competitor_prices = 
+```
+
+
+# Reading/ Loading
+
+* CSV : pd.read_csv(<file_name>)
+* Excel : pd.read_excel(<file_name>)
+* JSON : pd.read_json(<file_name>)
+* HTML_tables : pd.read_csv_html(<file_name>)
+* SQL : pd.read_sql("SELECT.....", connection)
+* URL : pd.read_<anyone> ('url')
+
+<anyone> means excel/json/html/sql
+<is_just_a_place_holder>, remove <> with path name

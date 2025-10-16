@@ -6,8 +6,9 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="mimansa dahiya">
 
-<title>Lab 3_Singing a song</title>
+<title>Lab</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -2175,32 +2176,27 @@ vertical-align: -.125em;
 
 </head>
 
-<body class="quarto-light">
+<body class="fullcontent quarto-light">
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
-<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
-   
-  <ul>
-  <li><a href="#importing-xmas-data" id="toc-importing-xmas-data" class="nav-link active" data-scroll-target="#importing-xmas-data">Importing xmas data:</a></li>
-  <li><a href="#function-1-pluralize_gift" id="toc-function-1-pluralize_gift" class="nav-link" data-scroll-target="#function-1-pluralize_gift">Function 1: pluralize_gift</a></li>
-  <li><a href="#function-2-make_phrase" id="toc-function-2-make_phrase" class="nav-link" data-scroll-target="#function-2-make_phrase">Function 2: make_phrase</a></li>
-  <li><a href="#function-3-sing_day" id="toc-function-3-sing_day" class="nav-link" data-scroll-target="#function-3-sing_day">Function 3: sing_day()</a></li>
-  </ul>
-</nav>
-</div>
+
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Lab 3_Singing a song</h1>
+<h1 class="title">Lab</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>mimansa dahiya </p>
+          </div>
+  </div>
     
   
     
@@ -2211,18 +2207,48 @@ vertical-align: -.125em;
 </header>
 
 
-<p>Link to github repository:</p>
-<p><a href="https://github.com/mimansadahiya/GSB544/tree/main/week_3_functions" class="uri">https://github.com/mimansadahiya/GSB544/tree/main/week_3_functions</a></p>
-<section id="importing-xmas-data" class="level3">
-<h3 class="anchored" data-anchor-id="importing-xmas-data">Importing xmas data:</h3>
-<div id="956d8744" class="cell" data-execution_count="1">
+<div id="f13a8d22" class="cell" data-execution_count="301">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>xmas <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/scl/fi/qxaslqqp5p08i1650rpc4/xmas.csv?rlkey=erdxi7jbh7pqf9fh4lv4cayp5&amp;dl=1&quot;</span>)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>customers <span class="op">=</span> <span class="st">&quot;customers.csv&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>orders <span class="op">=</span> <span class="st">&quot;orders.csv&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>products <span class="op">=</span> <span class="st">&quot;products.csv&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>traffic <span class="op">=</span> <span class="st">&quot;traffic.csv&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>competitor_prices <span class="op">=</span> <span class="st">&quot;competitor_prices.html&quot;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="61">
+</div>
+<section id="reading-loading" class="level1">
+<h1>Reading/ Loading</h1>
+<ul>
+<li>CSV : pd.read_csv(<file_name>)</file_name></li>
+<li>Excel : pd.read_excel(<file_name>)</file_name></li>
+<li>JSON : pd.read_json(<file_name>)</file_name></li>
+<li>HTML_tables : pd.read_csv_html(<file_name>)</file_name></li>
+<li>SQL : pd.read_sql(“SELECT…..”, connection)</li>
+<li>URL : pd.read_<anyone> (‘url’)</anyone></li>
+</ul>
+<p><anyone> means excel/json/html/sql <is_just_a_place_holder>, remove &lt;&gt; with path name</is_just_a_place_holder></anyone></p>
+<div id="981b5dc3" class="cell" data-execution_count="302">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cust_data <span class="op">=</span> pd.read_csv(customers)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>order_data <span class="op">=</span> pd.read_csv(orders)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>prod_data <span class="op">=</span> pd.read_csv(products)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>traff_data <span class="op">=</span> pd.read_csv(traffic)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>comp_data <span class="op">=</span> pd.read_html(competitor_prices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<section id="dataframe-information" class="level2">
+<h2 class="anchored" data-anchor-id="dataframe-information">Dataframe information</h2>
+<div id="030c5395" class="cell" data-execution_count="303">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>cust_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2230,122 +2256,65 @@ vertical-align: -.125em;
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Day</th>
-<th data-quarto-table-cell-role="th">Day.in.Words</th>
-<th data-quarto-table-cell-role="th">Gift.Item</th>
-<th data-quarto-table-cell-role="th">Verb</th>
-<th data-quarto-table-cell-role="th">Adjective</th>
-<th data-quarto-table-cell-role="th">Location</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">phone</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">signup_date</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>first</td>
-<td>partridge</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>in a pear tree</td>
+<td>User001</td>
+<td>user001@data.org</td>
+<td>+1-555-242-2679</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-02-26</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>2</td>
-<td>second</td>
-<td>dove</td>
+<td>User002</td>
+<td>user002@biz.co</td>
 <td>NaN</td>
-<td>turtle</td>
-<td>NaN</td>
+<td>Rochester</td>
+<td>NY</td>
+<td>2023-12-28</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>3</td>
-<td>third</td>
-<td>hen</td>
-<td>NaN</td>
-<td>french</td>
-<td>NaN</td>
+<td>User003</td>
+<td>user003@mail.com</td>
+<td>+1-555-127-4257</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-06-08</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
-<td>fourth</td>
-<td>bird</td>
-<td>NaN</td>
-<td>calling</td>
-<td>NaN</td>
+<td>User004</td>
+<td>user004@biz.co</td>
+<td>+1-555-928-1106</td>
+<td>Phoenix</td>
+<td>AZ</td>
+<td>2023-04-20</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
-<td>fifth</td>
-<td>ring</td>
-<td>NaN</td>
-<td>golden</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>6</td>
-<td>sixth</td>
-<td>goose</td>
-<td>a-laying</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>7</td>
-<td>seventh</td>
-<td>swan</td>
-<td>a-swimming</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>8</td>
-<td>eighth</td>
-<td>maid</td>
-<td>a-milking</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>9</td>
-<td>ninth</td>
-<td>lady</td>
-<td>dancing</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>10</td>
-<td>tenth</td>
-<td>lord</td>
-<td>a-leaping</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>11</td>
-<td>eleventh</td>
-<td>piper</td>
-<td>piping</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>12</td>
-<td>twelfth</td>
-<td>drummer</td>
-<td>drumming</td>
-<td>NaN</td>
-<td>NaN</td>
+<td>User005</td>
+<td>user005@data.org</td>
+<td>+1-555-320-6514</td>
+<td>San Antonio</td>
+<td>TX</td>
+<td>2023-01-21</td>
 </tr>
 </tbody>
 </table>
@@ -2353,49 +2322,37 @@ vertical-align: -.125em;
 </div>
 </div>
 </div>
-</section>
-<section id="function-1-pluralize_gift" class="level3">
-<h3 class="anchored" data-anchor-id="function-1-pluralize_gift">Function 1: pluralize_gift</h3>
-<div id="a00fa45e" class="cell" data-execution_count="2">
+<div id="dbefad34" class="cell" data-execution_count="304">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pluralize_gift(gift):</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns plural of a noun</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">    gift: str</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">        A noun</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Return</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co">    ------</span></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">    str</span></span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="co">        Plural version</span></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> gift <span class="op">==</span> <span class="st">&quot;goose&quot;</span>:</span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>        gift <span class="op">=</span> gift.replace(<span class="st">&quot;goose&quot;</span>, <span class="st">&quot;geese&quot;</span>)</span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> gift[<span class="op">-</span><span class="dv">1</span>] <span class="op">==</span> <span class="st">&#39;y&#39;</span>:</span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>        gift <span class="op">=</span> gift[:<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="st">&#39;ies&#39;</span></span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>        gift <span class="op">=</span> gift <span class="op">+</span> <span class="st">&#39;s&#39;</span></span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> gift</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>cust_data.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-display">
+<pre><code>customer_id     int64
+first_name     object
+email          object
+phone          object
+city           object
+state          object
+signup_date    object
+dtype: object</code></pre>
 </div>
-<section id="testing-the-functionpluralize_gift" class="level5">
-<h5 class="anchored" data-anchor-id="testing-the-functionpluralize_gift">Testing the function(pluralize_gift)</h5>
-<div id="cf492405" class="cell" data-execution_count="3">
+</div>
+<div id="97eefb21" class="cell" data-execution_count="305">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pluralize_gift(<span class="st">&quot;goose&quot;</span>))</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Gift.Item.Plural&#39;</span>] <span class="op">=</span> xmas[<span class="st">&#39;Gift.Item&#39;</span>].<span class="bu">apply</span>(pluralize_gift)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cust_data.columns</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>geese</code></pre>
+<div class="cell-output cell-output-display">
+<pre><code>Index([&#39;customer_id&#39;, &#39;first_name&#39;, &#39;email&#39;, &#39;phone&#39;, &#39;city&#39;, &#39;state&#39;, &#39;signup_date&#39;], dtype=&#39;object&#39;)</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="63">
+</div>
+<div id="a5a676e9" class="cell" data-execution_count="306">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>cust_data.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2403,135 +2360,41 @@ vertical-align: -.125em;
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Day</th>
-<th data-quarto-table-cell-role="th">Day.in.Words</th>
-<th data-quarto-table-cell-role="th">Gift.Item</th>
-<th data-quarto-table-cell-role="th">Verb</th>
-<th data-quarto-table-cell-role="th">Adjective</th>
-<th data-quarto-table-cell-role="th">Location</th>
-<th data-quarto-table-cell-role="th">Gift.Item.Plural</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">0</td>
-<td>1</td>
-<td>first</td>
-<td>partridge</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>in a pear tree</td>
-<td>partridges</td>
+<td data-quarto-table-cell-role="th">count</td>
+<td>120.000000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">1</td>
-<td>2</td>
-<td>second</td>
-<td>dove</td>
-<td>NaN</td>
-<td>turtle</td>
-<td>NaN</td>
-<td>doves</td>
+<td data-quarto-table-cell-role="th">mean</td>
+<td>60.500000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">2</td>
-<td>3</td>
-<td>third</td>
-<td>hen</td>
-<td>NaN</td>
-<td>french</td>
-<td>NaN</td>
-<td>hens</td>
+<td data-quarto-table-cell-role="th">std</td>
+<td>34.785054</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">3</td>
-<td>4</td>
-<td>fourth</td>
-<td>bird</td>
-<td>NaN</td>
-<td>calling</td>
-<td>NaN</td>
-<td>birds</td>
+<td data-quarto-table-cell-role="th">min</td>
+<td>1.000000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">4</td>
-<td>5</td>
-<td>fifth</td>
-<td>ring</td>
-<td>NaN</td>
-<td>golden</td>
-<td>NaN</td>
-<td>rings</td>
+<td data-quarto-table-cell-role="th">25%</td>
+<td>30.750000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>6</td>
-<td>sixth</td>
-<td>goose</td>
-<td>a-laying</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>geese</td>
+<td data-quarto-table-cell-role="th">50%</td>
+<td>60.500000</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>7</td>
-<td>seventh</td>
-<td>swan</td>
-<td>a-swimming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>swans</td>
+<td data-quarto-table-cell-role="th">75%</td>
+<td>90.250000</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>8</td>
-<td>eighth</td>
-<td>maid</td>
-<td>a-milking</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>maids</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>9</td>
-<td>ninth</td>
-<td>lady</td>
-<td>dancing</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>ladies</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>10</td>
-<td>tenth</td>
-<td>lord</td>
-<td>a-leaping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>lords</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>11</td>
-<td>eleventh</td>
-<td>piper</td>
-<td>piping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>pipers</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>12</td>
-<td>twelfth</td>
-<td>drummer</td>
-<td>drumming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>drummers</td>
+<td data-quarto-table-cell-role="th">max</td>
+<td>120.000000</td>
 </tr>
 </tbody>
 </table>
@@ -2539,35 +2402,53 @@ vertical-align: -.125em;
 </div>
 </div>
 </div>
-</section>
-</section>
-<section id="function-2-make_phrase" class="level3">
-<h3 class="anchored" data-anchor-id="function-2-make_phrase">Function 2: make_phrase</h3>
-<section id="creating-a-dictionary-for-ordinal-and-cardinal-numbers-and-assigning-it-to-different-columns" class="level5">
-<h5 class="anchored" data-anchor-id="creating-a-dictionary-for-ordinal-and-cardinal-numbers-and-assigning-it-to-different-columns">Creating a dictionary for ordinal and cardinal numbers and assigning it to different columns</h5>
-<div id="80f89327" class="cell" data-execution_count="4">
+<div id="6b4c33fc" class="cell" data-execution_count="307">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create mapping dictionaries for numbers to words</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>num_to_cardinal <span class="op">=</span> {</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">&quot;one&quot;</span>, <span class="dv">2</span>: <span class="st">&quot;two&quot;</span>, <span class="dv">3</span>: <span class="st">&quot;three&quot;</span>, <span class="dv">4</span>: <span class="st">&quot;four&quot;</span>, <span class="dv">5</span>: <span class="st">&quot;five&quot;</span>,</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>: <span class="st">&quot;six&quot;</span>, <span class="dv">7</span>: <span class="st">&quot;seven&quot;</span>, <span class="dv">8</span>: <span class="st">&quot;eight&quot;</span>, <span class="dv">9</span>: <span class="st">&quot;nine&quot;</span>, <span class="dv">10</span>: <span class="st">&quot;ten&quot;</span>,</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dv">11</span>: <span class="st">&quot;eleven&quot;</span>, <span class="dv">12</span>: <span class="st">&quot;twelve&quot;</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>num_to_ordinal <span class="op">=</span> {</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="dv">1</span>: <span class="st">&quot;first&quot;</span>, <span class="dv">2</span>: <span class="st">&quot;second&quot;</span>, <span class="dv">3</span>: <span class="st">&quot;third&quot;</span>, <span class="dv">4</span>: <span class="st">&quot;fourth&quot;</span>, <span class="dv">5</span>: <span class="st">&quot;fifth&quot;</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="dv">6</span>: <span class="st">&quot;sixth&quot;</span>, <span class="dv">7</span>: <span class="st">&quot;seventh&quot;</span>, <span class="dv">8</span>: <span class="st">&quot;eighth&quot;</span>, <span class="dv">9</span>: <span class="st">&quot;ninth&quot;</span>, <span class="dv">10</span>: <span class="st">&quot;tenth&quot;</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="dv">11</span>: <span class="st">&quot;eleventh&quot;</span>, <span class="dv">12</span>: <span class="st">&quot;twelfth&quot;</span></span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Add necessary columns to xmas dataframe</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Cardinal_days_in_words&#39;</span>] <span class="op">=</span> xmas[<span class="st">&#39;Day&#39;</span>].<span class="bu">map</span>(num_to_cardinal)</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Day.in.Words&#39;</span>] <span class="op">=</span> xmas[<span class="st">&#39;Day&#39;</span>].<span class="bu">map</span>(num_to_ordinal)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Gift.Item.Plural&#39;</span>] <span class="op">=</span> xmas[<span class="st">&#39;Gift.Item&#39;</span>].<span class="bu">apply</span>(pluralize_gift)</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&quot;state&quot;</span>].nunique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="64">
+<div class="cell-output cell-output-display">
+<pre><code>8</code></pre>
+</div>
+</div>
+<div id="a292e322" class="cell" data-execution_count="308">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&quot;state&quot;</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>array([&#39;NY&#39;, &#39;AZ&#39;, &#39;TX&#39;, &#39;IL&#39;, &#39;WA&#39;, &#39;FL&#39;, &#39;CA&#39;, &#39;MA&#39;], dtype=object)</code></pre>
+</div>
+</div>
+<section id="duplicates" class="level4">
+<h4 class="anchored" data-anchor-id="duplicates">duplicates</h4>
+<div id="c613944c" class="cell" data-execution_count="309">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;state&#39;</span>].duplicated() <span class="co">#check duplicates, true means that row has duplicated state value</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="co"># cust_data[&#39;state&#39;].duplicated().sum() ; this just checks the sum of all missing values in state</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>0      False
+1       True
+2       True
+3      False
+4      False
+       ...  
+115     True
+116     True
+117     True
+118     True
+119     True
+Name: state, Length: 120, dtype: bool</code></pre>
+</div>
+</div>
+<div id="969e16b7" class="cell" data-execution_count="310">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>cust_data.drop_duplicates()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2575,260 +2456,201 @@ vertical-align: -.125em;
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Day</th>
-<th data-quarto-table-cell-role="th">Day.in.Words</th>
-<th data-quarto-table-cell-role="th">Gift.Item</th>
-<th data-quarto-table-cell-role="th">Verb</th>
-<th data-quarto-table-cell-role="th">Adjective</th>
-<th data-quarto-table-cell-role="th">Location</th>
-<th data-quarto-table-cell-role="th">Gift.Item.Plural</th>
-<th data-quarto-table-cell-role="th">Cardinal_days_in_words</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">phone</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">signup_date</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>first</td>
-<td>partridge</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>in a pear tree</td>
-<td>partridges</td>
-<td>one</td>
+<td>User001</td>
+<td>user001@data.org</td>
+<td>+1-555-242-2679</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-02-26</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>2</td>
-<td>second</td>
-<td>dove</td>
+<td>User002</td>
+<td>user002@biz.co</td>
 <td>NaN</td>
-<td>turtle</td>
-<td>NaN</td>
-<td>doves</td>
-<td>two</td>
+<td>Rochester</td>
+<td>NY</td>
+<td>2023-12-28</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>3</td>
-<td>third</td>
-<td>hen</td>
-<td>NaN</td>
-<td>french</td>
-<td>NaN</td>
-<td>hens</td>
-<td>three</td>
+<td>User003</td>
+<td>user003@mail.com</td>
+<td>+1-555-127-4257</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-06-08</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
-<td>fourth</td>
-<td>bird</td>
-<td>NaN</td>
-<td>calling</td>
-<td>NaN</td>
-<td>birds</td>
-<td>four</td>
+<td>User004</td>
+<td>user004@biz.co</td>
+<td>+1-555-928-1106</td>
+<td>Phoenix</td>
+<td>AZ</td>
+<td>2023-04-20</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
-<td>fifth</td>
-<td>ring</td>
-<td>NaN</td>
-<td>golden</td>
-<td>NaN</td>
-<td>rings</td>
-<td>five</td>
+<td>User005</td>
+<td>user005@data.org</td>
+<td>+1-555-320-6514</td>
+<td>San Antonio</td>
+<td>TX</td>
+<td>2023-01-21</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>6</td>
-<td>sixth</td>
-<td>goose</td>
-<td>a-laying</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>geese</td>
-<td>six</td>
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>7</td>
-<td>seventh</td>
-<td>swan</td>
-<td>a-swimming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>swans</td>
-<td>seven</td>
+<td data-quarto-table-cell-role="th">115</td>
+<td>116</td>
+<td>User116</td>
+<td>user116@example.com</td>
+<td>+1-555-561-4995</td>
+<td>Chicago</td>
+<td>IL</td>
+<td>2023-09-04</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>8</td>
-<td>eighth</td>
-<td>maid</td>
-<td>a-milking</td>
+<td data-quarto-table-cell-role="th">116</td>
+<td>117</td>
+<td>User117</td>
+<td>user117@data.org</td>
 <td>NaN</td>
-<td>NaN</td>
-<td>maids</td>
-<td>eight</td>
+<td>Cambridge</td>
+<td>MA</td>
+<td>2023-07-15</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>9</td>
-<td>ninth</td>
-<td>lady</td>
-<td>dancing</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>ladies</td>
-<td>nine</td>
+<td data-quarto-table-cell-role="th">117</td>
+<td>118</td>
+<td>User118</td>
+<td>user118@biz.co</td>
+<td>+1-555-916-5232</td>
+<td>Chicago</td>
+<td>IL</td>
+<td>2023-01-25</td>
 </tr>
 <tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>10</td>
-<td>tenth</td>
-<td>lord</td>
-<td>a-leaping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>lords</td>
-<td>ten</td>
+<td data-quarto-table-cell-role="th">118</td>
+<td>119</td>
+<td>User119</td>
+<td>user119@data.org</td>
+<td>+1-555-629-4130</td>
+<td>Evanston</td>
+<td>IL</td>
+<td>2023-09-25</td>
 </tr>
 <tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>11</td>
-<td>eleventh</td>
-<td>piper</td>
-<td>piping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>pipers</td>
-<td>eleven</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>12</td>
-<td>twelfth</td>
-<td>drummer</td>
-<td>drumming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>drummers</td>
-<td>twelve</td>
+<td data-quarto-table-cell-role="th">119</td>
+<td>120</td>
+<td>User120</td>
+<td>user120@biz.co</td>
+<td>+1-555-876-4937</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-04-04</td>
 </tr>
 </tbody>
 </table>
 
+<p>120 rows × 7 columns</p>
 </div>
 </div>
 </div>
-</section>
-<section id="creating-the-functionmake_phrase" class="level5">
-<h5 class="anchored" data-anchor-id="creating-the-functionmake_phrase">Creating the function(make_phrase):</h5>
-<div id="2842afdd" class="cell" data-execution_count="5">
+<section id="rename" class="level5">
+<h5 class="anchored" data-anchor-id="rename">rename</h5>
+<div id="3f09d593" class="cell" data-execution_count="311">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_phrase(num<span class="op">=</span><span class="dv">1</span>, num_word<span class="op">=</span><span class="st">&#39;&#39;</span>, item<span class="op">=</span><span class="st">&#39;&#39;</span>, verb<span class="op">=</span><span class="st">&#39;&#39;</span>, adjective<span class="op">=</span><span class="st">&#39;&#39;</span>, location<span class="op">=</span><span class="st">&#39;&#39;</span>):  </span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Creates a phrase from given input</span></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    num: int</span></span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">        The numeric day </span></span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">    num_word: str</span></span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">        The gift count as a word (e.g., &#39;one&#39;, &#39;two&#39;)</span></span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="co">    item: str</span></span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">        The gift item name (e.g., &#39;dove&#39;, &#39;bird&#39;, etc) </span></span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">    verb: str or pd.Series or None</span></span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Associated verb for the gift, if any</span></span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">    adjective: str or pd.Series or None</span></span>
-<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">        Associated adjective for the gift, if any</span></span>
-<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a><span class="co">    location: str or pd.Series or None</span></span>
-<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a><span class="co">        Associated location for the gift, if any</span></span>
-<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
-<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
-<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co">    str: </span></span>
-<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a><span class="co">         a full sentence of the song with parameters</span></span>
-<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 1: Replace NAs with blank strings</span></span>
-<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    verb <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(verb) <span class="cf">else</span> <span class="bu">str</span>(verb)</span>
-<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>    adjective <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(adjective) <span class="cf">else</span> <span class="bu">str</span>(adjective)</span>
-<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>    location <span class="op">=</span> <span class="st">&quot;&quot;</span> <span class="cf">if</span> pd.isna(location) <span class="cf">else</span> <span class="bu">str</span>(location)</span>
-<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 2: If the day number is larger than 1, pluralize the gift item</span></span>
-<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>        item <span class="op">=</span> pluralize_gift(item)</span>
-<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 3: Figure out if the gift item starts with a vowel</span></span>
-<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>    starts_with_vowel <span class="op">=</span> <span class="bu">bool</span>(item) <span class="kw">and</span> item[<span class="dv">0</span>].lower() <span class="kw">in</span> <span class="st">&#39;aeiou&#39;</span></span>
-<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 4: Choose correct article (&#39;a&#39;, &#39;an&#39;) or number word</span></span>
-<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num <span class="op">==</span> <span class="dv">1</span>:   <span class="co"># day 1</span></span>
-<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> <span class="st">&quot;an&quot;</span> <span class="cf">if</span> starts_with_vowel <span class="cf">else</span> <span class="st">&quot;a&quot;</span>   <span class="co"># starts with vowel, use &#39;an&#39;</span></span>
-<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>        day_word <span class="op">=</span> num_word  </span>
-<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Step 5: Put all of the pieces together</span></span>
-<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    parts <span class="op">=</span> [day_word]</span>
-<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> adjective:</span>
-<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>        parts.append(adjective)</span>
-<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    parts.append(item)</span>
-<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> verb:</span>
-<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>        parts.append(verb)</span>
-<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> location:</span>
-<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>        parts.append(location)</span>
-<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>    phrase <span class="op">=</span> <span class="st">&quot; &quot;</span>.join([<span class="bu">str</span>(p) <span class="cf">for</span> p <span class="kw">in</span> parts <span class="cf">if</span> p]).strip()</span>
-<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> phrase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;state&#39;</span>].rename</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
+<div class="cell-output cell-output-display">
+<pre><code>&lt;bound method Series.rename of 0      NY
+1      NY
+2      NY
+3      AZ
+4      TX
+       ..
+115    IL
+116    MA
+117    IL
+118    IL
+119    NY
+Name: state, Length: 120, dtype: object&gt;</code></pre>
 </div>
-</section>
-<section id="testing-the-function" class="level5">
-<h5 class="anchored" data-anchor-id="testing-the-function">Testing the function:</h5>
-<div id="b73cc6d4" class="cell" data-execution_count="6">
+</div>
+<div id="4af40fd0" class="cell" data-execution_count="312">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Test 1:&quot;</span>, make_phrase(num_word<span class="op">=</span><span class="st">&quot;ten&quot;</span>, </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>            item<span class="op">=</span><span class="st">&quot;lords&quot;</span>, </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>            verb<span class="op">=</span><span class="st">&quot;a-leaping&quot;</span>, </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            adjective<span class="op">=</span><span class="st">&quot;&quot;</span>, </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            location<span class="op">=</span><span class="st">&quot;&quot;</span>))</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Test 2:&quot;</span>, make_phrase())</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;Test 3:&quot;</span>, make_phrase(num_word<span class="op">=</span><span class="st">&#39;two&#39;</span>, item<span class="op">=</span><span class="st">&#39;mice&#39;</span>, verb<span class="op">=</span><span class="st">&#39;a running&#39;</span>, location<span class="op">=</span><span class="st">&#39;in the house&#39;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;state&#39;</span>] <span class="op">=</span> cust_data[<span class="st">&#39;state&#39;</span>].replace({</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;CA&quot;</span>: <span class="st">&quot;CAL&quot;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;NY&quot;</span>: <span class="st">&quot;NEW YORK&quot;</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#cust_data = cust_data.rename(solumns={&#39;state:})</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-stdout">
-<pre><code>Test 1: a lords a-leaping
-Test 2: a
-Test 3: a mice a running in the house</code></pre>
+<div class="cell-output cell-output-error">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-cyan-fg">  Cell </span><span class="ansi-green-fg">In[312], line 3</span>
+
+<span class="ansi-red-fg">    &quot;NY&quot;: &quot;NEW YORK&quot;</span>
+
+        ^
+
+<span class="ansi-red-fg">SyntaxError</span><span class="ansi-red-fg">:</span> invalid syntax
+</pre>
 </div>
 </div>
-</section>
-<section id="using-make_phrase-on-xmas-data" class="level4">
-<h4 class="anchored" data-anchor-id="using-make_phrase-on-xmas-data">Using make_phrase on xmas data</h4>
-<div id="3e7e909a" class="cell" data-execution_count="7">
+</div>
+<div id="6aaa00d0" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Now this should work since we created the &#39;Cardinal_days_in_words&#39; column</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>xmas[<span class="st">&#39;Full.Phrases&#39;</span>] <span class="op">=</span> xmas.<span class="bu">apply</span>(</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">lambda</span> row: make_phrase(</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>        num<span class="op">=</span>row[<span class="st">&#39;Day&#39;</span>],                    </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>        num_word<span class="op">=</span>row[<span class="st">&#39;Cardinal_days_in_words&#39;</span>], </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        adjective<span class="op">=</span>row[<span class="st">&#39;Adjective&#39;</span>],     </span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>        item<span class="op">=</span>row[<span class="st">&#39;Gift.Item&#39;</span>],</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>        verb<span class="op">=</span>row[<span class="st">&#39;Verb&#39;</span>],</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>        location<span class="op">=</span>row[<span class="st">&#39;Location&#39;</span>]</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>    axis<span class="op">=</span><span class="dv">1</span></span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>xmas</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>order_data.dtypes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="67">
+<div class="cell-output cell-output-display">
+<pre><code>order_id          int64
+customer_id       int64
+product_id        int64
+order_ts         object
+quantity          int64
+discount_pct    float64
+channel          object
+coupon_code      object
+dtype: object</code></pre>
+</div>
+</div>
+<div id="9b9e6a97" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;s_date&#39;</span>]<span class="op">=</span> pd.to_datetime(cust_data[<span class="st">&#39;signup_date&#39;</span>])</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>cust_data.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2836,161 +2658,71 @@ Test 3: a mice a running in the house</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Day</th>
-<th data-quarto-table-cell-role="th">Day.in.Words</th>
-<th data-quarto-table-cell-role="th">Gift.Item</th>
-<th data-quarto-table-cell-role="th">Verb</th>
-<th data-quarto-table-cell-role="th">Adjective</th>
-<th data-quarto-table-cell-role="th">Location</th>
-<th data-quarto-table-cell-role="th">Gift.Item.Plural</th>
-<th data-quarto-table-cell-role="th">Cardinal_days_in_words</th>
-<th data-quarto-table-cell-role="th">Full.Phrases</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">first_name</th>
+<th data-quarto-table-cell-role="th">email</th>
+<th data-quarto-table-cell-role="th">phone</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">state</th>
+<th data-quarto-table-cell-role="th">signup_date</th>
+<th data-quarto-table-cell-role="th">s_date</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>first</td>
-<td>partridge</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>in a pear tree</td>
-<td>partridges</td>
-<td>one</td>
-<td>a partridge in a pear tree</td>
+<td>User001</td>
+<td>user001@data.org</td>
+<td>+1-555-242-2679</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-02-26</td>
+<td>2023-02-26</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>2</td>
-<td>second</td>
-<td>dove</td>
+<td>User002</td>
+<td>user002@biz.co</td>
 <td>NaN</td>
-<td>turtle</td>
-<td>NaN</td>
-<td>doves</td>
-<td>two</td>
-<td>two turtle doves</td>
+<td>Rochester</td>
+<td>NY</td>
+<td>2023-12-28</td>
+<td>2023-12-28</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>3</td>
-<td>third</td>
-<td>hen</td>
-<td>NaN</td>
-<td>french</td>
-<td>NaN</td>
-<td>hens</td>
-<td>three</td>
-<td>three french hens</td>
+<td>User003</td>
+<td>user003@mail.com</td>
+<td>+1-555-127-4257</td>
+<td>New York</td>
+<td>NY</td>
+<td>2023-06-08</td>
+<td>2023-06-08</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
-<td>fourth</td>
-<td>bird</td>
-<td>NaN</td>
-<td>calling</td>
-<td>NaN</td>
-<td>birds</td>
-<td>four</td>
-<td>four calling birds</td>
+<td>User004</td>
+<td>user004@biz.co</td>
+<td>+1-555-928-1106</td>
+<td>Phoenix</td>
+<td>AZ</td>
+<td>2023-04-20</td>
+<td>2023-04-20</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
-<td>fifth</td>
-<td>ring</td>
-<td>NaN</td>
-<td>golden</td>
-<td>NaN</td>
-<td>rings</td>
-<td>five</td>
-<td>five golden rings</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>6</td>
-<td>sixth</td>
-<td>goose</td>
-<td>a-laying</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>geese</td>
-<td>six</td>
-<td>six geese a-laying</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>7</td>
-<td>seventh</td>
-<td>swan</td>
-<td>a-swimming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>swans</td>
-<td>seven</td>
-<td>seven swans a-swimming</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
-<td>8</td>
-<td>eighth</td>
-<td>maid</td>
-<td>a-milking</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>maids</td>
-<td>eight</td>
-<td>eight maids a-milking</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>9</td>
-<td>ninth</td>
-<td>lady</td>
-<td>dancing</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>ladies</td>
-<td>nine</td>
-<td>nine ladies dancing</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>10</td>
-<td>tenth</td>
-<td>lord</td>
-<td>a-leaping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>lords</td>
-<td>ten</td>
-<td>ten lords a-leaping</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>11</td>
-<td>eleventh</td>
-<td>piper</td>
-<td>piping</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>pipers</td>
-<td>eleven</td>
-<td>eleven pipers piping</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>12</td>
-<td>twelfth</td>
-<td>drummer</td>
-<td>drumming</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>drummers</td>
-<td>twelve</td>
-<td>twelve drummers drumming</td>
+<td>User005</td>
+<td>user005@data.org</td>
+<td>+1-555-320-6514</td>
+<td>San Antonio</td>
+<td>TX</td>
+<td>2023-01-21</td>
+<td>2023-01-21</td>
 </tr>
 </tbody>
 </table>
@@ -3000,238 +2732,16 @@ Test 3: a mice a running in the house</code></pre>
 </div>
 </section>
 </section>
-<section id="function-3-sing_day" class="level3">
-<h3 class="anchored" data-anchor-id="function-3-sing_day">Function 3: sing_day()</h3>
-<div id="b620662c" class="cell" data-execution_count="8">
+<section id="select-columns-and-filtering-rows" class="level4">
+<h4 class="anchored" data-anchor-id="select-columns-and-filtering-rows">Select Columns and Filtering Rows</h4>
+<div id="d04e3099" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sing_day(dataset, day_num<span class="op">=</span><span class="va">None</span>, start_day<span class="op">=</span><span class="dv">1</span>, end_day<span class="op">=</span><span class="dv">12</span>):</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Sings the 12 Days of Christmas song for the given dataset</span></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">    </span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">    dataset: pandas.DataFrame</span></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">        The Christmas dataset</span></span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">    day_num: int or None</span></span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">        Specific day to sing (if None, sings range from start_day to end_day)</span></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">    start_day: int</span></span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="co">        First day to sing (default: 1)</span></span>
-<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">    end_day: int</span></span>
-<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="co">        Last day to sing (default: 12)</span></span>
-<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="co">        </span></span>
-<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
-<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="co">    None (prints the song)</span></span>
-<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create a copy to avoid modifying original</span></span>
-<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> dataset.copy()</span>
-<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Add necessary columns if they don&#39;t exist</span></span>
-<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&#39;Cardinal_days_in_words&#39;</span> <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">&#39;Cardinal_days_in_words&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;Day&#39;</span>].<span class="bu">map</span>(num_to_cardinal)</span>
-<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="st">&#39;Day.in.Words&#39;</span> <span class="kw">not</span> <span class="kw">in</span> df.columns:</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        df[<span class="st">&#39;Day.in.Words&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;Day&#39;</span>].<span class="bu">map</span>(num_to_ordinal)</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Create Full.Phrases column</span></span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;Full.Phrases&#39;</span>] <span class="op">=</span> df.<span class="bu">apply</span>(</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> row: make_phrase(</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>            num<span class="op">=</span>row[<span class="st">&#39;Day&#39;</span>],                    </span>
-<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>            num_word<span class="op">=</span>row[<span class="st">&#39;Cardinal_days_in_words&#39;</span>], </span>
-<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>            adjective<span class="op">=</span>row[<span class="st">&#39;Adjective&#39;</span>] <span class="cf">if</span> <span class="st">&#39;Adjective&#39;</span> <span class="kw">in</span> df.columns <span class="cf">else</span> <span class="st">&#39;&#39;</span>,     </span>
-<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>            item<span class="op">=</span>row[<span class="st">&#39;Gift.Item&#39;</span>],</span>
-<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>            verb<span class="op">=</span>row[<span class="st">&#39;Verb&#39;</span>] <span class="cf">if</span> <span class="st">&#39;Verb&#39;</span> <span class="kw">in</span> df.columns <span class="cf">else</span> <span class="st">&#39;&#39;</span>,</span>
-<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>            location<span class="op">=</span>row[<span class="st">&#39;Location&#39;</span>] <span class="cf">if</span> <span class="st">&#39;Location&#39;</span> <span class="kw">in</span> df.columns <span class="cf">else</span> <span class="st">&#39;&#39;</span></span>
-<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>        ),</span>
-<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>        axis<span class="op">=</span><span class="dv">1</span></span>
-<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Determine which days to sing</span></span>
-<span id="cb10-44"><a href="#cb10-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> day_num <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
-<span id="cb10-45"><a href="#cb10-45" aria-hidden="true" tabindex="-1"></a>        days_to_sing <span class="op">=</span> [day_num]</span>
-<span id="cb10-46"><a href="#cb10-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb10-47"><a href="#cb10-47" aria-hidden="true" tabindex="-1"></a>        days_to_sing <span class="op">=</span> <span class="bu">range</span>(start_day, end_day <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb10-48"><a href="#cb10-48" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb10-49"><a href="#cb10-49" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Sing each day</span></span>
-<span id="cb10-50"><a href="#cb10-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> day <span class="kw">in</span> days_to_sing:</span>
-<span id="cb10-51"><a href="#cb10-51" aria-hidden="true" tabindex="-1"></a>        num_word <span class="op">=</span> df.loc[df[<span class="st">&#39;Day&#39;</span>] <span class="op">==</span> day, <span class="st">&#39;Day.in.Words&#39;</span>].values[<span class="dv">0</span>]</span>
-<span id="cb10-52"><a href="#cb10-52" aria-hidden="true" tabindex="-1"></a>        intro <span class="op">=</span> <span class="ss">f&quot;On the </span><span class="sc">{</span>num_word<span class="sc">}</span><span class="ss"> day of Christmas, my true love sent to me:&quot;</span></span>
-<span id="cb10-53"><a href="#cb10-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-54"><a href="#cb10-54" aria-hidden="true" tabindex="-1"></a>        verses <span class="op">=</span> (df.loc[df[<span class="st">&#39;Day&#39;</span>] <span class="op">&lt;=</span> day]</span>
-<span id="cb10-55"><a href="#cb10-55" aria-hidden="true" tabindex="-1"></a>                         .sort_values(<span class="st">&#39;Day&#39;</span>, ascending<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb10-56"><a href="#cb10-56" aria-hidden="true" tabindex="-1"></a>                         [<span class="st">&#39;Full.Phrases&#39;</span>]</span>
-<span id="cb10-57"><a href="#cb10-57" aria-hidden="true" tabindex="-1"></a>                         .reset_index(drop<span class="op">=</span><span class="va">True</span>))</span>
-<span id="cb10-58"><a href="#cb10-58" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb10-59"><a href="#cb10-59" aria-hidden="true" tabindex="-1"></a>        <span class="co"># &quot;and&quot; and &#39;.&#39; in last line</span></span>
-<span id="cb10-60"><a href="#cb10-60" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> day <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb10-61"><a href="#cb10-61" aria-hidden="true" tabindex="-1"></a>            verses.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> <span class="st">&quot;and &quot;</span> <span class="op">+</span> verses.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="st">&quot;.&quot;</span></span>
-<span id="cb10-62"><a href="#cb10-62" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
-<span id="cb10-63"><a href="#cb10-63" aria-hidden="true" tabindex="-1"></a>            verses.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> verses.iloc[<span class="op">-</span><span class="dv">1</span>] <span class="op">+</span> <span class="st">&quot;.&quot;</span></span>
-<span id="cb10-64"><a href="#cb10-64" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb10-65"><a href="#cb10-65" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Add commas to all but last line</span></span>
-<span id="cb10-66"><a href="#cb10-66" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> day <span class="op">&gt;</span> <span class="dv">1</span>:</span>
-<span id="cb10-67"><a href="#cb10-67" aria-hidden="true" tabindex="-1"></a>            verses[:<span class="op">-</span><span class="dv">1</span>] <span class="op">=</span> verses[:<span class="op">-</span><span class="dv">1</span>].<span class="bu">apply</span>(<span class="kw">lambda</span> x: x <span class="op">+</span> <span class="st">&quot;,&quot;</span>)</span>
-<span id="cb10-68"><a href="#cb10-68" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb10-69"><a href="#cb10-69" aria-hidden="true" tabindex="-1"></a>        <span class="co"># Join lines with newlines</span></span>
-<span id="cb10-70"><a href="#cb10-70" aria-hidden="true" tabindex="-1"></a>        gifts <span class="op">=</span> <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>.join(verses)</span>
-<span id="cb10-71"><a href="#cb10-71" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(intro <span class="op">+</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span> <span class="op">+</span> gifts <span class="op">+</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#column selection</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>order_sel <span class="op">=</span> order_data[[<span class="st">&#39;order_id&#39;</span>, <span class="st">&#39;customer_id&#39;</span>]]</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>order_sel</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-</div>
-<section id="using-the-sing_day-function-for-12th-stanza" class="level4">
-<h4 class="anchored" data-anchor-id="using-the-sing_day-function-for-12th-stanza">Using the sing_day function for 12th stanza</h4>
-<div id="791f25a3" class="cell" data-execution_count="9">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;=== 12th Stanza ===&quot;</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sing_day(xmas, <span class="dv">12</span>, <span class="st">&quot;Full.Phrases&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>=== 12th Stanza ===
-On the twelfth day of Christmas, my true love sent to me:
-twelve drummers drumming,
-eleven pipers piping,
-ten lords a-leaping,
-nine ladies dancing,
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-None</code></pre>
-</div>
-</div>
-</section>
-<section id="using-the-sing_day-function-for-full-song" class="level4">
-<h4 class="anchored" data-anchor-id="using-the-sing_day-function-for-full-song">Using the sing_day function for full song</h4>
-<div id="86865bff" class="cell" data-execution_count="10">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sing the full song</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">&quot;=== FULL SONG ===&quot;</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sing_day(xmas)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code>=== FULL SONG ===
-On the first day of Christmas, my true love sent to me:
-a partridge in a pear tree.
-
-On the second day of Christmas, my true love sent to me:
-two turtle doves,
-and a partridge in a pear tree.
-
-On the third day of Christmas, my true love sent to me:
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the fourth day of Christmas, my true love sent to me:
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the fifth day of Christmas, my true love sent to me:
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the sixth day of Christmas, my true love sent to me:
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the seventh day of Christmas, my true love sent to me:
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the eighth day of Christmas, my true love sent to me:
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the ninth day of Christmas, my true love sent to me:
-nine ladies dancing,
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the tenth day of Christmas, my true love sent to me:
-ten lords a-leaping,
-nine ladies dancing,
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the eleventh day of Christmas, my true love sent to me:
-eleven pipers piping,
-ten lords a-leaping,
-nine ladies dancing,
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-On the twelfth day of Christmas, my true love sent to me:
-twelve drummers drumming,
-eleven pipers piping,
-ten lords a-leaping,
-nine ladies dancing,
-eight maids a-milking,
-seven swans a-swimming,
-six geese a-laying,
-five golden rings,
-four calling birds,
-three french hens,
-two turtle doves,
-and a partridge in a pear tree.
-
-None</code></pre>
-</div>
-</div>
-</section>
-<section id="loading-xmas2" class="level4">
-<h4 class="anchored" data-anchor-id="loading-xmas2">Loading xmas2</h4>
-<div id="771eca71" class="cell" data-execution_count="11">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>xmas2 <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/scl/fi/p9x9k8xwuzs9rhp582vfy/xmas_2.csv?rlkey=kvc3j3lmyn4opcidsrhcmrof1&amp;dl=1&quot;</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>xmas2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-display" data-execution_count="71">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -3239,121 +2749,321 @@ None</code></pre>
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
-<th data-quarto-table-cell-role="th">Day</th>
-<th data-quarto-table-cell-role="th">Day.in.Words</th>
-<th data-quarto-table-cell-role="th">Gift.Item</th>
-<th data-quarto-table-cell-role="th">Verb</th>
-<th data-quarto-table-cell-role="th">Adjective</th>
-<th data-quarto-table-cell-role="th">Location</th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>1</td>
-<td>first</td>
-<td>email</td>
-<td>NaN</td>
-<td>NaN</td>
-<td>from Cal Poly</td>
+<td>89</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>2</td>
-<td>second</td>
-<td>point</td>
+<td>52</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">796</td>
+<td>797</td>
+<td>54</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">797</td>
+<td>798</td>
+<td>116</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">798</td>
+<td>799</td>
+<td>111</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">799</td>
+<td>800</td>
+<td>112</td>
+</tr>
+</tbody>
+</table>
+
+<p>800 rows × 2 columns</p>
+</div>
+</div>
+</div>
+<div id="f21f5867" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co">#query </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>orders_filter <span class="op">=</span> order_data.query(<span class="st">&quot;quantity == 3 &amp; coupon_code.notna()&quot;</span>).head()</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>orders_filter</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="co">#a query in a long string</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># and / &amp; ; both work</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># query is like an if condition, in quotes</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># can use; == / &lt;= / &gt;=...</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>7</td>
+<td>36</td>
+<td>1</td>
+<td>2024-01-28T17:18:00</td>
+<td>3</td>
+<td>0.30</td>
+<td>web</td>
+<td>VIP20</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">7</td>
+<td>8</td>
+<td>14</td>
+<td>1</td>
+<td>2024-10-20T09:30:00</td>
+<td>3</td>
+<td>0.14</td>
+<td>web</td>
+<td>FREESHIP</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">9</td>
+<td>10</td>
+<td>20</td>
+<td>3</td>
+<td>2024-10-15T09:05:00</td>
+<td>3</td>
+<td>0.04</td>
+<td>web</td>
+<td>holiday10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">23</td>
+<td>24</td>
+<td>98</td>
+<td>9</td>
+<td>2024-01-19T14:05:00</td>
+<td>3</td>
+<td>0.16</td>
+<td>web</td>
+<td>VIP20</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">33</td>
+<td>34</td>
+<td>59</td>
+<td>6</td>
+<td>2024-04-06T22:15:00</td>
+<td>3</td>
+<td>0.02</td>
+<td>web</td>
+<td>SAVE10</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="e601604b" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># loc, iloc</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>new_table <span class="op">=</span> order_data.loc[:<span class="dv">6</span>,[<span class="st">&#39;order_id&#39;</span>, <span class="st">&#39;customer_id&#39;</span>]]  <span class="co"># :6 is row, [&#39;order_id&#39;, &#39;customer_id&#39;] is column</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>new_table</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">5</td>
+<td>6</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">6</td>
+<td>7</td>
+<td>36</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="c82849fe" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>my_row <span class="op">=</span> order_data.iloc[<span class="dv">0</span>]  <span class="co">#iloc is index location; usually not used</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>my_row</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>order_id                          1
+customer_id                      89
+product_id                        8
+order_ts        2024-11-26T22:31:00
+quantity                          1
+discount_pct                    0.1
+channel                         web
+coupon_code                     NaN
+Name: 0, dtype: object</code></pre>
+</div>
+</div>
+<div id="9f1a8f13" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>my_row <span class="op">=</span> order_data.iloc[:<span class="dv">5</span>] </span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>my_row</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
 <td>NaN</td>
-<td>meal</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
 <td>NaN</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>3</td>
-<td>third</td>
-<td>pen</td>
-<td>NaN</td>
-<td>lost</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
 <td>NaN</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>4</td>
-<td>fourth</td>
-<td>review</td>
-<td>NaN</td>
-<td>course</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
 <td>NaN</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>5</td>
-<td>fifth</td>
-<td>exam</td>
-<td>NaN</td>
-<td>practice</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">5</td>
-<td>6</td>
-<td>sixth</td>
-<td>grader</td>
-<td>grading</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">6</td>
-<td>7</td>
-<td>seventh</td>
-<td>senior</td>
-<td>stressing</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">7</td>
+<td>28</td>
 <td>8</td>
-<td>eighth</td>
-<td>mom</td>
-<td>a-calling</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">8</td>
-<td>9</td>
-<td>ninth</td>
-<td>party</td>
-<td>bumping</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">9</td>
-<td>10</td>
-<td>tenth</td>
-<td>load</td>
-<td>of laundry</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="odd">
-<td data-quarto-table-cell-role="th">10</td>
-<td>11</td>
-<td>eleventh</td>
-<td>friend</td>
-<td>goodbye-ing</td>
-<td>NaN</td>
-<td>NaN</td>
-</tr>
-<tr class="even">
-<td data-quarto-table-cell-role="th">11</td>
-<td>12</td>
-<td>twelfth</td>
-<td>hour</td>
-<td>sleeping</td>
-<td>NaN</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
 <td>NaN</td>
 </tr>
 </tbody>
@@ -3363,117 +3073,1556 @@ None</code></pre>
 </div>
 </div>
 </section>
-<section id="using-the-sing_day-function-on-xmas2" class="level4">
-<h4 class="anchored" data-anchor-id="using-the-sing_day-function-on-xmas2">Using the sing_day function on xmas2</h4>
-<div id="36308b85" class="cell" data-execution_count="12">
+<section id="sorting" class="level4">
+<h4 class="anchored" data-anchor-id="sorting">Sorting</h4>
+<div id="c04f1e03" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Test the sing_day function</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sing_day(xmas2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>order_sort <span class="op">=</span> order_data.sort_values([<span class="st">&#39;quantity&#39;</span>, <span class="st">&#39;discount_pct&#39;</span>],   <span class="co"># sorting the column values; </span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ascending <span class="op">=</span> [<span class="va">False</span>, <span class="va">True</span>])</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>order_sort</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">399</td>
+<td>400</td>
+<td>98</td>
+<td>9</td>
+<td>2024-07-10T01:32:00</td>
+<td>5</td>
+<td>0.13</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">130</td>
+<td>131</td>
+<td>50</td>
+<td>6</td>
+<td>2024-05-09T23:01:00</td>
+<td>5</td>
+<td>0.23</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">326</td>
+<td>327</td>
+<td>116</td>
+<td>1</td>
+<td>2024-06-20T13:17:00</td>
+<td>5</td>
+<td>0.24</td>
+<td>web</td>
+<td>SAVE10</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">356</td>
+<td>357</td>
+<td>73</td>
+<td>9</td>
+<td>2024-06-13T12:17:00</td>
+<td>5</td>
+<td>0.27</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">267</td>
+<td>268</td>
+<td>102</td>
+<td>7</td>
+<td>2024-02-07T14:38:00</td>
+<td>4</td>
+<td>0.04</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">742</td>
+<td>743</td>
+<td>38</td>
+<td>10</td>
+<td>2024-01-14T09:31:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>mobile</td>
+<td>FREESHIP</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">755</td>
+<td>756</td>
+<td>29</td>
+<td>5</td>
+<td>2024-05-08T06:02:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>WELCOME</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">772</td>
+<td>773</td>
+<td>107</td>
+<td>8</td>
+<td>2024-01-09T01:21:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>store</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">777</td>
+<td>778</td>
+<td>15</td>
+<td>8</td>
+<td>2024-10-31T19:14:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+<td>3</td>
+<td>2024-01-17T22:36:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>VIP20</td>
+</tr>
+</tbody>
+</table>
+
+<p>800 rows × 8 columns</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="missing-values" class="level2">
+<h2 class="anchored" data-anchor-id="missing-values">Missing Values</h2>
+<div id="287726d0" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cust_data.isna().<span class="bu">sum</span>() <span class="co">#gives us number of missing values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>customer_id     0
+first_name      0
+email           0
+phone          17
+city            0
+state           0
+signup_date     0
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="cda2e86b" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>cust_data.isna().mean() <span class="co"># average mean of missing values</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 14% of phone columns values are missing</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>customer_id    0.000000
+first_name     0.000000
+email          0.000000
+phone          0.141667
+city           0.000000
+state          0.000000
+signup_date    0.000000
+dtype: float64</code></pre>
+</div>
+</div>
+<div id="b1558f22" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;phone&#39;</span>].fillna(<span class="st">&#39;+1-000-000-0000&#39;</span>) <span class="co"># fillna adds &#39;000-000-0000&#39; in the phone column</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a> <span class="co"># but original data set still has null values </span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a><span class="co"># to change the original dataset, we need to equate the fillna function to the original dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>0      +1-555-242-2679
+1         000-000-0000
+2      +1-555-127-4257
+3      +1-555-928-1106
+4      +1-555-320-6514
+            ...       
+115    +1-555-561-4995
+116       000-000-0000
+117    +1-555-916-5232
+118    +1-555-629-4130
+119    +1-555-876-4937
+Name: phone, Length: 120, dtype: object</code></pre>
+</div>
+</div>
+<div id="f2b269cc" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>cust_data[<span class="st">&#39;phone&#39;</span>] <span class="op">=</span> cust_data[<span class="st">&#39;phone&#39;</span>].fillna(<span class="st">&#39;+1-000-000-0000&#39;</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cust_data[<span class="st">&#39;phone&#39;</span>])</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="co">#now we the actual dataframe</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>On the first day of Christmas, my true love sent to me:
-an email from Cal Poly.
+<pre><code>0      +1-555-242-2679
+1         000-000-0000
+2      +1-555-127-4257
+3      +1-555-928-1106
+4      +1-555-320-6514
+            ...       
+115    +1-555-561-4995
+116       000-000-0000
+117    +1-555-916-5232
+118    +1-555-629-4130
+119    +1-555-876-4937
+Name: phone, Length: 120, dtype: object</code></pre>
+</div>
+</div>
+<div id="3786486a" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>copy_ord <span class="op">=</span> order_data <span class="co">#made a copy of original data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="be13729d" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>copy_ord.isna().<span class="bu">sum</span>() <span class="co">#sum of missing values</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>order_id          0
+customer_id       0
+product_id        0
+order_ts          0
+quantity          0
+discount_pct     82
+channel           0
+coupon_code     604
+dtype: int64</code></pre>
+</div>
+</div>
+<div id="e3ce685a" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>copy_ord.info()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;
+Index: 177 entries, 6 to 796
+Data columns (total 8 columns):
+ #   Column        Non-Null Count  Dtype  
+---  ------        --------------  -----  
+ 0   order_id      177 non-null    int64  
+ 1   customer_id   177 non-null    int64  
+ 2   product_id    177 non-null    int64  
+ 3   order_ts      177 non-null    object 
+ 4   quantity      177 non-null    int64  
+ 5   discount_pct  177 non-null    float64
+ 6   channel       177 non-null    object 
+ 7   coupon_code   177 non-null    object 
+dtypes: float64(1), int64(4), object(3)
+memory usage: 12.4+ KB</code></pre>
+</div>
+</div>
+<div id="3ddfb6ed" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>copy_ord</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
 
-On the second day of Christmas, my true love sent to me:
-two meal points,
-and an email from Cal Poly.
 
-On the third day of Christmas, my true love sent to me:
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+<td>3</td>
+<td>2024-01-17T22:36:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>VIP20</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">796</td>
+<td>797</td>
+<td>54</td>
+<td>3</td>
+<td>2024-06-24T07:56:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>web</td>
+<td>holiday10</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">797</td>
+<td>798</td>
+<td>116</td>
+<td>3</td>
+<td>2024-10-22T17:54:00</td>
+<td>2</td>
+<td>0.26</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">798</td>
+<td>799</td>
+<td>111</td>
+<td>4</td>
+<td>2024-10-29T15:53:00</td>
+<td>2</td>
+<td>0.07</td>
+<td>web</td>
+<td>NaN</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">799</td>
+<td>800</td>
+<td>112</td>
+<td>4</td>
+<td>2024-05-06T10:27:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>store</td>
+<td>NaN</td>
+</tr>
+</tbody>
+</table>
 
-On the fourth day of Christmas, my true love sent to me:
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+<p>800 rows × 8 columns</p>
+</div>
+</div>
+</div>
+<div id="e8b24477" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>copy_ord<span class="op">=</span>copy_ord.dropna()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="114e84fc" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>copy_ord.isna().<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>order_id          0
+customer_id       0
+product_id        0
+order_ts          0
+quantity          0
+discount_pct     82
+channel           0
+coupon_code     604
+dtype: int64</code></pre>
+</div>
+</div>
+<section id="mutating-and-transdforming" class="level4">
+<h4 class="anchored" data-anchor-id="mutating-and-transdforming">Mutating and Transdforming</h4>
+<div id="29b0c169" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>order_enrich <span class="op">=</span> order_data.merge (prod_data[[<span class="st">&#39;product_id&#39;</span>, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;unit_price&#39;</span>]], on <span class="op">=</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="st">&#39;product_id&#39;</span>, how <span class="op">=</span><span class="st">&#39;left&#39;</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>order_enrich</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
 
-On the fifth day of Christmas, my true love sent to me:
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
 
-On the sixth day of Christmas, my true love sent to me:
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>24.99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+<td>3</td>
+<td>2024-01-17T22:36:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>VIP20</td>
+<td>29.99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">796</td>
+<td>797</td>
+<td>54</td>
+<td>3</td>
+<td>2024-06-24T07:56:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>web</td>
+<td>holiday10</td>
+<td>29.99</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">797</td>
+<td>798</td>
+<td>116</td>
+<td>3</td>
+<td>2024-10-22T17:54:00</td>
+<td>2</td>
+<td>0.26</td>
+<td>web</td>
+<td>NaN</td>
+<td>29.99</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">798</td>
+<td>799</td>
+<td>111</td>
+<td>4</td>
+<td>2024-10-29T15:53:00</td>
+<td>2</td>
+<td>0.07</td>
+<td>web</td>
+<td>NaN</td>
+<td>49.00</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">799</td>
+<td>800</td>
+<td>112</td>
+<td>4</td>
+<td>2024-05-06T10:27:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+</tr>
+</tbody>
+</table>
 
-On the seventh day of Christmas, my true love sent to me:
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+<p>800 rows × 9 columns</p>
+</div>
+</div>
+</div>
+<div id="f966a81e" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>order_enrich <span class="op">=</span> order_enrich.assign(</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>    gross_rev <span class="op">=</span> <span class="kw">lambda</span> d: d[<span class="st">&#39;unit_price&#39;</span>] <span class="op">*</span> d[<span class="st">&#39;quantity&#39;</span>],</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a>    net_rev <span class="op">=</span> <span class="kw">lambda</span> d: d[<span class="st">&#39;gross_rev&#39;</span>] <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> d[<span class="st">&#39;discount_pct&#39;</span>])</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a>    ) </span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>order_enrich.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
 
-On the eighth day of Christmas, my true love sent to me:
-eight moms a-calling,
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
 
-On the ninth day of Christmas, my true love sent to me:
-nine parties bumping,
-eight moms a-calling,
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+<th data-quarto-table-cell-role="th">gross_rev</th>
+<th data-quarto-table-cell-role="th">net_rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>22.4910</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>39.6900</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+<td>7.49</td>
+<td>6.8159</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>38.7100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>20.7417</td>
+</tr>
+</tbody>
+</table>
 
-On the tenth day of Christmas, my true love sent to me:
-ten loads of laundry,
-nine parties bumping,
-eight moms a-calling,
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
+</div>
+</div>
+</div>
+<div id="9363aa70" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>order_enrich</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
 
-On the eleventh day of Christmas, my true love sent to me:
-eleven friends goodbye-ing,
-ten loads of laundry,
-nine parties bumping,
-eight moms a-calling,
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
 
-On the twelfth day of Christmas, my true love sent to me:
-twelve hours sleeping,
-eleven friends goodbye-ing,
-ten loads of laundry,
-nine parties bumping,
-eight moms a-calling,
-seven seniors stressing,
-six graders grading,
-five practice exams,
-four course reviews,
-three lost pens,
-two meal points,
-and an email from Cal Poly.
-</code></pre>
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+<th data-quarto-table-cell-role="th">gross_rev</th>
+<th data-quarto-table-cell-role="th">net_rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>22.4910</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>39.6900</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+<td>7.49</td>
+<td>6.8159</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>38.7100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>20.7417</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+<td>3</td>
+<td>2024-01-17T22:36:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>VIP20</td>
+<td>29.99</td>
+<td>29.99</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">796</td>
+<td>797</td>
+<td>54</td>
+<td>3</td>
+<td>2024-06-24T07:56:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>web</td>
+<td>holiday10</td>
+<td>29.99</td>
+<td>89.97</td>
+<td>74.6751</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">797</td>
+<td>798</td>
+<td>116</td>
+<td>3</td>
+<td>2024-10-22T17:54:00</td>
+<td>2</td>
+<td>0.26</td>
+<td>web</td>
+<td>NaN</td>
+<td>29.99</td>
+<td>59.98</td>
+<td>44.3852</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">798</td>
+<td>799</td>
+<td>111</td>
+<td>4</td>
+<td>2024-10-29T15:53:00</td>
+<td>2</td>
+<td>0.07</td>
+<td>web</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>98.00</td>
+<td>91.1400</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">799</td>
+<td>800</td>
+<td>112</td>
+<td>4</td>
+<td>2024-05-06T10:27:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>147.00</td>
+<td>122.0100</td>
+</tr>
+</tbody>
+</table>
+
+<p>800 rows × 11 columns</p>
+</div>
+</div>
+</div>
+<div id="cce082cf" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>order_enrich</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+<th data-quarto-table-cell-role="th">gross_rev</th>
+<th data-quarto-table-cell-role="th">net_rev</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>22.4910</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>39.6900</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+<td>7.49</td>
+<td>6.8159</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>38.7100</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>20.7417</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+<td>...</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">795</td>
+<td>796</td>
+<td>43</td>
+<td>3</td>
+<td>2024-01-17T22:36:00</td>
+<td>1</td>
+<td>NaN</td>
+<td>web</td>
+<td>VIP20</td>
+<td>29.99</td>
+<td>29.99</td>
+<td>NaN</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">796</td>
+<td>797</td>
+<td>54</td>
+<td>3</td>
+<td>2024-06-24T07:56:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>web</td>
+<td>holiday10</td>
+<td>29.99</td>
+<td>89.97</td>
+<td>74.6751</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">797</td>
+<td>798</td>
+<td>116</td>
+<td>3</td>
+<td>2024-10-22T17:54:00</td>
+<td>2</td>
+<td>0.26</td>
+<td>web</td>
+<td>NaN</td>
+<td>29.99</td>
+<td>59.98</td>
+<td>44.3852</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">798</td>
+<td>799</td>
+<td>111</td>
+<td>4</td>
+<td>2024-10-29T15:53:00</td>
+<td>2</td>
+<td>0.07</td>
+<td>web</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>98.00</td>
+<td>91.1400</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">799</td>
+<td>800</td>
+<td>112</td>
+<td>4</td>
+<td>2024-05-06T10:27:00</td>
+<td>3</td>
+<td>0.17</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>147.00</td>
+<td>122.0100</td>
+</tr>
+</tbody>
+</table>
+
+<p>800 rows × 11 columns</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="mapping-and-applying" class="level1">
+<h1>Mapping and applying</h1>
+<div id="acf193ed" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(order_enrich[<span class="st">&#39;channel&#39;</span>].unique()) <span class="co">#checked the values of column </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[&#39;web&#39; &#39;mobile&#39; &#39;store&#39;]</code></pre>
+</div>
+</div>
+<div id="589a7bce" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>name_map<span class="op">=</span>{</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;web&#39;</span>:<span class="st">&#39;Web&#39;</span>,</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;mobile&#39;</span>: <span class="st">&#39;Mobile App&#39;</span>,</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;store&#39;</span>: <span class="st">&#39;Retail Store&#39;</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>name_map[<span class="st">&#39;store&#39;</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>&#39;Retail Store&#39;</code></pre>
+</div>
+</div>
+<div id="3d5a1487" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;channel_better&#39;</span>]<span class="op">=</span> order_enrich[<span class="st">&#39;channel&#39;</span>].astype(<span class="bu">str</span>).<span class="bu">map</span>(name_map) </span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>order_enrich.head(<span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+<th data-quarto-table-cell-role="th">gross_rev</th>
+<th data-quarto-table-cell-role="th">net_rev</th>
+<th data-quarto-table-cell-role="th">channel_better</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>22.4910</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>39.6900</td>
+<td>2</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+<td>7.49</td>
+<td>6.8159</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="b3d8a4b7" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;coupon_code&#39;</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>array([nan, &#39;VIP20&#39;, &#39;FREESHIP&#39;, &#39;holiday10&#39;, &#39;WELCOME&#39;, &#39;SAVE10&#39;], dtype=object)</code></pre>
+</div>
+</div>
+<div id="77dc413b" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;coupon_code&#39;</span>]<span class="op">=</span>order_enrich[<span class="st">&#39;coupon_code&#39;</span>].replace({</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;holiday10&#39;</span>: <span class="st">&#39;HOLIDAY10&#39;</span>,</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">&#39;Holiday10&#39;</span>: <span class="st">&#39;HOLIDAY10&#39;</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;coupon_code&#39;</span>].unique()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>array([nan, &#39;VIP20&#39;, &#39;FREESHIP&#39;, &#39;HOLIDAY10&#39;, &#39;WELCOME&#39;, &#39;SAVE10&#39;], dtype=object)</code></pre>
+</div>
+</div>
+<section id="apply" class="level3">
+<h3 class="anchored" data-anchor-id="apply">Apply</h3>
+<div id="65ed8c01" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> is_big_order(row):</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>((row[<span class="st">&#39;quantity&#39;</span>]<span class="op">&gt;=</span><span class="dv">3</span>) <span class="kw">and</span> (row[<span class="st">&#39;net_rev&#39;</span>]<span class="op">&gt;=</span><span class="dv">60</span>))</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>order_enrich [<span class="st">&#39;big_order&#39;</span>]<span class="op">=</span> order_enrich.<span class="bu">apply</span>(is_big_order, axis<span class="op">=</span><span class="dv">1</span>) <span class="co">#axis=1 column wise</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>order_enrich.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">order_id</th>
+<th data-quarto-table-cell-role="th">customer_id</th>
+<th data-quarto-table-cell-role="th">product_id</th>
+<th data-quarto-table-cell-role="th">order_ts</th>
+<th data-quarto-table-cell-role="th">quantity</th>
+<th data-quarto-table-cell-role="th">discount_pct</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">coupon_code</th>
+<th data-quarto-table-cell-role="th">unit_price</th>
+<th data-quarto-table-cell-role="th">gross_rev</th>
+<th data-quarto-table-cell-role="th">net_rev</th>
+<th data-quarto-table-cell-role="th">channel_better</th>
+<th data-quarto-table-cell-role="th">big_order</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>89</td>
+<td>8</td>
+<td>2024-11-26T22:31:00</td>
+<td>1</td>
+<td>0.10</td>
+<td>web</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>22.4910</td>
+<td>1</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2</td>
+<td>52</td>
+<td>4</td>
+<td>2024-06-05T21:37:00</td>
+<td>1</td>
+<td>0.19</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>39.6900</td>
+<td>2</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>3</td>
+<td>96</td>
+<td>9</td>
+<td>2024-06-18T11:44:00</td>
+<td>1</td>
+<td>0.09</td>
+<td>web</td>
+<td>NaN</td>
+<td>7.49</td>
+<td>7.49</td>
+<td>6.8159</td>
+<td>1</td>
+<td>False</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>4</td>
+<td>93</td>
+<td>4</td>
+<td>2024-06-10T03:47:00</td>
+<td>1</td>
+<td>0.21</td>
+<td>store</td>
+<td>NaN</td>
+<td>49.00</td>
+<td>49.00</td>
+<td>38.7100</td>
+<td>3</td>
+<td>False</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>5</td>
+<td>28</td>
+<td>8</td>
+<td>2024-05-21T23:37:00</td>
+<td>1</td>
+<td>0.17</td>
+<td>mobile</td>
+<td>NaN</td>
+<td>24.99</td>
+<td>24.99</td>
+<td>20.7417</td>
+<td>2</td>
+<td>False</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summarize-and-aggregate" class="level1">
+<h1>Summarize and aggregate</h1>
+<div id="6cc44455" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;order_ts&#39;</span>]<span class="op">=</span>pd.to_datetime(order_enrich[<span class="st">&#39;order_ts&#39;</span>])</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>order_enrich[<span class="st">&#39;order_ts&#39;</span>].dt.month</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>0      11
+1       6
+2       6
+3       6
+4       5
+       ..
+795     1
+796     6
+797    10
+798    10
+799     5
+Name: order_ts, Length: 800, dtype: int32</code></pre>
+</div>
+</div>
+<section id="section" class="level3">
+<h3 class="anchored" data-anchor-id="section"></h3>
+<div id="8fe40690" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>monthly <span class="op">=</span> (order_enrich.groupby(</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    [order_enrich[<span class="st">&#39;order_ts&#39;</span>].dt.month, <span class="st">&#39;channel&#39;</span>]).agg(</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a>        order <span class="op">=</span> (<span class="st">&#39;order_id&#39;</span>, <span class="st">&#39;count&#39;</span>),</span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a>        qty <span class="op">=</span> (<span class="st">&#39;quantity&#39;</span>, <span class="st">&#39;sum&#39;</span>),</span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a>        gross <span class="op">=</span> (<span class="st">&#39;gross_rev&#39;</span>, <span class="st">&#39;sum&#39;</span>),</span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a>        net <span class="op">=</span> (<span class="st">&#39;net_rev&#39;</span>, <span class="st">&#39;sum&#39;</span>)).reset_index().rename(columns <span class="op">=</span> {<span class="st">&#39;order_ts&#39;</span> : <span class="st">&#39;month&#39;</span>})</span>
+<span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>monthly.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">month</th>
+<th data-quarto-table-cell-role="th">channel</th>
+<th data-quarto-table-cell-role="th">order</th>
+<th data-quarto-table-cell-role="th">qty</th>
+<th data-quarto-table-cell-role="th">gross</th>
+<th data-quarto-table-cell-role="th">net</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>1</td>
+<td>mobile</td>
+<td>12</td>
+<td>20</td>
+<td>617.32</td>
+<td>411.6649</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>1</td>
+<td>store</td>
+<td>26</td>
+<td>54</td>
+<td>1569.14</td>
+<td>1295.6232</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>1</td>
+<td>web</td>
+<td>35</td>
+<td>75</td>
+<td>2221.37</td>
+<td>1610.0299</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2</td>
+<td>mobile</td>
+<td>15</td>
+<td>25</td>
+<td>616.29</td>
+<td>505.9620</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2</td>
+<td>store</td>
+<td>17</td>
+<td>33</td>
+<td>918.75</td>
+<td>620.5831</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div id="1be7e5c2" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>monthly.isna().<span class="bu">any</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-display">
+<pre><code>month      False
+channel    False
+order      False
+qty        False
+gross      False
+net        False
+dtype: bool</code></pre>
+</div>
+</div>
+<div id="8cf72d16" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>pivoted <span class="op">=</span> monthly.pivot(index <span class="op">=</span> <span class="st">&#39;month&#39;</span>, columns <span class="op">=</span> <span class="st">&#39;channel&#39;</span>, values <span class="op">=</span><span class="st">&#39;net&#39;</span>)</span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pivoted)</span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a><span class="co">#index=row</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co">#column=column</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>pivoted_filled <span class="op">=</span> pivoted.fillna(<span class="dv">0</span>)</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pivoted_filled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>channel    mobile      store        web
+month                                  
+1        411.6649  1295.6232  1610.0299
+2        505.9620   620.5831  1628.3948
+3        343.9385   612.0582  1208.6417
+4        374.2054   587.4709  1376.1291
+5        557.2474   636.1117  1334.0767
+6        437.0913   466.4271  1085.6976
+7        334.7094   527.0300  1206.3939
+8        251.6669  1031.6039  1052.6182
+9        600.4629   693.2412  1782.6593
+10       653.8543   884.5382  1490.5564
+11       920.2776   606.6200  1118.0994
+12       348.3082   660.9217  1514.2557
+channel    mobile      store        web
+month                                  
+1        411.6649  1295.6232  1610.0299
+2        505.9620   620.5831  1628.3948
+3        343.9385   612.0582  1208.6417
+4        374.2054   587.4709  1376.1291
+5        557.2474   636.1117  1334.0767
+6        437.0913   466.4271  1085.6976
+7        334.7094   527.0300  1206.3939
+8        251.6669  1031.6039  1052.6182
+9        600.4629   693.2412  1782.6593
+10       653.8543   884.5382  1490.5564
+11       920.2776   606.6200  1118.0994
+12       348.3082   660.9217  1514.2557</code></pre>
+</div>
+</div>
+<div id="5b06fc66" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>long_again <span class="op">=</span> pivoted_filled.reset_index().melt(id_vars<span class="op">=</span><span class="st">&#39;month&#39;</span>, var_name<span class="op">=</span> <span class="st">&#39;channel&#39;</span>, value_name <span class="op">=</span> <span class="st">&#39;net&#39;</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pivoted_filled.head())</span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(long_again.sort_values(<span class="st">&#39;month&#39;</span>).reset_index(drop<span class="op">=</span><span class="va">True</span>).head())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>channel    mobile      store        web
+month                                  
+1        411.6649  1295.6232  1610.0299
+2        505.9620   620.5831  1628.3948
+3        343.9385   612.0582  1208.6417
+4        374.2054   587.4709  1376.1291
+5        557.2474   636.1117  1334.0767
+   month channel        net
+0      1  mobile   411.6649
+1      1     web  1610.0299
+2      1   store  1295.6232
+3      2  mobile   505.9620
+4      2     web  1628.3948</code></pre>
 </div>
 </div>
 </section>
