@@ -7,7 +7,7 @@ format:
     code-fold: true
 echo: false
 ---
-<https://github.com/mimansadahiya/GSB544-lab0>
+<https://github.com/mimansadahiya/GSB544/tree/main/Lab0>
 This dataset contains a subset of the fuel economy data from the EPA.
 
 ```{python}
