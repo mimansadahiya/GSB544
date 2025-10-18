@@ -1,0 +1,128 @@
+---
+title: Practice Activity 4.1
+format:
+  html: 
+   toc: true
+   code-fold: true
+   embed-resources: true
+---
+```{python}
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+#jason is simpler, has key{};  human eyes easy
+#xml has tags<>;  complex but robust
+```
+```{python}
+#pandas: for data frames
+#requests: for downloading web page HTML
+#BeautifulSoup: for parsing HTML/XML
+import requests
+URL = "https://en.wikipedia.org/wiki/List_of_United_States_cities_by_population"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+response = requests.get(URL, headers=HEADERS)
+response
+```
+```{python}
+from bs4 import BeautifulSoup
+soup = BeautifulSoup(response.content, 'html.parser')
+```
+```{python}
+#find all table elements in the HTML
+len(soup.find_all("table"))
+```
+```{python}
+#print(soup.find_all("table"))
+```
+```{python}
+len(soup.find_all("table",
+                  attrs={
+                      "class": "wikitable sortable sort-under col1left col2center",
+                      "style": "text-align:right"}
+                  ))
+```
+```{python}
+table = soup.find_all("table",
+                  attrs={
+                      "class": "wikitable sortable sort-under col1left col2center", #changed name to #wikitable sortable sort-under col1left col2center
+                      "style": "text-align:right"} #changed style to alin:right from center(nav's notebook)
+                  )[0]
+```
+```{python}
+def clean_cell(tag):
+    for sup in tag.find_all("sup"):
+        sup.decompose()
+    return tag.get_text(strip=True)
+```
+```{python}
+rows = []
+for tr in table.find_all("tr")[1:]:
+    tds = tr.find_all("td")
+    if len(tds) < 6:
+        continue
+
+    # After the rank , the  order is:
+    # 0 City | 1 State | 2 2022 estimate | 3 2020 census | 4 Change | 5 2020 land area (sq mi) | ...
+    city  = clean_cell(tds[0])
+    state = clean_cell(tds[1])
+    pop22 = clean_cell(tds[2])
+    area  = clean_cell(tds[5])
+
+    rows.append({
+        "city": city,
+        "state": state,
+        "population_2022_estimate": pop22,
+        "land_area_sq_mi": area
+    })
+
+```
+```{python}
+df_cities = pd.DataFrame(rows)
+df_cities.shape, df_cities.head()
+```
+```{python}
+pd.read_html("http://catalog.calpoly.edu/collegesandprograms/collegeofsciencemathematics/statistics/#courseinventory")
+```
+```{python}
+CATALOG_URL = "http://catalog.calpoly.edu/collegesandprograms/collegeofsciencemathematics/statistics/#courseinventory"
+HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+
+resp = requests.get(CATALOG_URL, headers=HEADERS)
+soup = BeautifulSoup(resp.content, "html.parser")
+```
+```{python}
+courses = []
+for block in soup.find_all("div", {"class": "courseblock"}):
+    title_tag = block.find("p", {"class": "courseblocktitle"})
+    if not title_tag:
+        continue
+
+    title_text = title_tag.get_text(" ", strip=True)
+    if not (title_text.startswith("STAT") or title_text.startswith("DATA")):
+        continue
+
+    # remove "(X units)" span if present
+    for span in title_tag.find_all("span"):
+        span.extract()
+    course_name = title_tag.get_text(" ", strip=True)
+
+    # first noindent line is typically "Term Typically Offered: ..."
+    term_tag = block.find("p", {"class": "noindent"})
+    term_text = term_tag.get_text(" ", strip=True) if term_tag else ""
+
+    # if not the right line, search all noindent p's for the one that starts with it
+    if not term_text.lower().startswith("term typically offered"):
+        for p in block.find_all("p", {"class": "noindent"}):
+            t = p.get_text(" ", strip=True)
+            if t.lower().startswith("term typically offered"):
+                term_text = t
+                break
+
+    courses.append({"course": course_name, "term_typically_offered": term_text})
+
+```
+```{python}
+df_courses = pd.DataFrame(courses)
+df_courses.shape, df_courses.head()
+```
