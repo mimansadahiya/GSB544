@@ -2197,7 +2197,8 @@ vertical-align: -.125em;
 </header>
 
 
-<div id="8a9ba1ce" class="cell" data-execution_count="1">
+<p>Git hub link: <a href="https://github.com/mimansadahiya/GSB544/blob/main/week4/webscraping.html" class="uri">https://github.com/mimansadahiya/GSB544/blob/main/week4/webscraping.html</a></p>
+<div id="f362abd6" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2207,7 +2208,7 @@ vertical-align: -.125em;
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#xml has tags&lt;&gt;;  complex but robust</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="ed0b969e" class="cell" data-execution_count="2">
+<div id="798d451d" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#pandas: for data frames</span></span>
@@ -2220,34 +2221,34 @@ vertical-align: -.125em;
 <span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> requests.get(URL, headers<span class="op">=</span>HEADERS)</span>
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>response</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <pre><code>&lt;Response [200]&gt;</code></pre>
 </div>
 </div>
-<div id="2a4cfaaf" class="cell" data-execution_count="3">
+<div id="a591eff2" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> bs4 <span class="im">import</span> BeautifulSoup</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>soup <span class="op">=</span> BeautifulSoup(response.content, <span class="st">&#39;html.parser&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="2fb66ebb" class="cell" data-execution_count="4">
+<div id="ed36b322" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#find all table elements in the HTML</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(soup.find_all(<span class="st">&quot;table&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <pre><code>10</code></pre>
 </div>
 </div>
-<div id="fbf1952c" class="cell" data-execution_count="5">
+<div id="17e3f639" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#print(soup.find_all(&quot;table&quot;))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="749ad45e" class="cell" data-execution_count="6">
+<div id="ad20e53e" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">len</span>(soup.find_all(<span class="st">&quot;table&quot;</span>,</span>
@@ -2256,11 +2257,11 @@ vertical-align: -.125em;
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;style&quot;</span>: <span class="st">&quot;text-align:right&quot;</span>}</span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>                  ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>1</code></pre>
 </div>
 </div>
-<div id="d73a73ca" class="cell" data-execution_count="7">
+<div id="526dc104" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> soup.find_all(<span class="st">&quot;table&quot;</span>,</span>
@@ -2270,7 +2271,7 @@ vertical-align: -.125em;
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                  )[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="783e57c3" class="cell" data-execution_count="8">
+<div id="cd068872" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_cell(tag):</span>
@@ -2279,7 +2280,7 @@ vertical-align: -.125em;
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> tag.get_text(strip<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="c6c28ce0" class="cell" data-execution_count="9">
+<div id="be320132" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>rows <span class="op">=</span> []</span>
@@ -2303,13 +2304,13 @@ vertical-align: -.125em;
 <span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>    })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="67944868" class="cell" data-execution_count="10">
+<div id="789398d2" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>df_cities <span class="op">=</span> pd.DataFrame(rows)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>df_cities.shape, df_cities.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="10">
+<div class="cell-output cell-output-display" data-execution_count="24">
 <pre><code>((25, 4),
               city state population_2022_estimate land_area_sq_mi
  0       Allegheny    PA                       NA            1907
@@ -2319,12 +2320,12 @@ vertical-align: -.125em;
  4  Citrus Heights    CA                   86,909            1990)</code></pre>
 </div>
 </div>
-<div id="17f3a2de" class="cell" data-execution_count="11">
+<div id="9cec39e0" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>pd.read_html(<span class="st">&quot;http://catalog.calpoly.edu/collegesandprograms/collegeofsciencemathematics/statistics/#courseinventory&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>[                                        Program name   Program type
  0                              Actuarial Preparation          Minor
  1  Cross Disciplinary Studies Minor in Bioinforma...          Minor
@@ -2332,7 +2333,7 @@ vertical-align: -.125em;
  3                                         Statistics  BS, MS, Minor]</code></pre>
 </div>
 </div>
-<div id="c3a1774b" class="cell" data-execution_count="12">
+<div id="643861c1" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>CATALOG_URL <span class="op">=</span> <span class="st">&quot;http://catalog.calpoly.edu/collegesandprograms/collegeofsciencemathematics/statistics/#courseinventory&quot;</span></span>
@@ -2342,7 +2343,7 @@ vertical-align: -.125em;
 <span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>soup <span class="op">=</span> BeautifulSoup(resp.content, <span class="st">&quot;html.parser&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="e72456a3" class="cell" data-execution_count="13">
+<div id="1c0e7854" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>courses <span class="op">=</span> []</span>
@@ -2375,13 +2376,13 @@ vertical-align: -.125em;
 <span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>    courses.append({<span class="st">&quot;course&quot;</span>: course_name, <span class="st">&quot;term_typically_offered&quot;</span>: term_text})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="a83eb944" class="cell" data-execution_count="14">
+<div id="b859b923" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>df_courses <span class="op">=</span> pd.DataFrame(courses)</span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>df_courses.shape, df_courses.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <pre><code>((74, 2),
                                                course  \
  0                  DATA 100. Data Science for All I.   
