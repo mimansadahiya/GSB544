@@ -1,0 +1,358 @@
+---
+title: Lab4_webscrapping
+format:
+    html:
+        embed-resources: true
+code-fold: true
+toc: true
+---
+
+Github link:
+
+<g>
+
+## 1. Data from unstructured websites
+
+
+##### 1. Importing the required libraries(pandas, requests, BeautifulSoup, re):
+```{python}
+#import libs
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import re
+```
+
+##### 2. Scrapping the data from url using Beautifulsoup and requests packages:
+
+```{python}
+#scrap data 
+plan_number = 210
+url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+response = requests.get(url, headers=headers, timeout=10)
+response.raise_for_status()
+soup = BeautifulSoup(response.content, 'html.parser')
+```
+
+##### 3. Finding the matches for all weekdays and their corresponding recipe name, link to the recipe, and its price, for the chosen meal plan (using re/regex):
+
+```{python}
+#use regex to find matches 
+days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+recipes = []
+for day in days:
+        # Regex for: "**Monday**: Recipe Name $Price"
+        pattern = re.compile(rf'{day}: (.+?) \$(\d+\.?\d*)', re.IGNORECASE)
+
+        # Find all matches in the page text
+        for match in pattern.finditer(soup.get_text()):
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            # Now try to find a link near the recipe name in the HTML
+            link = ""
+            for a in soup.find_all("a", href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a["href"]
+                    break
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+
+```
+
+##### 4. Converting the matches into a dataframe with weekday, recipe name, link and price:
+```{python}
+#creating the dataframe from what we matched before
+df = pd.DataFrame(recipes)
+df
+```
+
+## 2. Data from an API
+
+
+##### 1. Query for Monday recipe only:
+```{python}
+#query the tasty API for each recipe
+monday_recipe = df[df['Day of the Week'] == 'Monday']['Name of Recipe'].iloc[0]
+print("Monday's recipe:", monday_recipe)
+```
+
+##### 2. Query for all the monday recipes:
+```{python}
+url = "https://tasty.p.rapidapi.com/recipes/list"
+headers = {
+    "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+    "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+}
+querystring = {"from": "0", "size": "100", "q": monday_recipe}
+response = requests.get(url, headers=headers, params=querystring)
+data = response.json()
+# Extract Tasty matches
+recipes = []
+for r in data.get('results', []):
+    nut = r.get('nutrition', {})
+    recipes.append({
+        "Original Name": monday_recipe,
+        "Tasty Title": r.get('name'),
+        "Tasty ID": r.get('id'),
+        "Tasty URL": r.get('canonical_id'),
+        "Tasty Description": r.get("description"),
+        "Calories": nut.get("calories"),
+        "Protein": nut.get("protein"),
+        "Fat": nut.get("fat"),
+        "Carbs": nut.get("carbohydrates")
+    })
+df_tasty = pd.DataFrame(recipes)
+df_tasty
+#no calorie, carb, fat, protein information in this meal plan
+```
+
+## 3. Automate it
+
+##### We need to cerate a function (get_mealplan_data) to perform 2 parts from above in one function. For that we will create 2 separate functions and use them in get_mealplan_data function:
+
+###### Function 1 : get_weekly_plan
+
+```{python}
+# 1. Scrape weekly meal plan (all weekdays, all recipes)
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    recipes = []
+    for day in days:
+        pattern = re.compile(rf'{day}:\s*(.+?)\s*\$(\d+\.?\d*)', re.IGNORECASE)
+        for match in pattern.finditer(text):
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            link = ""
+            for a in soup.find_all('a', href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a['href']
+                    break
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+```
+
+###### Function 2: match_recipies
+
+```{python}
+# 2. Query Tasty API for a recipe by name
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    recipes = []
+    for r in data.get('results', []):
+        nut = r.get('nutrition', {})
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+            "Calories": nut.get("calories"),
+            "Protein": nut.get("protein"),
+            "Fat": nut.get("fat"),
+            "Carbs": nut.get("carbohydrates")
+        })
+    return pd.DataFrame(recipes)
+```
+
+###### Function 3: get_weekly_plan(main function)
+```{python}
+# 3. Main integration: all days, all recipes, all API matches!
+def get_mealplan_data(plan_number):
+    weekly_df = get_weekly_plan(plan_number)
+    all_results = []
+    for idx, row in weekly_df.iterrows():
+        recipe_name = row['Name of Recipe']
+        tasty_df = match_recipe(recipe_name)
+        if not tasty_df.empty:
+            tasty_df['Day of the Week'] = row['Day of the Week']
+            tasty_df['Original Recipe Name'] = recipe_name
+            tasty_df['Original Link'] = row['Link to Recipe']
+            tasty_df['Original Price'] = row['Price of Recipe']
+            all_results.append(tasty_df)
+        else:
+            all_results.append(pd.DataFrame({
+                "Day of the Week": [row['Day of the Week']],
+                "Original Recipe Name": [recipe_name],
+                "Original Link": [row['Link to Recipe']],
+                "Original Price": [row['Price of Recipe']]
+            }))
+    if all_results:
+        final_df = pd.concat(all_results, ignore_index=True)
+        return final_df
+    else:
+        return pd.DataFrame()
+
+# To use:
+df = get_mealplan_data(202)
+df
+```
+
+## 4. Add a column with fuzzy matching
+
+##### Create a boolean vector to specify if the recipe is vegetarian or not using a dictionary:
+```{python}
+import re
+
+# List of common meat-related words to check for in the recipe name
+meat_words = [
+    'chicken', 'beef', 'pork', 'lamb', 'turkey', 'fish', 'shrimp', 'bacon', 'ham', 
+    'sausage', 'salmon', 'duck', 'veal', 'goat', 'crab', 'anchovy', 'anchovies',
+    'lobster', 'pepperoni', 'prosciutto', 'steak', 'meatball', 'meatloaf', 'mutton',
+    'tilapia', 'trout', 'tuna', 'cod', 'clam', 'mussels', 'oyster', 'squid', 'octopus'
+]
+meat_pattern = re.compile('|'.join(meat_words), re.IGNORECASE)
+
+def is_vegetarian(title):
+    if pd.isna(title):
+        return None
+    return not bool(meat_pattern.search(str(title)))
+
+# Guarantee 'Name of Recipe' exists in your DataFrame
+if 'Name of Recipe' not in df.columns and 'Tasty Title' in df.columns:
+    df['Name of Recipe'] = df['Tasty Title']
+
+# Create the Vegetarian column based on 'Name of Recipe'
+df['Vegetarian'] = df['Name of Recipe'].apply(is_vegetarian)
+
+# Optional: Show the relevant columns
+df
+#df_with_veg = df[['Day of the Week', 'Original Recipe Name', 'Name of Recipe', 'Vegetarian', 'Original Link', 'Original Price', 'Tasty Title', 'Tasty ID', 'Tasty URL', 'Tasty Description']]
+#df_with_veg
+df_with_veg = df[[
+    'Day of the Week',
+    'Original Recipe Name',
+    'Name of Recipe',
+    'Vegetarian',
+    'Original Link',
+    'Original Price',
+    'Tasty Title',
+    'Tasty ID',
+    'Tasty URL',
+    'Tasty Description',
+    'Calories',
+    'Protein',
+    'Fat',
+    'Carbs'
+]]
+df_with_veg.head()
+```
+
+## 6. Analyze
+
+##### Making data fit for plotting
+
+###### Filtering out the rows with null values for calories for plotting
+
+```{python}
+# 1. Only keep rows with valid nutrition info
+df_with_veg = df_with_veg.dropna(subset=['Calories'])
+```
+
+
+```{python}
+# 2. Sort and pick one best row per weekday (highest calories, or whatever you want)
+df_with_veg = df_with_veg.sort_values(['Day of the Week', 'Calories'], ascending=[True, False])
+best_per_day = df_with_veg.groupby('Day of the Week', as_index=False).first()
+```
+
+
+```{python}
+# 3. Macro calculations
+for macro in ['Protein', 'Fat', 'Carbs']:
+    best_per_day[macro] = pd.to_numeric(best_per_day[macro], errors='coerce')
+
+best_per_day['kcal_protein'] = best_per_day['Protein'] * 4
+best_per_day['kcal_fat'] = best_per_day['Fat'] * 9
+best_per_day['kcal_carbs'] = best_per_day['Carbs'] * 4
+
+best_per_day['kcal_total_from_macros'] = best_per_day[['kcal_protein','kcal_fat','kcal_carbs']].sum(axis=1)
+best_per_day['pct_protein'] = best_per_day['kcal_protein']/best_per_day['kcal_total_from_macros']*100
+best_per_day['pct_fat'] = best_per_day['kcal_fat']/best_per_day['kcal_total_from_macros']*100
+best_per_day['pct_carbs'] = best_per_day['kcal_carbs']/best_per_day['kcal_total_from_macros']*100
+```
+
+###### Melting the dataframe for plotting
+```{python}
+# 4. Melt macro percent for plotnine
+bp_long = best_per_day.melt(
+    id_vars=['Day of the Week','Vegetarian','Tasty Title'],
+    value_vars=['pct_protein','pct_fat','pct_carbs'],
+    var_name='Macro', value_name='Percent'
+)
+bp_long['Macro'] = bp_long['Macro'].map({
+    'pct_protein':'Protein',
+    'pct_fat':'Fat',
+    'pct_carbs':'Carbs'
+})
+
+weekday_order = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+bp_long['Day of the Week'] = pd.Categorical(bp_long['Day of the Week'], categories=weekday_order, ordered=True)
+```
+
+###### Plotting use plotnine
+```{python}
+# 5. Plotnine: 100% stacked bar of macro breakdown by weekday
+from plotnine import *
+
+plot = (
+    ggplot(bp_long, aes(x='Day of the Week', y='Percent', fill='Macro'))
+    + geom_col(position='stack', alpha=0.85)
+    + labs(
+        title="Weekly Macro Composition (Mealplan 202)",
+        subtitle="Each bar = % of calories from Protein/Fat/Carbs; Vegetarian meals highlighted",
+        x='Day', y='% of Calories')
+    + scale_y_continuous(limits=[0,100])
+    + theme_minimal()
+    + theme(axis_text_x=element_text(rotation=15, ha='right'), figure_size=(10,7))
+)
+plot
+
+```
+
+##### The 100% bar chart above shows the shifting balance of macronutrients(carbohyderte, fat, protein) in daily meal recipes over the week. After removing all null values, including those for Monday, which did not have any nutritional data, we can see how the proportions of calories from carbohydrates, fat, and protein vary by day.
+
+##### Throughout most of the week, fat seems to be as the dominant contributor to daily calorie intake, especially from Tuesday through Thursday. These meals are consistently richer in fats, suggesting a dietary pattern focused on energy-dense, satiating foods. However, Friday shows a change where carbohydrates and protein together make up the largest share of calories, depicting the shift towards leaner and more energizing meal choices. 
+
+##### This visualization tells the story of a meal plan that evolves over the week, with heavier, fat-rich meals in the middle and a lighter, carb-protein focused as the weekend approaches.
+
+## Annotations:
+
+1. Used AI to do Macro calculations for plotting in part 6
+
+2. USed AI to get skeleton code to work with
+
+3. Used AI for debugging(I got null values for calories, fats, protein, carbs ) when using Tasty API and AI helped me use nut.get syntax to get those values as it was not saved under <r>
+
+4. Used AI to brainstorm for ideas for plotting and storytelling, but did not copy paste the whole story.
+
+
+

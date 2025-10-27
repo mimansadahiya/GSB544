@@ -1,0 +1,132 @@
+---
+title: Lab4_webscrapping
+format:
+    html:
+        embed-resources: true
+code-fold: true
+toc: true
+---
+
+```{python}
+import pandas as pd
+import requests
+from bs4 import BeautifulSoup
+import re
+
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    soup = BeautifulSoup(response.content, 'html.parser')
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    day_re = re.compile(r"^(Monday|Tuesday|Wednesday|Thursday|Friday)\s*:", re.I)
+    price_re = re.compile(r"\$(\d+\.\d{2})")
+    recipes = []
+    for tag in soup.find_all(["p", "li"]):
+        text = " ".join(tag.get_text(" ", strip=True).split())
+        dmatch = day_re.search(text)
+        if not dmatch:
+            continue
+        day = dmatch.group(1).title()
+        a = tag.find("a")
+        name = a.get_text(strip=True) if a else None
+        link = a['href'] if (a and a.has_attr("href")) else None
+        pmatch = price_re.search(text)
+        price = float(pmatch.group(1)) if pmatch else None
+        if day in days and name:
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+
+# Usage for Q1
+plan_number = 202
+df = get_weekly_plan(plan_number)
+df
+```
+
+```{python}
+# Make sure you've run the Q1 block first (df contains your recipes)
+monday_recipe = df[df['Day of the Week'] == 'Monday']['Name of Recipe'].iloc[0]
+print("Monday's recipe:", monday_recipe)
+
+url_api = "https://tasty.p.rapidapi.com/recipes/list"
+headers_api = {
+    "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+    "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+}
+querystring = {"from": "0", "size": "100", "q": monday_recipe}
+response_api = requests.get(url_api, headers=headers_api, params=querystring)
+data = response_api.json()
+
+# Extract Tasty matches
+recipes_api = []
+for r in data.get('results', []):
+    recipes_api.append({
+        "Original Name": monday_recipe,
+        "Tasty Title": r.get('name'),
+        "Tasty ID": r.get('id'),
+        "Tasty URL": r.get('canonical_id'),
+        "Tasty Description": r.get("description"),
+    })
+df_tasty = pd.DataFrame(recipes_api)
+df_tasty
+
+```
+
+
+```{python}
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    recipes = []
+    for r in data.get('results', []):
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+def get_mealplan_data(plan_number):
+    weekly_df = get_weekly_plan(plan_number)
+    all_results = []
+    for idx, row in weekly_df.iterrows():
+        recipe_name = row['Name of Recipe']
+        tasty_df = match_recipe(recipe_name)
+        if not tasty_df.empty:
+            tasty_df['Day of the Week'] = row['Day of the Week']
+            tasty_df['Original Recipe Name'] = recipe_name
+            tasty_df['Original Link'] = row['Link to Recipe']
+            tasty_df['Original Price'] = row['Price of Recipe']
+            all_results.append(tasty_df)
+        else:
+            all_results.append(pd.DataFrame({
+                "Day of the Week": [row['Day of the Week']],
+                "Original Recipe Name": [recipe_name],
+                "Original Link": [row['Link to Recipe']],
+                "Original Price": [row['Price of Recipe']]
+            }))
+    if all_results:
+        final_df = pd.concat(all_results, ignore_index=True)
+        return final_df
+    else:
+        return pd.DataFrame()
+
+# Usage for Q3:
+plan_number = 203
+df_full = get_mealplan_data(plan_number)
+df_full.head()
+
+```

@@ -1,0 +1,496 @@
+
+## 2.
+```{python}
+
+import requests
+import pandas as pd
+
+def search_tasty_api(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",  # Your actual API key
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    # Extract recipes from API results
+    recipes = []
+    for r in data.get('results', []):
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+# Assume monday_recipe is already set from your dataframe:
+# monday_recipe = df[df['Day of the Week'] == 'Monday']['Name of Recipe'].iloc[0]
+results_df = search_tasty_api(monday_recipe)
+results_df
+
+```
+
+## 3. with al days 
+
+```{python}
+
+# 1. Scrape weekly plan function
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/" #specify the link of meal plan
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"} #avoid any blocks frmo the website
+    response = requests.get(url, headers=headers) # format for web scrapping
+    soup = BeautifulSoup(response.content, 'html.parser') # beautifulsoup: It transforms the HTML code into a Python object that is very easy to search and navigate.
+
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] #list of all days
+    recipes = [] #empty list to store the recipies
+    #use for loop to find the matches
+    for day in days:
+        pattern = re.compile(rf'{day}: (.+?) \$(\d+\.?\d*)', re.IGNORECASE) # matches extract recipe names and prices
+        for match in pattern.finditer(soup.get_text()):
+            recipe_name = match.group(1).strip() #column 1 with recipie names
+            price = float(match.group(2)) #columns 2 qith prices
+            link = "" #emplty string for links
+            for a in soup.find_all("a", href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a["href"]
+                    break 
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+
+# 2. API query function
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    # Extract recipes from API results
+    recipes = []
+    for r in data.get('results', []):
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+# 3. Automated integration function
+def get_mealplan_data(plan_number):
+    weekly_df = get_weekly_plan(plan_number)
+    all_results = []
+    for idx, row in weekly_df.iterrows():
+        recipe_name = row['Name of Recipe']
+        tasty_df = match_recipe(recipe_name)
+        tasty_df['Day of the Week'] = row['Day of the Week']
+        tasty_df['Original Recipe Name'] = recipe_name
+        tasty_df['Original Link'] = row['Link to Recipe']
+        tasty_df['Original Price'] = row['Price of Recipe']
+        all_results.append(tasty_df)
+    # Combine all results
+    final_df = pd.concat(all_results, ignore_index=True)
+    return final_df
+
+# Test run for Meal Plan 202
+df = get_mealplan_data(202)
+df
+```
+
+
+
+
+
+for question 3
+
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import re
+
+# 1. Scrape weekly plan function (get ALL days, but we will filter for Monday later)
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    recipes = []
+    for day in days:
+        pattern = re.compile(rf'{day}: (.+?) \$(\d+\.?\d*)', re.IGNORECASE)
+        for match in pattern.finditer(soup.get_text()):
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            link = ""
+            for a in soup.find_all("a", href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a["href"]
+                    break
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+
+
+# 2. API query function for one recipe
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    recipes = []
+    for r in data.get('results', []):
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+# 3. Only automate for Monday (or any specific day you want)
+def get_mealplan_data(plan_number, day='Monday'):
+    weekly_df = get_weekly_plan(plan_number)
+    monday_df = weekly_df[weekly_df["Day of the Week"].str.lower() == day.lower()]
+    all_results = []
+    for idx, row in monday_df.iterrows():
+        recipe_name = row['Name of Recipe']
+        tasty_df = match_recipe(recipe_name)
+        tasty_df['Day of the Week'] = row['Day of the Week']
+        tasty_df['Original Recipe Name'] = recipe_name
+        tasty_df['Original Link'] = row['Link to Recipe']
+        tasty_df['Original Price'] = row['Price of Recipe']
+        all_results.append(tasty_df)
+    if all_results:
+        return pd.concat(all_results, ignore_index=True)
+    else:
+        return pd.DataFrame()  # Return empty dataframe if no matches
+
+# Example: find only Monday's matches for meal plan 202
+df = get_mealplan_data(202, day='Monday')
+df
+
+```
+
+```{python}
+print(soup.get_text())
+
+```
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import re
+
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    # Debug print for actual meal lines
+    print("==== Extracted relevant lines ====")
+    for line in text.splitlines():
+        if ':' in line and '$' in line:
+            print(line.strip())
+    recipes = []
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    for day in days:
+        pattern = re.compile(rf'{day}:\s*(.+?)\s*\$(\d+\.?\d*)', re.IGNORECASE)
+        found = False
+        for match in pattern.finditer(text):
+            found = True
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Price of Recipe": price
+            })
+        print(f"Found recipe for {day}: {found}")
+    return pd.DataFrame(recipes)
+
+# Test it
+weekly_df = get_weekly_plan(205)
+print("\nFinal scraped table:")
+print(weekly_df)
+
+```
+
+
+```{python}
+monday_df = weekly_df[weekly_df["Day of the Week"].str.lower() == "monday"]
+print(monday_df)
+
+```
+
+
+```{python}
+import requests
+from bs4 import BeautifulSoup
+import pandas as pd
+import re
+
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    recipes = []
+    for day in days:
+        pattern = re.compile(rf'{day}:\s*(.+?)\s*\$(\d+\.?\d*)', re.IGNORECASE)
+        for match in pattern.finditer(text):
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            link = ""
+            for a in soup.find_all('a', href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a['href']
+                    break
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    recipes = []
+    for r in data.get('results', []):
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+def get_mealplan_data(plan_number):
+    weekly_df = get_weekly_plan(plan_number)
+    # Only keep Monday rows
+    monday_df = weekly_df[weekly_df["Day of the Week"].str.lower() == "monday"] #only for mondays
+    all_results = []
+    for idx, row in monday_df.iterrows():
+        recipe_name = row['Name of Recipe']
+        tasty_df = match_recipe(recipe_name)
+        if not tasty_df.empty:
+            tasty_df['Day of the Week'] = row['Day of the Week']
+            tasty_df['Original Recipe Name'] = recipe_name
+            tasty_df['Original Link'] = row['Link to Recipe']
+            tasty_df['Original Price'] = row['Price of Recipe']
+            all_results.append(tasty_df)
+        else:
+            all_results.append(pd.DataFrame({
+                "Day of the Week": [row['Day of the Week']],
+                "Original Recipe Name": [recipe_name],
+                "Original Link": [row['Link to Recipe']],
+                "Original Price": [row['Price of Recipe']]
+            }))
+    if all_results:
+        final_df = pd.concat(all_results, ignore_index=True)
+        return final_df
+    else:
+        return pd.DataFrame()  # Empty if nothing found
+
+df = get_mealplan_data(202)
+df
+```
+
+
+```{python}
+
+
+def get_weekly_plan(plan_number):
+    url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
+    headers = {"User-Agent": "Mozilla/5.0"}
+    response = requests.get(url, headers=headers)
+    soup = BeautifulSoup(response.content, 'html.parser')
+    text = soup.get_text()
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    recipes = []
+    for day in days:
+        pattern = re.compile(rf'{day}:\s*(.+?)\s*\$(\d+\.?\d*)', re.IGNORECASE)
+        print(f"\n---- Lines matching {day}: ----")
+        for match in pattern.finditer(text):
+            print(match.group(0))  # Print the full matching line
+            recipe_name = match.group(1).strip()
+            price = float(match.group(2))
+            link = ""
+            for a in soup.find_all('a', href=True):
+                if recipe_name.lower() in a.text.lower():
+                    link = a['href']
+                    break
+            recipes.append({
+                "Day of the Week": day,
+                "Name of Recipe": recipe_name,
+                "Link to Recipe": link,
+                "Price of Recipe": price
+            })
+    return pd.DataFrame(recipes)
+df = get_weekly_plan(202)
+df
+
+```
+
+
+
+## 4
+
+```{python}
+df = get_mealplan_data(202)
+```
+
+
+```{python}
+def match_recipe(recipe_name):
+    url = "https://tasty.p.rapidapi.com/recipes/list"
+    headers = {
+        "X-RapidAPI-Key": "d862f7cf28msh3be5a9a6c442deep1a2ac9jsn7b3a879fcbde",
+        "X-RapidAPI-Host": "tasty.p.rapidapi.com"
+    }
+    querystring = {"from": "0", "size": "100", "q": recipe_name}
+    response = requests.get(url, headers=headers, params=querystring)
+    data = response.json()
+    recipes = []
+    for r in data.get('results', []):
+        nutrition = r.get("nutrition") or {}
+        recipes.append({
+            "Tasty Title": r.get('name'),
+            "Calories": nutrition.get("calories"),
+            "Protein": nutrition.get("protein"),
+            "Fat": nutrition.get("fat"),
+            "Carbs": nutrition.get("carbohydrates"),
+            "Tasty ID": r.get('id'),
+            "Tasty URL": r.get('canonical_id'),
+            "Tasty Description": r.get("description"),
+        })
+    return pd.DataFrame(recipes)
+
+```
+
+
+```{python}
+# Assume df is your full DataFrame
+cal_df = df.copy()
+cal_df = cal_df[~cal_df['Calories'].isna()]
+cal_df = cal_df.sort_values(['Day of the Week', 'Calories'], ascending=[True, False])
+best_per_day = cal_df.groupby('Day of the Week', as_index=False).first()
+
+```
+
+```{python}
+from plotnine import *
+weekday_order = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+bp_long['Day of the Week'] = pd.Categorical(bp_long['Day of the Week'], categories=weekday_order, ordered=True)
+
+p = (
+    ggplot(bp_long, aes(x='Day of the Week', y='Percent', fill='Macro'))
+    + geom_col(position='stack', alpha=0.85)
+    # Outline vegetarian meals, if you want
+    + geom_col(data=bp_long[bp_long['Vegetarian']==True], fill=None, color="#2E8B57", size=0.8)
+    + labs(
+        title="Weekly Macro Composition (Mealplan 202)",
+        subtitle="Each bar = % calories from protein/fat/carbs; Outlined = vegetarian meal",
+        x='Day', y='% of Calories')
+    + scale_y_continuous(limits=[0,100])
+    + theme_minimal()
+    + theme(axis_text_x=element_text(rotation=15, ha='right'), figure_size=(10,7))
+)
+p
+
+```
+
+
+
+## analyse extra part
+
+
+```{python}
+##### Pick the best Tasty match per day with nutrition info:
+```{python}
+# Ensure you work with your nutrition DataFrame from start to finish
+df_with_cal = df_with_cal.dropna(subset=['Calories'])  # keep only rows with nutrition info
+
+# Sort and pick one best row per weekday (highest calories, or whatever you want)
+df_with_cal = df_with_cal.sort_values(['Day of the Week', 'Calories'], ascending=[True, False])
+best_per_day = df_with_cal.groupby('Day of the Week', as_index=False).first()
+
+```
+
+##### Compute Macros as % of Calories
+```{python}
+# Ensure numeric
+for macro in ['Protein', 'Fat', 'Carbs']:
+    best_per_day[macro] = pd.to_numeric(best_per_day[macro], errors='coerce')
+
+best_per_day['kcal_protein'] = best_per_day['Protein'] * 4
+best_per_day['kcal_fat']     = best_per_day['Fat'] * 9
+best_per_day['kcal_carbs']   = best_per_day['Carbs'] * 4
+
+best_per_day['kcal_total_from_macros'] = best_per_day[['kcal_protein','kcal_fat','kcal_carbs']].sum(axis=1)
+best_per_day['pct_protein'] = best_per_day['kcal_protein'] / best_per_day['kcal_total_from_macros'] * 100
+best_per_day['pct_fat']     = best_per_day['kcal_fat'] / best_per_day['kcal_total_from_macros'] * 100
+best_per_day['pct_carbs']   = best_per_day['kcal_carbs'] / best_per_day['kcal_total_from_macros'] * 100
+
+```
+
+```{python}
+if 'Vegetarian' not in best_per_day.columns:
+    # If you still have 'Name of Recipe', use that
+    # otherwise switch to 'Tasty Title'
+    if 'Name of Recipe' in best_per_day.columns:
+        best_per_day['Vegetarian'] = best_per_day['Name of Recipe'].apply(is_vegetarian)
+    elif 'Tasty Title' in best_per_day.columns:
+        best_per_day['Vegetarian'] = best_per_day['Tasty Title'].apply(is_vegetarian)
+
+```
+##### Melt to long format for plotnine
+
+```{python}
+
+bp_long = best_per_day.melt(
+    id_vars=['Day of the Week','Vegetarian','Tasty Title'],
+    value_vars=['pct_protein','pct_fat','pct_carbs'],
+    var_name='Macro', value_name='Percent'
+)
+bp_long['Macro'] = bp_long['Macro'].map({
+    'pct_protein': 'Protein',
+    'pct_fat': 'Fat',
+    'pct_carbs': 'Carbs'
+})
+
+# Ensure correct weekday order
+weekday_order = ['Monday','Tuesday','Wednesday','Thursday','Friday']
+bp_long['Day of the Week'] = pd.Categorical(bp_long['Day of the Week'], categories=weekday_order, ordered=True)
+
+```
