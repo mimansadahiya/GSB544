@@ -2213,11 +2213,13 @@ vertical-align: -.125em;
 </header>
 
 
+<p>Github link:</p>
+<p><g></g></p>
 <section id="data-from-unstructured-websites" class="level2">
 <h2 class="anchored" data-anchor-id="data-from-unstructured-websites">1. Data from unstructured websites</h2>
 <section id="importing-the-required-librariespandas-requests-beautifulsoup-re" class="level5">
 <h5 class="anchored" data-anchor-id="importing-the-required-librariespandas-requests-beautifulsoup-re">1. Importing the required libraries(pandas, requests, BeautifulSoup, re):</h5>
-<div id="7d427701" class="cell" data-execution_count="1">
+<div id="da5c31fd" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#import libs</span></span>
@@ -2230,7 +2232,7 @@ vertical-align: -.125em;
 </section>
 <section id="scrapping-the-data-from-url-using-beautifulsoup-and-requests-packages" class="level5">
 <h5 class="anchored" data-anchor-id="scrapping-the-data-from-url-using-beautifulsoup-and-requests-packages">2. Scrapping the data from url using Beautifulsoup and requests packages:</h5>
-<div id="91cbeff5" class="cell" data-execution_count="2">
+<div id="caa98818" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#scrap data </span></span>
@@ -2247,7 +2249,7 @@ vertical-align: -.125em;
 </section>
 <section id="finding-the-matches-for-all-weekdays-and-their-corresponding-recipe-name-link-to-the-recipe-and-its-price-for-the-chosen-meal-plan-using-reregex" class="level5">
 <h5 class="anchored" data-anchor-id="finding-the-matches-for-all-weekdays-and-their-corresponding-recipe-name-link-to-the-recipe-and-its-price-for-the-chosen-meal-plan-using-reregex">3. Finding the matches for all weekdays and their corresponding recipe name, link to the recipe, and its price, for the chosen meal plan (using re/regex):</h5>
-<div id="e6253a9e" class="cell" data-execution_count="3">
+<div id="0b70ddcf" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#use regex to find matches </span></span>
@@ -2284,7 +2286,7 @@ vertical-align: -.125em;
 </section>
 <section id="converting-the-matches-into-a-dataframe-with-weekday-recipe-name-link-and-price" class="level5">
 <h5 class="anchored" data-anchor-id="converting-the-matches-into-a-dataframe-with-weekday-recipe-name-link-and-price">4. Converting the matches into a dataframe with weekday, recipe name, link and price:</h5>
-<div id="943fc30e" class="cell" data-execution_count="4">
+<div id="06f385f5" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#creating the dataframe from what we matched before</span></span>
@@ -2388,7 +2390,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="data-from-an-api">2. Data from an API</h2>
 <section id="query-for-monday-recipe-only" class="level5">
 <h5 class="anchored" data-anchor-id="query-for-monday-recipe-only">1. Query for Monday recipe only:</h5>
-<div id="5ff7a1cf" class="cell" data-execution_count="5">
+<div id="37b0d119" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#query the tasty API for each recipe</span></span>
@@ -2402,7 +2404,7 @@ vertical-align: -.125em;
 </section>
 <section id="query-for-all-the-monday-recipes" class="level5">
 <h5 class="anchored" data-anchor-id="query-for-all-the-monday-recipes">2. Query for all the monday recipes:</h5>
-<div id="23593676" class="cell" data-execution_count="6">
+<div id="5260c2dc" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">&quot;https://tasty.p.rapidapi.com/recipes/list&quot;</span></span>
@@ -2550,7 +2552,7 @@ vertical-align: -.125em;
 <h5 class="anchored" data-anchor-id="we-need-to-cerate-a-function-get_mealplan_data-to-perform-2-parts-from-above-in-one-function.-for-that-we-will-create-2-separate-functions-and-use-them-in-get_mealplan_data-function">We need to cerate a function (get_mealplan_data) to perform 2 parts from above in one function. For that we will create 2 separate functions and use them in get_mealplan_data function:</h5>
 <section id="function-1-get_weekly_plan" class="level6">
 <h6 class="anchored" data-anchor-id="function-1-get_weekly_plan">Function 1 : get_weekly_plan</h6>
-<div id="57235583" class="cell" data-execution_count="7">
+<div id="a8baead9" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Scrape weekly meal plan (all weekdays, all recipes)</span></span>
@@ -2584,7 +2586,7 @@ vertical-align: -.125em;
 </section>
 <section id="function-2-match_recipies" class="level6">
 <h6 class="anchored" data-anchor-id="function-2-match_recipies">Function 2: match_recipies</h6>
-<div id="4903a766" class="cell" data-execution_count="8">
+<div id="aa4a0ead" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Query Tasty API for a recipe by name</span></span>
@@ -2616,7 +2618,7 @@ vertical-align: -.125em;
 </section>
 <section id="function-3-get_weekly_planmain-function" class="level6">
 <h6 class="anchored" data-anchor-id="function-3-get_weekly_planmain-function">Function 3: get_weekly_plan(main function)</h6>
-<div id="b25ea5c8" class="cell" data-execution_count="9">
+<div id="fee68bfa" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Main integration: all days, all recipes, all API matches!</span></span>
@@ -2851,7 +2853,7 @@ vertical-align: -.125em;
 <h2 class="anchored" data-anchor-id="add-a-column-with-fuzzy-matching">4. Add a column with fuzzy matching</h2>
 <section id="create-a-boolean-vector-to-specify-if-the-recipe-is-vegetarian-or-not-using-a-dictionary" class="level5">
 <h5 class="anchored" data-anchor-id="create-a-boolean-vector-to-specify-if-the-recipe-is-vegetarian-or-not-using-a-dictionary">Create a boolean vector to specify if the recipe is vegetarian or not using a dictionary:</h5>
-<div id="5936df14" class="cell" data-execution_count="10">
+<div id="6bde7aa5" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
@@ -3023,14 +3025,14 @@ vertical-align: -.125em;
 <h5 class="anchored" data-anchor-id="making-data-fit-for-plotting">Making data fit for plotting</h5>
 <section id="filtering-out-the-rows-with-null-values-for-calories-for-plotting" class="level6">
 <h6 class="anchored" data-anchor-id="filtering-out-the-rows-with-null-values-for-calories-for-plotting">Filtering out the rows with null values for calories for plotting</h6>
-<div id="e43da001" class="cell" data-execution_count="11">
+<div id="db46da03" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Only keep rows with valid nutrition info</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>df_with_veg <span class="op">=</span> df_with_veg.dropna(subset<span class="op">=</span>[<span class="st">&#39;Calories&#39;</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="01b19944" class="cell" data-execution_count="12">
+<div id="686d84e3" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Sort and pick one best row per weekday (highest calories, or whatever you want)</span></span>
@@ -3038,7 +3040,7 @@ vertical-align: -.125em;
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>best_per_day <span class="op">=</span> df_with_veg.groupby(<span class="st">&#39;Day of the Week&#39;</span>, as_index<span class="op">=</span><span class="va">False</span>).first()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="fdf1bea7" class="cell" data-execution_count="13">
+<div id="686ec3a2" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Macro calculations</span></span>
@@ -3058,7 +3060,7 @@ vertical-align: -.125em;
 </section>
 <section id="melting-the-dataframe-for-plotting" class="level6">
 <h6 class="anchored" data-anchor-id="melting-the-dataframe-for-plotting">Melting the dataframe for plotting</h6>
-<div id="aa01447c" class="cell" data-execution_count="14">
+<div id="0c706059" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Melt macro percent for plotnine</span></span>
@@ -3080,7 +3082,7 @@ vertical-align: -.125em;
 </section>
 <section id="plotting-use-plotnine" class="level6">
 <h6 class="anchored" data-anchor-id="plotting-use-plotnine">Plotting use plotnine</h6>
-<div id="e014b228" class="cell" data-execution_count="15">
+<div id="08dfd60f" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 5. Plotnine: 100% stacked bar of macro breakdown by weekday</span></span>
