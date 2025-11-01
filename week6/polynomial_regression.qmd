@@ -14,7 +14,7 @@ Suppose we want to predict `bill_depth_mm` using the other variables in the data
 
 Which variables would we need to **dummify**?
 
-We would need to dummify 
+We would need to dummify all the categorical variables 'species', 'island', 'sex'. 
 ```{python}
 !pip install palmerpenguins
 ```

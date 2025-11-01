@@ -1,0 +1,135 @@
+---
+title: Practice Activity- Multiple Linear Regression and Evaluation
+format: 
+    html:
+        embed-resources: true
+code-fold : true
+toc: true
+author: Mimansa Dahiya
+---
+## importing necessary libraries  
+```{python}
+!pip install palmerpenguins
+```
+```{python}
+from palmerpenguins import load_penguins
+import pandas as pd
+penguins = load_penguins()
+penguins.head()
+```
+
+## Cleaning penguins data
+
+```{python}
+df = penguins.dropna()
+display(df.head())
+df.info()
+```
+
+## Creating dummies for categorical variables
+```{python}
+categorical_cols = ['species', 'island', 'sex']
+df_encoded = pd.get_dummies(df, columns=categorical_cols, drop_first=True)
+display(df_encoded.head())
+```
+
+## Defining the models used
+```{python}
+target = df_encoded['bill_depth_mm']
+all_predictors = [col for col in df_encoded.columns if col != 'bill_depth_mm']
+
+predictors_model1 = ['bill_length_mm']
+predictors_model2 = ['bill_length_mm', 'flipper_length_mm']
+predictors_model3 = ['bill_length_mm', 'flipper_length_mm', 'body_mass_g']
+predictors_model4 = all_predictors
+```
+
+## SPlitting the data into training and test data
+```{python}
+from sklearn.model_selection import train_test_split
+
+X_train_model1, X_test_model1, y_train, y_test = train_test_split(df_encoded[predictors_model1], target, test_size=0.2, random_state=42)
+X_train_model2, X_test_model2, y_train, y_test = train_test_split(df_encoded[predictors_model2], target, test_size=0.2, random_state=42)
+X_train_model3, X_test_model3, y_train, y_test = train_test_split(df_encoded[predictors_model3], target, test_size=0.2, random_state=42)
+X_train_model4, X_test_model4, y_train, y_test = train_test_split(df_encoded[predictors_model4], target, test_size=0.2, random_state=42)
+
+print("Data splitting complete.")
+```
+
+## Fitting all the models and storing the predictions in the dataframe
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+results = {}
+
+# Model 1
+model1 = LinearRegression()
+model1.fit(X_train_model1, y_train)
+y_train_pred_model1 = model1.predict(X_train_model1)
+y_test_pred_model1 = model1.predict(X_test_model1)
+results['Model1 Training R-squared'] = r2_score(y_train, y_train_pred_model1)
+results['Model1 Testing R-squared'] = r2_score(y_test, y_test_pred_model1)
+
+# Model 2
+model2 = LinearRegression()
+model2.fit(X_train_model2, y_train)
+y_train_pred_model2 = model2.predict(X_train_model2)
+y_test_pred_model2 = model2.predict(X_test_model2)
+results['Model2 Training R-squared'] = r2_score(y_train, y_train_pred_model2)
+results['Model2 Testing R-squared'] = r2_score(y_test, y_test_pred_model2)
+
+# Model 3
+model3 = LinearRegression()
+model3.fit(X_train_model3, y_train)
+y_train_pred_model3 = model3.predict(X_train_model3)
+y_test_pred_model3 = model3.predict(X_test_model3)
+results['Model3 Training R-squared'] = r2_score(y_train, y_train_pred_model3)
+results['Model3 Testing R-squared'] = r2_score(y_test, y_test_pred_model3)
+
+# Model 4
+model4 = LinearRegression()
+model4.fit(X_train_model4, y_train)
+y_train_pred_model4 = model4.predict(X_train_model4)
+y_test_pred_model4 = model4.predict(X_test_model4)
+results['Model4 Training R-squared'] = r2_score(y_train, y_train_pred_model4)
+results['Model4 Testing R-squared'] = r2_score(y_test, y_test_pred_model4)
+
+print(results)
+```
+
+## Plotting
+
+```{python}
+from plotnine import *
+```
+
+
+```{python}
+
+model_names = ['Model 1', 'Model 2', 'Model 3', 'Model 4']
+training_r2 = [results['Model1 Training R-squared'], results['Model2 Training R-squared'], results['Model3 Training R-squared'], results['Model4 Training R-squared']]
+testing_r2 = [results['Model1 Testing R-squared'], results['Model3 Testing R-squared'], results['Model3 Testing R-squared'], results['Model4 Testing R-squared']]
+
+# Create a pandas DataFrame for plotnine
+plot_data = pd.DataFrame({
+    'Model': model_names * 2,
+    'R_squared': training_r2 + testing_r2,
+    'Type': ['Training'] * len(model_names) + ['Testing'] * len(model_names)
+})
+
+# Create the plot using plotnine
+plot = (ggplot(plot_data, aes(x='Model', y='R_squared', fill='Type'))
+        + geom_bar(stat='identity', position='dodge')
+        + labs(y='R-squared', title='Training and Testing R-squared for Different Models')
+        + theme_minimal()
+       )
+
+plot
+```
+
+## Analysis
+
+Based on the analysis through different models, model 1 (on bill_length as explanatory variable) performed poorly with a negative testing R-squared (-0.046). Models 2 and 3 showed moderate performance with testing R-squared values around 0.23.Model 4, using all available predictors (including one-hot encoded categorical features), achieved the highest testing R-squared (0.759), indicating it explains a substantial amount of the variance in the target variable.
+
+The plot also shows that Model 4 had significantly higher training and testing R-squared scores compared to the other models.
