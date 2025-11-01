@@ -9,7 +9,9 @@ toc: true
 
 Github link:
 
-<g>
+<https://github.com/mimansadahiya/GSB544/blob/main/week5/lab4.html>
+
+
 
 ## 1. Data from unstructured websites
 
@@ -36,6 +38,7 @@ response = requests.get(url, headers=headers, timeout=10)
 response.raise_for_status()
 soup = BeautifulSoup(response.content, 'html.parser')
 ```
+
 
 ##### 3. Finding the matches for all weekdays and their corresponding recipe name, link to the recipe, and its price, for the chosen meal plan (using re/regex):
 
@@ -76,7 +79,7 @@ for day in days:
 ```{python}
 #creating the dataframe from what we matched before
 df = pd.DataFrame(recipes)
-df
+df.head()
 ```
 
 ## 2. Data from an API
@@ -126,7 +129,7 @@ df_tasty
 ###### Function 1 : get_weekly_plan
 
 ```{python}
-# 1. Scrape weekly meal plan (all weekdays, all recipes)
+ # 1. Scrape weekly meal plan (all weekdays, all recipes)
 def get_weekly_plan(plan_number):
     url = f"https://tastesbetterfromscratch.com/meal-plan-{plan_number}/"
     headers = {"User-Agent": "Mozilla/5.0"}
@@ -219,6 +222,10 @@ df
 ## 4. Add a column with fuzzy matching
 
 ##### Create a boolean vector to specify if the recipe is vegetarian or not using a dictionary:
+
+```{python}
+print(df.columns)
+```
 ```{python}
 import re
 

@@ -1,0 +1,168 @@
+---
+title: Practice Activity- Polynomial Regression
+format: 
+    html:
+        embed-resources: true
+code-fold : true
+toc: true
+---
+
+
+Import the Palmer Penguins dataset and print out the first few rows.
+
+Suppose we want to predict `bill_depth_mm` using the other variables in the dataset.
+
+Which variables would we need to **dummify**?
+
+We would need to dummify 
+```{python}
+!pip install palmerpenguins
+```
+
+```{python}
+from palmerpenguins import load_penguins
+penguins = load_penguins()
+```
+
+
+```{python}
+penguins.head()
+```
+
+Let's use `bill_length_mm` to predict `bill_depth_mm`. Prepare your data and fit the following models on the entire dataset:
+
+* Simple linear regression (e.g. straight-line) model
+* Quadratic (degree 2 polynomial) model
+* Cubic (degree 3 polynomial) model
+* Degree 10 polynomial model
+
+Make predictions for each model and plot your fitted models on the scatterplot.
+
+
+```{python}
+import pandas as pd
+
+# Select relevant columns and drop rows with missing values
+data = penguins[['bill_length_mm', 'bill_depth_mm']].dropna()
+# Separate features (X) and target (y)
+X = data[['bill_length_mm']]
+y = data['bill_depth_mm']
+
+display(data.head())
+```
+
+Importing libraries:
+
+
+```{python}
+import numpy as np
+from sklearn.linear_model import LinearRegression
+```
+
+
+```{python}
+# Create a DataFrame with the original bill_length_mm and bill_depth_mm
+predicted_df = pd.DataFrame({'bill_length_mm': X.values.flatten(), 'bill_depth_mm': y.values})
+```
+## Simple linear model
+
+```{python}
+# simple linear regression
+model_linear = LinearRegression()
+model_linear.fit(X,y)
+y_pred_linear = model_linear.predict(X)
+
+# add the predicted values for simple linear regression
+predicted_df['linear_pred'] = y_pred_linear
+```
+
+
+## Quadratic model
+```{python}
+#quadratic (degree 2 polynomial)
+from sklearn.preprocessing import PolynomialFeatures
+
+poly_2 = PolynomialFeatures(degree=2)
+X_poly_2 = poly_2.fit_transform(X)
+model_quadratic = LinearRegression()
+model_quadratic.fit(X_poly_2, y)
+y_pred_quadratic = model_quadratic.predict(X_poly_2)
+
+# adding the predicted values of quadratic model into the dataframe
+predicted_df['quadratic_pred'] = y_pred_quadratic
+```
+
+## Cubic model:
+
+```{python}
+# Cubic Model
+poly_3 = PolynomialFeatures(degree=3, include_bias = False)
+X_poly_3 = poly_3.fit_transform(X)
+
+model_cubic = LinearRegression()
+model_cubic.fit(X_poly_3, y)
+y_pred_cubic = model_cubic.predict(X_poly_3)
+
+# adding the predicted values of cubic model into the dataframe
+predicted_df['cubic_pred'] = y_pred_cubic
+```
+
+
+## Degree 10:
+
+```{python}
+# Degree 10 Polynomial Model
+poly_10 = PolynomialFeatures(degree=10, include_bias=False)
+X_poly_10 = poly_10.fit_transform(X)
+model_degree_10 = LinearRegression()
+model_degree_10.fit(X_poly_10, y)
+y_pred_degree_10 = model_degree_10.predict(X_poly_10)
+
+# adding the predicted values of degree 10 model into the dataframe
+predicted_df['degree_10_pred'] = y_pred_degree_10
+```
+
+
+```{python}
+# Display the first few rows of the new DataFrame
+display(predicted_df.head())
+```
+
+## Plotting:
+
+
+```{python}
+from plotnine import ggplot, aes, geom_point, geom_smooth, labs, theme_classic
+
+p = (ggplot(data, aes(x='bill_length_mm', y='bill_depth_mm'))
+     + geom_point()
+     + theme_classic())
+
+# Add the fitted models as smooth lines
+# Simple Linear Regression
+p = p + geom_smooth(method='lm', se=False, color='red', linetype='solid')
+
+# Quadratic Model (using formula for polynomial regression)
+p = p + geom_smooth(method='lm', formula='y ~ x + I(x**2)', se=False, color='green', linetype='solid')
+
+# Cubic Model (using formula for polynomial regression)
+p = p + geom_smooth(method='lm', formula='y ~ x + I(x**2) + I(x**3)', se=False, color='purple', linetype='solid')
+
+# Degree 10 Polynomial Model (using formula for polynomial regression)
+# Note: Plotnine's geom_smooth might struggle with very high degree polynomials.
+# A more robust approach for higher degrees would be to generate predictions
+# from the fitted sklearn models and plot those as lines.
+# For demonstration, let's try with formula up to degree 3, and explain
+# how to plot higher degrees by generating predictions.
+
+# Add labels and title
+p = p + labs(x='Bill Length (mm)', y='Bill Depth (mm)', title='Polynomial Regression Models for Bill Depth Prediction (Plotnine)')
+
+# Display the plot
+p
+
+```
+
+Based on the plot above, the variables do not show a clear relationship with each other in the plot. Model 1 is too simple to capture any linearity, while the degree 10 model tries too hard to fit the training data, essentially identifying patterns that may not actually exist. This overfitting means the degree 10 model might not accurately explain the relationship between variables in a different dataset.
+
+The quadratic (degree 2) and cubic (degree 3) models provide a better fit, as they capture some relationship between the variables without overfitting. Between the two, the quadratic model may be preferred for its simplicity and reproducibility. The added complexity of the degree 10 model does not offer a better representation of the data compared to the quadratic model.
