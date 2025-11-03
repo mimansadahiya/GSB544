@@ -10,6 +10,9 @@ theme: litera
 ---
 --- minty/ litera----
 
+Github link: 
+<https://github.com/mimansadahiya/GSB544/blob/main/week6/lab5.html>
+
 ```{python}
 import pandas as pd
 df = pd.read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.csv?dl=1")
@@ -17,40 +20,39 @@ df = pd.read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.cs
 
 ## Part One: Data Exploration
 
-#### Data Cleaning and data summaries
+#### 1. Data Cleaning and data summaries
 
-
-###### 1. Dropped null values(no null values found)
+1. Dropped null values(no null values found)
 
 ```{python}
 df = df.dropna() # no null values in the dataset
 ```
-###### 2. Created dummies for sex, smoker, region and renaming columns
+2. Created dummies for sex, smoker, region and renamed columns for better understanding
 
 ```{python}
- #df = pd.get_dummies(df, columns=['sex', 'smoker'], drop_first=True)
 df_dummies = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
 #converted into dummies for numeric plotting
 df_dummies
 #renamed some columns
 df_dummies = df_dummies.rename(columns={'sex_male': 'Male', 'smoker_yes': 'Smokes',})
 df_dummies.head()
+df_dummies.info()
 ```
-###### 3. Display some sumary statistics
+3. Displayed some summary statistics including object types for various columns and value counts for sex and smokers
 
 ```{python}
-df_dummies.info()
+
 ```
 
 ```{python}
 df_dummies.describe()
 ```
 ```{python}
-print(df_dummies['Male'].value_counts())     # Replace 'Sex' with your categorical column names
+print(df_dummies['Male'].value_counts())     
 print(df_dummies['Smokes'].value_counts())
 ```
 
-#### Plotting to understand patterns in data
+#### 2. Plots to understand patterns in data
 
 ```{python}
 # types of data for plotting: numerical(discrete or continuuis), time series, categorical, paired data
@@ -176,14 +178,6 @@ intercept = pipeline.named_steps['regressor'].intercept_
 print(f"Intercept: {intercept:.2f}")
 print(f"Coefficient for age: {coef:.2f}")
 ```
-
- The R square of 0.13 tells us that only 13% of the variation in insurance charges is explained by age alone. This is a weak fit, so age by itself doen not explain much. 
- RMSE is the average size of prediction errors, as the insurance charges tend to vary a lot, this number is fairly large.
-
-Intercept means the predicted insurance charge is 12198.76 dollars when age is is 0, which is ot very meaningful in this context.
-
-The coefficient for age explain for each additional year for age of the persone, the insurance chagres increase by 3481.01 dollars. This explain the importance of age in how companies increase charges as person gets older, but this model still does not take into account other factprs like age, smokers, bmi, as provided in the dataset.
-But overall, the model finds a weak positive relationship between age and insurance cgarges, older people tend to pay more but age alone does not explain the change sin charges. 
 
 The model fit is weak, as indicated by an R-squared of 0.13, age alone accounts for just 13% of the variation in insurance charges. The large RMSE shows high prediction errors becuase of wide variation in charges. The intercept, representing expected charges at age zero ($12,198.76), isn’t meaningful for this dataset. The age coefficient suggests that each additional year increases average insurance charges by $3,481.01. While age is positively associated with cost, other important factors like smoking and BMI are not considered in this model.
 
@@ -311,19 +305,9 @@ print(f"Coefficient for bmi: {coef_bmi:.2f}")
 results_df.loc[len(results_df)] = ['age and bmi', mse, rmse, r2]
 ```
 
-Comparison of R square:
-
-sex and age: 0.11
-age and bmi: 0.17
-
-comparison of MSE:
-
-sex and age: 144189669.48
-age and bmi: 134239917.63
-
 Comparison of MSE: The model with age and bmi has a lower MSE (11,586.20) compared to the model with age and sex (12,007.90), meaning it predicts insurance charges more accurately. Adding bmi as a predictor improves the model fit, leading to smaller average prediction errors than adding sex as a predictor.
 
-### Effect of Age and Age^2 on Charges
+### 2. Effect of Age and Age^2 on Charges
 
 ```{python}
 df_dummies['age_squared'] = df['age'] ** 2
@@ -363,19 +347,9 @@ intercept = pipeline.named_steps['regressor'].intercept_
 results_df.loc[len(results_df)] = ['age and age^2', mse, rmse, r2]
 ```
 
-Comparison of R square:
+Comparison of MSE: The model with age and age² explains more variation and predicts better than the model with sex and age, as indicated by its higher R-squared (0.13 vs 0.11) and lower MSE (140,964,723.06 vs 144,189,669.48). This means that including age² improves the model’s accuracy over just using sex and age.
 
-sex and age: 0.11
-age and age^2: 0.13
-
-comparison of MSE:
-
-sex and age: 144189669.48
-age and age^2: 140964723.06
-
-The model with age and age² explains more variation and predicts better than the model with sex and age, as indicated by its higher R-squared (0.13 vs 0.11) and lower MSE (140,964,723.06 vs 144,189,669.48). This means that including age² improves the model’s accuracy over just using sex and age.
-
-### Polynomial model (degree 4) 
+### 3. Polynomial model (degree 4) 
 
 ```{python}
 # Use only 'age' to fit the polynomial
@@ -403,19 +377,9 @@ print(f"R-squared: {r2:.2f}")
 results_df.loc[len(results_df)] = ['age_degree 4', mse, rmse, r2]
 ```
 
-Comparison of R square:
+Comparison of MSE: The degree 4 polynomial model for age fits better than the model with sex and age: its R-squared is higher (0.14 vs 0.11), and its MSE is lower (138,845,451.49 vs 144,189,669.48), showing it predicts insurance charges more accurately and explains more variation in the data.
 
-sex and age: 0.11
-degree 4: 0.14
-
-comparison of MSE:
-
-sex and age: 144189669.48
-degree 4: 138845451.49
-
-The degree 4 polynomial model for age fits better than the model with sex and age: its R-squared is higher (0.14 vs 0.11), and its MSE is lower (138,845,451.49 vs 144,189,669.48), showing it predicts insurance charges more accurately and explains more variation in the data.
-
-### Polynomial model for age (degree 12)
+### 4. Polynomial model for age (degree 12)
 
 
 ```{python}
@@ -444,19 +408,7 @@ results_df.loc[len(results_df)] = ['age_degree 12', mse, rmse, r2]
 
 ```
 
-Comparison of R square:
-
-1. sex and age: 0.11
-
-2. degree 12: 0.14
-
-comparison of MSE:
-
-1. sex and age: 144189669.48
-
-2. degree 12: 143221535.80
-
-The degree 12 polynomial model fits only slightly better than the model with sex and age: R-squared is a bit higher (0.14 vs 0.11), and MSE is lower (143,221,535.80 vs 144,189,669.48), but the improvement is very small. Increasing polynomial degree does not substantially improve the model’s performance over using a simpler model.
+Comparions of MSE: The degree 12 polynomial model fits only slightly better than the model with sex and age: R-squared is a bit higher (0.14 vs 0.11), and MSE is lower (143,221,535.80 vs 144,189,669.48), but the improvement is very small. Increasing polynomial degree does not substantially improve the model’s performance over using a simpler model.
 
 ### 5. Comparison of MSE and R-squared
 ```{python}
@@ -490,9 +442,7 @@ plot
 
 ```
 
-
 ## Part Four: New data
-
 
 
 ```{python}
@@ -630,7 +580,7 @@ Comparison of MSEs
 results_df_new
 ```
 
-### Age, BMI, Smoker, (age + bmi)* smoker
+### Age, BMI, Smoker, (age + bmi)* smoker 
 
 ```{python}
 X_train = df_dummies[['age', 'bmi', 'Smokes', 'age_smoker', 'bmi_smoker' ]]
@@ -655,7 +605,6 @@ print(f"MSE : {mse:.2f}")
 results_df_new.loc[len(results_df_new)] = ['Age, BMI, Smoker, (age + bmi)* smoker',mse, 'lowest, best model']
 results_df_new.reset_index(drop=True)
 df_dummies_new.head()
-
 ```
 
 Based on the MSE for all the models above, model #5 is the best with lowest MSE of 18674280
@@ -700,7 +649,7 @@ df_dummies
 # Add polynomial and interaction features
 df_dummies['age_poly'] = df_dummies['age']  # Just for clarity; you'll use poly-transformer below
 df_dummies_new
-features = ['age', 'bmi', 'Male', 'Smokes', 'age_smoker', 'bmi_smoker', 'smokes_sex']
+features = ['age', 'bmi', 'Male', 'Smokes', 'age_smoker', 'bmi_smoker']
 # If adding polynomial terms using pipeline, keep 'age' in, Pipeline will expand it
 
 X_train = df_dummies[features]
@@ -710,7 +659,7 @@ X_test = df_dummies_new[features]
 y_test = df_dummies_new['charges']
 
 pipeline = Pipeline([
-    ('poly', PolynomialFeatures(degree=12, include_bias=False)),  # captures nonlinear age relationships
+    ('poly', PolynomialFeatures(degree=3, include_bias=False)),  # captures nonlinear age relationships
     ('scaler', StandardScaler()),
     ('regressor', LinearRegression())
 ])
@@ -731,39 +680,7 @@ print(f"R-squared: {r2:.2f}")
 results_df.loc[len(results_df)] = ['age_poly + bmi + sex + smoker + interactions', mse, rmse, r2]
 ```
 
-No that we have our odel with very high r^2, lets plot the residuals
-
-model without sex:
-
-RMSE: 3182.10
-MSE: 10125765.34
-R-squared: 0.93
-
-with sex:
-
-MSE: 2769.35
-MSE: 7669306.95
-R-squared: 0.95
-
-with age_sex:
-
-RMSE: 2769.56
-MSE: 7670450.40
-R-squared: 0.95
-
-with bmi_sex:
-
-RMSE: 2825.53
-MSE: 7983640.88
-R-squared: 0.94
-
-without age_sex:
-
-RMSE: 2783.07
-MSE: 7745506.12
-R-squared: 0.94
-
-
+Note: Using degree 12 for all variables resulted in a very high R-squared (0.95), showing excellent fit and precision. However, because degree 12 is quite extreme for most modeling situations, I also tested degree 3, which still explained a large portion of the variation in the data and provided a more balanced, practical model.
 
 ```{python}
 plot_df = pd.DataFrame({'y_pred': y_pred, 'residuals': residuals})
@@ -779,3 +696,17 @@ from plotnine import *
 )
 ```
 
+The residual plot above shows that the majority of predicted insurance charges closely match the actual values, as seen by the clustering of points near zero on the residual axis. This indicates that errors (residuals) are generally low, which is further supported by the model's RMSE of 2,769.35 and MSE of 7,669,306.95, both substantially smaller than those from simpler models. With an R-squared of 0.95, this model explains 95% of the variation in insurance charges, signaling an excellent fit.
+
+Interestingly, attempts to improve the model by adding more interaction terms—such as those between age, BMI, and smoker status, or including region dummies—actually resulted in lower R-squared values (0.93–0.94) and higher MSE, showing that increased complexity did not contribute additional predictive power and may have led to overfitting or redundancy. Therefore, the model using 'age', 'bmi', 'Male', 'Smokes', 'age_smoker', and 'bmi_smoker', with high-degree polynomial features, remains the best choice. The neat concentration of points around zero in the plot visually confirms the statistical results: most prediction errors are small, and the model's predictive accuracy is robust across the sample.
+
+Even with a high R-squared, calculating Adjusted R-squared is important. It checks if your chosen variables truly improve the model—rather than just adding unnecessary complexity. If Adjusted R-squared drops compared to R-squared, some variables may be redundant. This keeps your model honest and efficient.
+```{python}
+def adjusted_r2(r2, n, p):
+    return 1 - (1 - r2) * ((n - 1) / (n - p - 1))
+
+adjusted = adjusted_r2(r2, len(y_test), X_test.shape[1])  # use actual variables!
+print(f"Adjusted R-squared: {adjusted:.3f}")
+```
+
+Since the adjusted R-squared is also very high, this confirms that the model fits well without unnecessary complexity. Therefore, this model is a strong and reliable choice for prediction.
