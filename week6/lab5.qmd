@@ -8,7 +8,6 @@ toc: true
 author: Mimansa Dahiya
 theme: litera
 ---
---- minty/ litera----
 
 Github link: 
 <https://github.com/mimansadahiya/GSB544/blob/main/week6/lab5.html>
@@ -698,15 +697,5 @@ from plotnine import *
 
 The residual plot above shows that the majority of predicted insurance charges closely match the actual values, as seen by the clustering of points near zero on the residual axis. This indicates that errors (residuals) are generally low, which is further supported by the model's RMSE of 2,769.35 and MSE of 7,669,306.95, both substantially smaller than those from simpler models. With an R-squared of 0.95, this model explains 95% of the variation in insurance charges, signaling an excellent fit.
 
-Interestingly, attempts to improve the model by adding more interaction terms—such as those between age, BMI, and smoker status, or including region dummies—actually resulted in lower R-squared values (0.93–0.94) and higher MSE, showing that increased complexity did not contribute additional predictive power and may have led to overfitting or redundancy. Therefore, the model using 'age', 'bmi', 'Male', 'Smokes', 'age_smoker', and 'bmi_smoker', with high-degree polynomial features, remains the best choice. The neat concentration of points around zero in the plot visually confirms the statistical results: most prediction errors are small, and the model's predictive accuracy is robust across the sample.
+Interestingly, attempts to improve the model by adding more interaction terms such as between age, BMI, and smoking status, or including region dummies, actually resulted in lower R-squared values (0.93–0.94) and higher MSE, showing that increased complexity did not contribute additional predictive power and may have led to overfitting or redundancy. Therefore, the model using 'age', 'bmi', 'Male', 'Smokes', 'age_smoker', and 'bmi_smoker', with high-degree polynomial features, is best choice. The clear concentration of points around zero in the plot visually confirms the statistical results that most prediction errors are small, and the model's predictive accuracy is robust across the sample.
 
-Even with a high R-squared, calculating Adjusted R-squared is important. It checks if your chosen variables truly improve the model—rather than just adding unnecessary complexity. If Adjusted R-squared drops compared to R-squared, some variables may be redundant. This keeps your model honest and efficient.
-```{python}
-def adjusted_r2(r2, n, p):
-    return 1 - (1 - r2) * ((n - 1) / (n - p - 1))
-
-adjusted = adjusted_r2(r2, len(y_test), X_test.shape[1])  # use actual variables!
-print(f"Adjusted R-squared: {adjusted:.3f}")
-```
-
-Since the adjusted R-squared is also very high, this confirms that the model fits well without unnecessary complexity. Therefore, this model is a strong and reliable choice for prediction.
