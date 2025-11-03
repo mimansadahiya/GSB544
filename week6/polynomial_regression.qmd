@@ -62,6 +62,7 @@ from sklearn.linear_model import LinearRegression
 
 ```{python}
 # Create a DataFrame with the original bill_length_mm and bill_depth_mm
+# makes it easier to compare 2 dataframes
 predicted_df = pd.DataFrame({'bill_length_mm': X.values.flatten(), 'bill_depth_mm': y.values})
 ```
 ## Simple linear model

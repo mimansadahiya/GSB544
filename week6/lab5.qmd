@@ -1,0 +1,781 @@
+---
+title: Lab 5
+format: 
+    html:
+        embed-resources: true
+code-fold : true
+toc: true
+author: Mimansa Dahiya
+theme: litera
+---
+--- minty/ litera----
+
+```{python}
+import pandas as pd
+df = pd.read_csv("https://www.dropbox.com/s/bocjjyo1ehr5auz/insurance_costs_1.csv?dl=1")
+```
+
+## Part One: Data Exploration
+
+#### Data Cleaning and data summaries
+
+
+###### 1. Dropped null values(no null values found)
+
+```{python}
+df = df.dropna() # no null values in the dataset
+```
+###### 2. Created dummies for sex, smoker, region and renaming columns
+
+```{python}
+ #df = pd.get_dummies(df, columns=['sex', 'smoker'], drop_first=True)
+df_dummies = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
+#converted into dummies for numeric plotting
+df_dummies
+#renamed some columns
+df_dummies = df_dummies.rename(columns={'sex_male': 'Male', 'smoker_yes': 'Smokes',})
+df_dummies.head()
+```
+###### 3. Display some sumary statistics
+
+```{python}
+df_dummies.info()
+```
+
+```{python}
+df_dummies.describe()
+```
+```{python}
+print(df_dummies['Male'].value_counts())     # Replace 'Sex' with your categorical column names
+print(df_dummies['Smokes'].value_counts())
+```
+
+#### Plotting to understand patterns in data
+
+```{python}
+# types of data for plotting: numerical(discrete or continuuis), time series, categorical, paired data
+# need structered dataframe for plotting
+
+from plotnine import *
+
+(ggplot(df_dummies, aes(
+    x='age', y='charges', colour='Smokes'))
++geom_point(size = 4, stroke = 1, alpha = 0.6)
++theme_bw()
++ labs(
+        x="Age",
+        y="Charges",
+        title="Exploring Factors that Affect the Insuarnce Costs",
+        subtitle ="Relation between Age and charges for insurance, categorized by gender",
+    )
++ scale_color_manual(
+        name='Sex',                   # legend title
+        labels=['Male', 'Female'],    # order follows unique values (False, True)
+        values=['teal', 'pink']  # optional color mapping
+    )
+)
+```
+
+The plot shows that insurance charges generally increase with age for both males and females. For males, the increase is steady and nearly linear, with charges starting low at younger ages and rising toward $20,000 by age 70. For females, charges are consistently higher across all ages and the data appears to form two separate upward trends, suggesting another factor may be influencing charges for different groups of women. Overall, insurance costs for females remain above those for males at every age.
+
+Now lets look at BMI and age together
+
+```{python}
+
+from plotnine import *
+
+(ggplot(df_dummies, aes(
+    x='age', y='bmi', colour='Male'))
++geom_point(size=4, stroke = 1, alpha = 0.5)
++theme_bw()
++ labs(
+        x="Age",
+        y="BMI",
+        title="Exploring Factors that Affect the Insuarnce Costs",
+        subtitle ="Relationship between Age and bmi, categorized by gender",
+    )
++ scale_color_manual(
+        name='Sex',                   # legend title
+        labels=['Male', 'Female'],    # order follows unique values (False, True)
+        values=['teal', 'pink']  # optional color mapping
+    )
+)
+```
+
+The scatter plot does not reveal a very distinct pattern—both males and females appear to be evenly dispersed overall. However, it’s noticeable that there are more data points in the younger (ages 10–30) and older (ages 50–70) age groups. The points are more concentrated near these extremes rather than in the middle age range. This suggests that the dataset contains more information about individuals who are either relatively young or elderly—groups that typically experience greater variability in insurance costs due to developing or changing health risks.
+
+
+Now lets see how the pattern is affected by people who smoke
+
+```{python}
+from plotnine import *
+(ggplot(df_dummies, aes(
+    x='bmi',
+    y='charges',
+    fill='Smokes'
+)
+)
++ geom_boxplot()
++theme_bw()
++labs(
+        x="Smokes",
+        y="Charges",
+        title="Exploring Factors that Affect the Insuarnce Costs",
+        subtitle ="Relationship between smokers and charges, categorized by gender",
+    )
+)
+```
+
+The box plot clearly illustrates that insurance costs for smokers are significantly higher, typically ranging between $20,000 and $40,000, compared to non-smokers whose charges mostly remain below $10,000. This pattern aligns with common sense, since smokers face a greater risk of developing health issues such as lung cancer, insurance companies charge them higher premiums to account for the increased risk.
+
+## Part Two: Simple Linear Models
+
+### 1. How Does Age Impact Insurance Charges?
+
+Importing essential libraries
+
+```{python}
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, PolynomialFeatures
+from sklearn.metrics import mean_squared_error, r2_score
+import pandas as pd 
+```
+
+Model with pipelines
+
+```{python}
+#Preparing the data
+X = df_dummies[['age']] 
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+```{python}
+# pipeline for structure
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+coef = pipeline.named_steps['regressor'].coef_[0]
+intercept = pipeline.named_steps['regressor'].intercept_
+
+print(f"Intercept: {intercept:.2f}")
+print(f"Coefficient for age: {coef:.2f}")
+```
+
+ The R square of 0.13 tells us that only 13% of the variation in insurance charges is explained by age alone. This is a weak fit, so age by itself doen not explain much. 
+ RMSE is the average size of prediction errors, as the insurance charges tend to vary a lot, this number is fairly large.
+
+Intercept means the predicted insurance charge is 12198.76 dollars when age is is 0, which is ot very meaningful in this context.
+
+The coefficient for age explain for each additional year for age of the persone, the insurance chagres increase by 3481.01 dollars. This explain the importance of age in how companies increase charges as person gets older, but this model still does not take into account other factprs like age, smokers, bmi, as provided in the dataset.
+But overall, the model finds a weak positive relationship between age and insurance cgarges, older people tend to pay more but age alone does not explain the change sin charges. 
+
+The model fit is weak, as indicated by an R-squared of 0.13, age alone accounts for just 13% of the variation in insurance charges. The large RMSE shows high prediction errors becuase of wide variation in charges. The intercept, representing expected charges at age zero ($12,198.76), isn’t meaningful for this dataset. The age coefficient suggests that each additional year increases average insurance charges by $3,481.01. While age is positively associated with cost, other important factors like smoking and BMI are not considered in this model.
+
+
+### 2. How Does Age and Sex Together Impact Insurance Charges?
+
+```{python}
+
+import pandas as pd
+results_df = pd.DataFrame(columns=['Model', 'MSE', 'RMSE', 'R_squared'])
+
+# repeating the same code for this model as well, but added sex as explanatory variable
+X = df_dummies[['age', 'Male']] 
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+coef_age = pipeline.named_steps['regressor'].coef_[0]
+coef_sex = pipeline.named_steps['regressor'].coef_[1]
+intercept = pipeline.named_steps['regressor'].intercept_
+
+print(f"Intercept: {intercept:.2f}")
+print(f"Coefficient for age: {coef_age:.2f}")
+print(f"Coefficient for sex: {coef_sex:.2f}")
+# Example: 'sex and age' is a description for this model
+results_df.loc[len(results_df)] = ['sex and age', mse, rmse, r2]
+```
+
+In this model, only 11% of the variation in insurance charges is explained by age and sex together, which is worse than the model just with age. RMSE remains large as expected, as the insurance cgarges will vary a lot. Intercept of 12198.76 dollars takes baseline as age=0, which is not meaningful, and sex as female. Coefficient for age of 4037.37 explain with every one year increase in age increases predicted insurance charge by 3,463.36 dollars, holding sex constant. Coefficient for sex of 801.75 explain if the person is male, the predicted increase in insurance cghare is 801.75 dollars, taking age constant(comparing female of same age). Overall, the model remains weak and it is clear that most variation in insurance costs is not explained by age or sex alone. Other factors likely matter more.
+
+### 3. How Does Smoking Impact Insurance Charges?
+```{python}
+# repeating the same code for this model as well, but replaced sex with smokers for explanatory variables
+X = df_dummies[['age', 'Smokes']] 
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+coef_age = pipeline.named_steps['regressor'].coef_[0]
+coef_smokers = pipeline.named_steps['regressor'].coef_[1]
+
+intercept = pipeline.named_steps['regressor'].intercept_
+
+print(f"Intercept: {intercept:.2f}")
+print(f"Coefficient for age: {coef_age:.2f}")
+print(f"Coefficient for smokers: {coef_smokers:.2f}")
+```
+
+This model predicts insurance charges much better than the model with just ag and sex. the higher R square proves 83% of the variation in the costs is explained byt he model, which is 3 fold than the previous models, showing smokeing is a powerful predictor. In this model, each year of age adds about 4037 dollars and being a smokers adds around 9387 dollars to the prediction cost. while model with sex provides only weak fit and small effects. 
+We can undestad that sex is not that big of  afactor when it come to insurance costs, as compared to smoking. 
+
+ Summary: The model with age and smoker (Q3) fits the data much better than the model with age and sex (Q2). Q3 has a much lower MSE (5,220.04² = 27,244,817) and a much higher R-squared (0.83), meaning it explains 83% of the variance in charges, while Q2’s higher MSE (12,007.90² = 144,190,091) and low R-squared (0.11) mean it explains very little. So, the model with age and smoker is clearly the better fit.
+
+## Part Three: Multiple Linear Models
+
+### 1. Effect of Age and BMI on Charges 
+
+
+```{python}
+
+# repeating the same code for this model as well, but added sex as explanatory variable
+X = df_dummies[['age', 'bmi']] 
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+coef_age = pipeline.named_steps['regressor'].coef_[0]
+coef_bmi = pipeline.named_steps['regressor'].coef_[1]
+intercept = pipeline.named_steps['regressor'].intercept_
+
+print(f"Intercept: {intercept:.2f}")
+print(f"Coefficient for age: {coef_age:.2f}")
+print(f"Coefficient for bmi: {coef_bmi:.2f}")
+results_df.loc[len(results_df)] = ['age and bmi', mse, rmse, r2]
+```
+
+Comparison of R square:
+
+sex and age: 0.11
+age and bmi: 0.17
+
+comparison of MSE:
+
+sex and age: 144189669.48
+age and bmi: 134239917.63
+
+Comparison of MSE: The model with age and bmi has a lower MSE (11,586.20) compared to the model with age and sex (12,007.90), meaning it predicts insurance charges more accurately. Adding bmi as a predictor improves the model fit, leading to smaller average prediction errors than adding sex as a predictor.
+
+### Effect of Age and Age^2 on Charges
+
+```{python}
+df_dummies['age_squared'] = df['age'] ** 2
+
+# repeating the same code for this model as well, but added sex as explanatory variable
+X = df_dummies[['age', 'age_squared']]
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+```
+
+```{python}
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+coef_age = pipeline.named_steps['regressor'].coef_[0]
+coef_age2 = pipeline.named_steps['regressor'].coef_[1]
+intercept = pipeline.named_steps['regressor'].intercept_
+
+#print(f"Intercept: {intercept:.2f}")
+#print(f"Coefficient for age: {coef_age:.2f}")
+#print(f"Coefficient for age^2: {coef_age2:.2f}")
+results_df.loc[len(results_df)] = ['age and age^2', mse, rmse, r2]
+```
+
+Comparison of R square:
+
+sex and age: 0.11
+age and age^2: 0.13
+
+comparison of MSE:
+
+sex and age: 144189669.48
+age and age^2: 140964723.06
+
+The model with age and age² explains more variation and predicts better than the model with sex and age, as indicated by its higher R-squared (0.13 vs 0.11) and lower MSE (140,964,723.06 vs 144,189,669.48). This means that including age² improves the model’s accuracy over just using sex and age.
+
+### Polynomial model (degree 4) 
+
+```{python}
+# Use only 'age' to fit the polynomial
+X = df_dummies[['age']]
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+pipeline = Pipeline([
+    ('poly', PolynomialFeatures(degree=4, include_bias=False)),
+    ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())
+])
+
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+results_df.loc[len(results_df)] = ['age_degree 4', mse, rmse, r2]
+```
+
+Comparison of R square:
+
+sex and age: 0.11
+degree 4: 0.14
+
+comparison of MSE:
+
+sex and age: 144189669.48
+degree 4: 138845451.49
+
+The degree 4 polynomial model for age fits better than the model with sex and age: its R-squared is higher (0.14 vs 0.11), and its MSE is lower (138,845,451.49 vs 144,189,669.48), showing it predicts insurance charges more accurately and explains more variation in the data.
+
+### Polynomial model for age (degree 12)
+
+
+```{python}
+X = df_dummies[['age']]
+y = df_dummies['charges']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+pipeline = Pipeline([
+    ('poly', PolynomialFeatures(degree=12, include_bias=False)),
+    ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())
+])
+
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+results_df.loc[len(results_df)] = ['age_degree 12', mse, rmse, r2]
+
+```
+
+Comparison of R square:
+
+1. sex and age: 0.11
+
+2. degree 12: 0.14
+
+comparison of MSE:
+
+1. sex and age: 144189669.48
+
+2. degree 12: 143221535.80
+
+The degree 12 polynomial model fits only slightly better than the model with sex and age: R-squared is a bit higher (0.14 vs 0.11), and MSE is lower (143,221,535.80 vs 144,189,669.48), but the improvement is very small. Increasing polynomial degree does not substantially improve the model’s performance over using a simpler model.
+
+### 5. Comparison of MSE and R-squared
+```{python}
+results_df
+```
+
+According to MSE and R-squared, the model with age and bmi is the best as it has the lowest MSE and highest R-squared, meaning it predicts insurance charges most accurately and explains the most variation in the data. This is because adding bmi captures more about a person's health and risk than just age or sex. Looking back at our earlier plots, we saw that the scatterplot for males showed a fairly consistent and linear increase with age and a lower intercept, while the plot for females suggested two distinct groups with much higher intercepts, indicating that gender could affect patterns in the data, though not as strongly or clearly as bmi. Gender might partly separate females into subgroups, but overall, across all models we tested, the model with age and bmi strikes the best balance between fit, simplicity, and interpretability.
+
+### 6. Plotting degree 12 for age
+
+```{python}
+import numpy as np
+ages_range = np.linspace(X['age'].min(), X['age'].max(), 300).reshape(-1, 1)
+charges_pred = pipeline.predict(ages_range)
+pred_df = pd.DataFrame({'age': ages_range.flatten(), 'charges_pred': charges_pred})
+
+# Actual data (flatten values if needed)
+#test_df = pd.DataFrame({'age': X_test['age'].values, 'charges': y_test.values})
+
+pred_df
+
+# Plot
+plot = (
+    ggplot(df, aes(x='age', y='charges')) 
+    + geom_point(color="teal", size = 4, alpha=0.5) 
+    + geom_line(pred_df, aes(x='age', y='charges_pred'), color="mediumorchid", size=1.5) 
+    + labs(title='Degree 12 Polynomial Model Fit', x='Age', y='Insurance Charges') 
+    + theme_minimal()
+)
+plot
+
+```
+
+
+## Part Four: New data
+
+
+
+```{python}
+df_new = pd.read_csv("https://www.dropbox.com/s/sky86agc4s8c6qe/insurance_costs_2.csv?dl=1")
+df_new
+```
+
+Data CLeaning
+
+```{python}
+df_new = df.dropna() # no null values in the dataset
+#df.info() #df = pd.get_dummies(df, columns=['sex', 'smoker'], drop_first=True)
+df_dummies_new = pd.get_dummies(df, columns=['sex', 'smoker', 'region'], drop_first=True)
+#converted into dummies for numeric plotting
+#df_dummies_new
+#renamed some columns
+df_dummies_new = df_dummies_new.rename(columns={'sex_male': 'Male', 'smoker_yes': 'Smokes',})
+df_dummies_new.head()
+
+# X_tes and y_test from new dattaframe:
+X_test = df_dummies_new[['age']]
+y_test = df_dummies_new['charges']
+```
+
+### Age as predictor
+
+```{python}
+results_df_new = pd.DataFrame(columns=['Model', 'MSE', 'Interpretation']) #empty dataframe to store MSEs
+
+X = df_dummies[['age']] 
+y = df_dummies['charges']
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X, y)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+
+print(f"MSE: {mse:.2f}")
+results_df_new.loc[len(results_df)] = ['age', mse, 'pretty high error']
+```
+
+### Age and BMI as predictor
+
+```{python}
+
+X_test = df_dummies_new[['age', 'bmi']]
+y_test = df_dummies_new['charges']
+
+X = df_dummies[['age', 'bmi']] 
+y = df_dummies['charges']
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+df_new
+pipeline.fit(X, y)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+
+print(f"MSE: {mse:.2f}")
+
+results_df_new.loc[len(results_df_new)] = ['age and BMI', mse, 'slightly lower']
+```
+
+### Age, BMI and Smoking as predictors
+```{python}
+
+X_test = df_dummies_new[['age', 'bmi', 'Smokes']]
+y_test = df_dummies_new['charges']
+X = df_dummies[['age', 'bmi', 'Smokes']] 
+y = df_dummies['charges']
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),   # scales features
+    ('regressor', LinearRegression())  # linear model
+])
+
+pipeline.fit(X, y)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+
+print(f"MSE: {mse:.2f}")
+results_df_new.loc[len(results_df_new)] = ['Age, BMI and Smokes', mse, 'much lower, better']
+```
+
+### Age, BMI, (Age + BMI)* Smoker
+
+
+
+```{python}
+# Preparing the data:
+df_dummies.eval('age_smoker = age * Smokes', inplace=True)
+df_dummies.eval('bmi_smoker = bmi * Smokes', inplace=True)
+df_dummies
+df_dummies_new.eval('age_smoker = age * Smokes', inplace=True)
+df_dummies_new.eval('bmi_smoker = bmi * Smokes', inplace=True)
+df_dummies
+```
+
+```{python}
+X_train = df_dummies[['age', 'bmi', 'age_smoker', 'bmi_smoker']]
+y_train = df_dummies['charges']
+
+X_test = df_dummies_new[['age', 'bmi', 'age_smoker', 'bmi_smoker']]
+y_test = df_dummies_new['charges']
+
+pipeline = Pipeline(
+    [ ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())]
+)
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+
+print(f"MSE : {mse:.2f}")
+results_df_new.loc[len(df_dummies_new)] = ['Age, BMI, (Age + BMI)* Smoker', mse, 'even lower, best so far']
+
+```
+
+Comparison of MSEs 
+
+```{python}
+results_df_new
+```
+
+### Age, BMI, Smoker, (age + bmi)* smoker
+
+```{python}
+X_train = df_dummies[['age', 'bmi', 'Smokes', 'age_smoker', 'bmi_smoker' ]]
+y_train = df_dummies['charges']
+
+X_test = df_dummies_new[['age', 'bmi', 'Smokes', 'age_smoker', 'bmi_smoker' ]]
+y_test = df_dummies_new['charges']
+
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+# residuals for best model--------
+residuals = y_test - y_pred
+print(f"MSE : {mse:.2f}")
+results_df_new.loc[len(results_df_new)] = ['Age, BMI, Smoker, (age + bmi)* smoker',mse, 'lowest, best model']
+results_df_new.reset_index(drop=True)
+df_dummies_new.head()
+
+```
+
+Based on the MSE for all the models above, model #5 is the best with lowest MSE of 18674280
+
+### Plotting for best model for part 4
+
+```{python}
+# using residuals and y_pred
+
+plot_df = pd.DataFrame({'y_pred': y_pred, 'residuals': residuals})
+plot_df
+from plotnine import *
+
+(ggplot(plot_df, aes(
+    x = 'y_pred',
+    y = 'residuals',
+    fill = 'residuals'))
++ geom_point(size = 6,stroke =0.3, alpha =0.9)
++theme_bw()
+)
+```
+
+The U shape pattern shows this model is missingsome structure in data, the points are kind of clustered around 0 for y_pred? random scatter around 0 for y_red is a good fit, but the curves shows it may need improvement. 
+
+## Part Five: Full Exploration
+
+From part one, we found that a high degree polynomial model using age alone gave the best fit, while part two showed that including interaction terms between age, BMI, and smoker status improved prediction accuracy. Based on these results, the best model should include a polynomial term for age and interaction terms for age and BMI with smoker status. Additionally, since the initial plots indicated that sex has a noticeable effect—particularly with some females showing higher charges—it makes sense to add sex as a predictor. Therefore, the optimal model would combine polynomial age terms, BMI, sex, smoker status, and their interactions to best capture the factors affecting insurance charges.
+
+
+```{python}
+
+df_dummies.eval('age_sex = age * Male', inplace=True)
+df_dummies.eval('bmi_sex = bmi * Male', inplace=True)
+
+df_dummies
+df_dummies_new.eval('age_sex = age * Male', inplace=True)
+df_dummies_new.eval('bmi_sex = bmi * Male', inplace=True)
+
+df_dummies
+
+
+# Add polynomial and interaction features
+df_dummies['age_poly'] = df_dummies['age']  # Just for clarity; you'll use poly-transformer below
+df_dummies_new
+features = ['age', 'bmi', 'Male', 'Smokes', 'age_smoker', 'bmi_smoker', 'smokes_sex']
+# If adding polynomial terms using pipeline, keep 'age' in, Pipeline will expand it
+
+X_train = df_dummies[features]
+y_train = df_dummies['charges']
+
+X_test = df_dummies_new[features]
+y_test = df_dummies_new['charges']
+
+pipeline = Pipeline([
+    ('poly', PolynomialFeatures(degree=12, include_bias=False)),  # captures nonlinear age relationships
+    ('scaler', StandardScaler()),
+    ('regressor', LinearRegression())
+])
+
+pipeline.fit(X_train, y_train)
+y_pred = pipeline.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = mse ** 0.5
+r2 = r2_score(y_test, y_pred)
+residuals = y_test - y_pred
+
+print(f"RMSE: {rmse:.2f}")
+print(f"MSE: {mse:.2f}")
+print(f"R-squared: {r2:.2f}")
+
+# Add results to summary table
+results_df.loc[len(results_df)] = ['age_poly + bmi + sex + smoker + interactions', mse, rmse, r2]
+```
+
+No that we have our odel with very high r^2, lets plot the residuals
+
+model without sex:
+
+RMSE: 3182.10
+MSE: 10125765.34
+R-squared: 0.93
+
+with sex:
+
+MSE: 2769.35
+MSE: 7669306.95
+R-squared: 0.95
+
+with age_sex:
+
+RMSE: 2769.56
+MSE: 7670450.40
+R-squared: 0.95
+
+with bmi_sex:
+
+RMSE: 2825.53
+MSE: 7983640.88
+R-squared: 0.94
+
+without age_sex:
+
+RMSE: 2783.07
+MSE: 7745506.12
+R-squared: 0.94
+
+
+
+```{python}
+plot_df = pd.DataFrame({'y_pred': y_pred, 'residuals': residuals})
+plot_df
+from plotnine import *
+
+(ggplot(plot_df, aes(
+    x = 'y_pred',
+    y = 'residuals',
+    fill = 'residuals'))
++ geom_point(size = 6,stroke =0.3, alpha =0.9)
++theme_bw()
+)
+```
+
