@@ -8,6 +8,10 @@ code-fold: true
 author: Mimansa Dahiya 
 ---
 
+GitHub link:
+
+<https://github.com/mimansadahiya/GSB544/blob/main/week7/lab6_baseballplayers.html>
+
 # Part I: Different Model Specs
 
 ## A. Regression without regularization
