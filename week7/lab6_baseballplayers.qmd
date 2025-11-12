@@ -1,0 +1,589 @@
+---
+title: Lab 6 Baseball Players
+format:
+    html:
+        embed-resources: true
+toc: true
+code-fold: true
+author: Mimansa Dahiya 
+---
+
+# Part I: Different Model Specs
+
+## A. Regression without regularization
+
+Importing all necessary Python libraries:
+
+```{python}
+import plotnine as p9
+import pandas as pd
+import numpy as np
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, PolynomialFeatures
+from sklearn.linear_model import LinearRegression, Ridge, ElasticNet, RidgeCV, ElasticNetCV, LassoCV
+from sklearn.model_selection import train_test_split, cross_val_score, GridSearchCV
+from sklearn.metrics import r2_score, mean_squared_error
+from sklearn.compose import ColumnTransformer
+```
+Preprocessing: Checking for and handling missing values and necessary data type conversions or preprocessing
+```{python}
+df = pd.read_csv('Hitters.csv')
+#df.info()
+#df.describe()
+#df.columns
+df = df.dropna(subset =['Salary']).reset_index(drop = True)
+df.head()
+# Dropped 18% rows with missing y values — without y, they can’t be used (not redundant)
+#---------
+# understanding the data:
+# Seasonal performance stats: AtBat, Hits, HmRun, Runs, RBI, Walks
+# Career totals: CAtBat, CHits, CHmRun, CRuns, CRBI, CWalks
+# League, Division, NewLeague : dummy
+# y: Salary
+# Defensive stats: PutOuts, Assists, Errors
+```
+
+#### 1. Creating the pipeline
+```{python}
+X = df.drop('Salary', axis=1)
+y= df['Salary']
+
+#X_train, X_test, y_train, y_test = train_test_split(X, y)
+
+ct = ColumnTransformer(
+    [
+       ("dummify", OneHotEncoder(sparse_output = False), ["League", 'Division', "NewLeague"]),
+       ("standardize", StandardScaler(), [
+           "AtBat", "Hits", "HmRun", "Runs", "RBI", "Walks",
+           "CHits", "CHmRun", "CRuns", "CRBI", "CWalks",
+           "PutOuts", "Assists", "Errors"])
+  ], 
+  remainder = 'passthrough'
+)
+lr_pipeline_1 = Pipeline(
+    [
+        ('preprocessing', ct),
+        ('linear_regression', LinearRegression())
+    ]
+).set_output(transform='pandas')
+```
+#### 2. Fitting the model
+
+```{python}
+lr_pipeline_1.fit(X, y)
+
+lr_model = lr_pipeline_1.named_steps['linear_regression']
+feature_names = lr_pipeline_1.named_steps['preprocessing'].get_feature_names_out()
+lr_coefficients = lr_model.coef_
+
+df_plot = pd.DataFrame({'coefficients': lr_coefficients, 'feature': feature_names, 'index': range(len(lr_coefficients)) })
+
+#df_plot_sorted = df_plot.sort_values('coefficients', ascending=False)
+df_plot_sorted = df_plot.reindex(df_plot['coefficients'].abs().sort_values(ascending=False).index)
+
+```
+
+Below are the top 5 coefficients which we can interpret
+
+```{python}
+df_plot_sorted.head()
+```
+
+**Interpretation of Top Coefficients**
+
+As we standardized all the numerical variables, the coefficients need to be interpreted in terms of 'average', 'significantly more', or 'much higher'
+
+CRuns (Career Runs):
+If a player has significantly more career runs than average, their predicted value increases by about 480.75 units, indicating a strong positive impact.
+
+Hits:
+Players with significantly more hits than their peers are predicted to have an increase of approximately 337.83 units in the outcome, showing a notable positive effect.
+
+AtBat:
+Interestingly, players with a much higher number of at bats than others tend to have their predicted value decrease by about 291.09 units, suggesting more opportunities at bat do not always correspond to higher predicted outcomes.
+
+#### 3. MSE through cross-validation
+
+```{python}
+scores = cross_val_score(lr_pipeline_1, X, y, cv=5, scoring = 'neg_mean_squared_error')
+scores
+estimated_mse = -scores.mean()
+print('MSE for this pipeline to predict 1989 salaries:',estimated_mse)
+```
+
+## B. Ridge regression
+
+#### 1. Creating the pipeline
+```{python}
+ridge_pipeline = Pipeline([
+    ('preprocessing', ct),
+    ('ridge', Ridge())
+]).set_output(transform='pandas')
+```
+
+#### 2. Tuning with cross validation 
+```{python}
+param_grid = {'ridge__alpha': [0.001, 0.01, 0.1, 1.0, 10, 100]}
+ridge_grid = GridSearchCV(ridge_pipeline, param_grid, cv=5, scoring='neg_mean_squared_error')
+ridge_grid.fit(X, y)
+
+# Best alpha value and best MSE (negated)
+best_alpha = ridge_grid.best_params_['ridge__alpha']
+best_mse = -ridge_grid.best_score_
+print(f'Best alpha: {best_alpha}')
+print(f'Expected MSE: {best_mse:.2f}')
+```
+
+#### 3. Fitting the model
+
+```{python}
+final_ridge = Pipeline([
+    ('preprocessing', ct),
+    ('ridge', Ridge(alpha=best_alpha))
+]).set_output(transform='pandas')
+final_ridge.fit(X, y)
+
+ridge_model = final_ridge.named_steps['ridge']
+feature_names = final_ridge.named_steps['preprocessing'].get_feature_names_out()
+ridge_coefficients = ridge_model.coef_
+
+ridge_coef_df = pd.DataFrame({'feature': feature_names, 'coefficient': ridge_coefficients})
+#ridge_coef_df = ridge_coef_df.sort_values('coefficient', ascending=False)
+ridge_coef_df = ridge_coef_df.reindex(ridge_coef_df['coefficient'].abs().sort_values(ascending=False).index)
+ridge_coef_df.head() 
+```
+
+Ridge Regression: Coefficient Interpretation
+
+As we standardized all the numerical variables, the coefficients need to be interpreted in terms of 'average', 'significantly more', or 'much higher':
+
+CRuns (Career Runs):
+If a player has significantly more career runs than average, their predicted value increases by about 333.68 units, indicating a strong positive effect.
+
+Hits:
+Players with significantly more hits than their peers are predicted to have an increase of approximately 285.82 units in the outcome, showing a notable positive effect.
+
+AtBat:
+Interestingly, players with a much higher number of at bats than average tend to have their predicted value decrease by about 256.78 units, suggesting that more opportunities at bat do not always translate to higher predicted outcomes.
+
+#### 4. MSE
+
+```{python}
+best_mse = -ridge_grid.best_score_
+print(f'Expected MSE: {best_mse:.2f}')
+```
+
+## C. Lasso Regression
+
+#### 1. Creating the pipeline
+
+```{python}
+ridge_pipeline = Pipeline([
+    ("preprocessing", ct),
+    ("ridge", Ridge())
+]).set_output(transform='pandas')
+```
+
+#### 2. Tuning with cross validation
+
+
+```{python}
+param_grid = {'ridge__alpha': [0.01, 0.1, 1, 10, 100, 200, 500]}
+ridge_grid = GridSearchCV(ridge_pipeline, param_grid, cv=5, scoring='neg_mean_squared_error')
+ridge_grid.fit(X, y)
+best_alpha = ridge_grid.best_params_['ridge__alpha']
+expected_mse = -ridge_grid.best_score_
+print(f"Best alpha: {best_alpha}")
+print(f"Expected MSE: {expected_mse:.2f}")
+```
+
+#### 3. Fitting the model
+
+```{python}
+final_ridge = Pipeline([
+    ("preprocessing", ct),
+    ("ridge", Ridge(alpha=best_alpha))
+]).set_output(transform='pandas')
+final_ridge.fit(X, y)
+ridge_model = final_ridge.named_steps["ridge"]
+feature_names = final_ridge.named_steps["preprocessing"].get_feature_names_out()
+ridge_coefficients = ridge_model.coef_
+
+import pandas as pd
+ridge_coef_df = pd.DataFrame({"feature": feature_names, "coefficient": ridge_coefficients})
+#ridge_coef_df = ridge_coef_df.sort_values("coefficient", ascending=False)
+ridge_coef_df = ridge_coef_df.reindex(ridge_coef_df['coefficient'].sort_values(ascending=False).index)
+ridge_coef_df.head()
+
+```
+Lasso Regression: Coefficient Interpretation
+
+
+As we standardized all numerical variables, the coefficients need to be interpreted in terms of 'average', 'significantly more', or 'much higher':
+
+CRuns (Career Runs):
+If a player has significantly more career runs than average, their predicted value increases by about 333.68 units, indicating a strong positive impact.
+
+Hits:
+Players with significantly more hits than their peers are predicted to increase their value by approximately 285.82 units, showing a substantial positive effect.
+
+CHits (Career Hits):
+Players with significantly more career hits than average see their predicted value increase by about 209.71 units, reflecting a meaningful positive association.
+
+#### MSE
+
+```{python}
+expected_mse = -ridge_grid.best_score_
+print(f"Expected MSE: {expected_mse:.2f}")
+```
+
+## D. Elastic Net
+
+#### 1. Creating the pipeline
+
+```{python}
+elasticnet_pipeline = Pipeline([
+    ("preprocessing", ct),
+    ("elasticnet", ElasticNet(max_iter=10000))
+]).set_output(transform='pandas')
+```
+
+#### 2. Tuning with cross validation
+
+
+```{python}
+param_grid = {
+    #'elasticnet__alpha': [0.01, 0.1, 1, 10, 100],
+    #'elasticnet__l1_ratio': [0.1, 0.5, 0.9]  # 0.1 (closer to Ridge), 0.9 (closer to Lasso)
+    'elasticnet__alpha': np.logspace(-3,2,10),
+    'elasticnet__l1_ratio': np.linspace(0.05,0.95,10)
+
+}
+elasticnet_grid = GridSearchCV(
+    elasticnet_pipeline, 
+    param_grid, 
+    cv=5, 
+    scoring='neg_mean_squared_error'
+)
+elasticnet_grid.fit(X, y)
+best_alpha = elasticnet_grid.best_params_['elasticnet__alpha']
+best_l1 = elasticnet_grid.best_params_['elasticnet__l1_ratio']
+estimated_mse = -elasticnet_grid.best_score_
+print(f"Best alpha: {best_alpha}, Best l1_ratio: {best_l1}")
+print(f"Expected MSE: {estimated_mse:.2f}")
+
+```
+
+#### 3. Fitting the model
+
+```{python}
+final_elasticnet = Pipeline([
+    ("preprocessing", ct),
+    ("elasticnet", ElasticNet(alpha=best_alpha, l1_ratio=best_l1, max_iter=10000))
+]).set_output(transform='pandas')
+final_elasticnet.fit(X, y)
+model = final_elasticnet.named_steps['elasticnet']
+feature_names = final_elasticnet.named_steps['preprocessing'].get_feature_names_out()
+coefs = model.coef_
+import pandas as pd
+ef = pd.DataFrame({'feature': feature_names, 'coefficient': coefs})
+#ef = ef.sort_values('coefficient', ascending=False)
+ef = ef.reindex(ef['coefficient'].sort_values(ascending=False).index)
+ef.head()
+```
+
+Elastic Net Regression: Top Coefficient Interpretation
+
+As we standardized all numerical variables, the coefficients should be interpreted as effects of having 'significantly more' or 'much higher' values than average:
+
+CRuns (Career Runs):
+If a player has significantly more career runs than average, their predicted value increases by about 262.27 units, indicating a strong positive effect.
+
+Hits:
+Players with significantly more hits than their peers tend to have their predicted value increase by approximately 247.17 units, showing a substantial positive impact.
+
+CHits (Career Hits):
+Players with significantly more career hits than average see their predicted value increase by about 192.79 units, reflecting a meaningful positive association.
+
+#### MSE
+
+```{python}
+expected_mse = -elasticnet_grid.best_score_
+print(f"Expected MSE: {expected_mse:.2f}")
+```
+
+# Part II. Variable Selection
+
+Most Important Numeric Variable: **CRuns** becuase in the above models it had the largest positive coefficient, showing high consistent influence on salary.
+
+Five Most Important Numeric Variables:
+
+1. CRuns (Career Runs)
+
+2. Hits (1986 Hits)
+
+3. CHits (Career Hits)
+
+4. CRBI (Career RBIs)
+
+5. Walks (1986 Walks)
+
+as they appear most frequently with large positive coefficients across all four regressions
+
+Most Important Categorical Variable: **Division** 
+
+### Comparisons:
+
+As we need to make pipelines for 4 different models(linear, ridge, lasso, and elastic), it is easier to run a loop for pipelines for each question. 
+
+#### 1. Using only the one best numeric variable(CRun)
+
+Let's define the variables which will be repeated and is better to define them in a list:
+```{python}
+numeric_vars = ["CRuns", "Hits", "CHits", "CRBI", "Walks"]
+cat_var = "Division"
+y = df["Salary"]
+
+# create a df to store values
+#results_df = pd.DataFrame(columns=["feature_set", "model_type", "alpha", "score"])
+```
+
+Let's create a dictionary of 4 types of pipelines we want to use for each question.
+
+
+```{python}
+X1 = df[["CRuns"]]
+
+pipelines = {
+    "Linear": Pipeline([
+        ("scaler", StandardScaler()),
+        ("lr", LinearRegression())
+    ]),
+    "Ridge": Pipeline([
+        ("scaler", StandardScaler()),
+        ("ridge", RidgeCV(alphas=[0.01, 0.1, 1, 10, 100], cv=5))
+    ]),
+    "Lasso": Pipeline([
+        ("scaler", StandardScaler()),
+        ("lasso", LassoCV(alphas=[0.01, 0.1, 1, 10, 100], cv=5, max_iter=10000))
+    ]),
+    "ElasticNet": Pipeline([
+        ("scaler", StandardScaler()),
+        ("enet", ElasticNetCV(alphas=[0.01, 0.1, 1, 10, 100], l1_ratio=[ 0.1, 0.3, 0.5, 0.7, 0.9], cv=5, max_iter=10000))
+    ]),
+}
+
+for name, pipe in pipelines.items():
+    mse = -cross_val_score(pipe, X1, y, scoring="neg_mean_squared_error", cv=5).mean()
+    print(f"{name} - One Best Numeric: MSE={mse:.2f}")
+```
+
+#### 2. Only the Five Best Numeric Variables
+
+
+```{python}
+X5 = df[numeric_vars]
+
+for name, pipe in pipelines.items():
+    mse = -cross_val_score(pipe, X5, y, scoring="neg_mean_squared_error", cv=5).mean()
+    print(f"{name} - Five Best Numeric: MSE={mse:.2f}")
+```
+
+#### 3. Five Best Numeric + Interactions with Best Categorical (Division)
+
+
+```{python}
+# Create interaction terms
+df_interact = df.copy()
+for var in numeric_vars:
+    df_interact[f"{var}_x_Division"] = df[var] * (df[cat_var] == "E").astype(int)
+
+interaction_features = numeric_vars + [f"{var}_x_Division" for var in numeric_vars]
+X_int = df_interact[interaction_features]
+
+for name, pipe in pipelines.items():
+    mse = -cross_val_score(pipe, X_int, y, scoring="neg_mean_squared_error", cv=5).mean()
+    print(f"{name} - Five Numeric + Interactions: MSE={mse:.2f}")
+```
+
+```{python}
+results_data = {
+    'Model': ['Linear', 'Ridge', 'Lasso', 'Elastic Net'],
+    'One Numeric (CRuns)': [143812.94, 144592.87, 144122.07, 145191.06],
+    'Five Numeric': [126047.77, 122492.16, 124607.55, 124485.95],
+    'Five Numeric + Interactions': [133209.58, 116552.04, 119669.74, 121082.28]
+}
+
+results_df = pd.DataFrame(results_data)
+results_df
+```
+
+**Best Combimantion Report**
+
+The best combination with the lowest validation MSE is Ridge Resression with 5  numeric plus their interaction with division (MSE: 116,552.04).
+
+We can interpret that using several relevant numeric features (CRuns, Hits, CHits, CRBI, Walks) and their relationship with the key categorical variable (Division) allows the model to better capture complex salary trends.
+
+In addition, Ridge regression provides additional stability over simple linear regression or sparse models, especially when interactions are present.
+
+# Part III. Discussion
+
+
+## A. Ridge
+
+A. Ridge
+
+**Ordinary Linear Regression**: The largest standardized coefficient for CRuns (career runs) is 480.75, and others like Hits and CRBI are also substantial (e.g., Hits: 337.83, CRBI: 260.69).
+
+These values are larger and more spread out, meaning the model is sensitive to variations in each predictor, even those with potentially redundant information due to multicollinearity.
+
+For instance, "AtBat" even has a large negative coefficient (−291), indicating the model is trying to fit the noise in the data as well.
+
+**Ridge Regression**: The coefficients for the same variables are all smaller: CRuns (333.68), Hits (285.82), CHits (209.71), CRBI (176.69), Walks (121.21).
+
+Ridge "shrinks" coefficients toward zero. The effect of each predictor on salary is still present, but less extreme and more "restrained."
+
+This shrinkage reduces the risk of overfitting, and your Ridge model's validation MSE is lower (116,552.04 for the best case), compared to the linear regression model (133,209.58), meaning Ridge gives more reliable out-of-sample predictions.
+
+Comparing the **Ridge regression** models with the **ordinary linear regression** models, we see that Ridge produces smaller and more stable coefficients. For example, the coefficient for CRuns drops from about 480 under linear regression to about 334 under Ridge. This is no surprise, as Ridge penalizes large coefficients to reduce model complexity and guard against overfitting, especially when predictors are correlated. As a result, Ridge regression gives a lower validation MSE, meaning it provides more reliable predictions for new data—highlighting its advantage over ordinary linear regression in this setting.
+
+## B. LASSO
+
+Did you get the same results (coefficients, selected features) in all LASSO models?
+
+No, the results changed depending on the input features.
+
+In Part I, the LASSO was fit with all variables, so it had many predictors to choose from and could set some coefficients exactly to zero, automatically selecting the most important features.
+
+In Part II, Each model has a different potential feature set, so the set of nonzero coefficients changes depending on which predictors are available and how many/which interactions are present.
+
+Did you get the same value of the tuning parameter (λ) and MSE?
+
+No, the best λ values and validation MSEs were different for each feature set. For example (from your outputs), the "only five numeric" LASSO MSE was 124,607.55; with interactions it was 119,669.74; and with only CRuns it was 144,122.07.
+
+The optimal λ for regularization depends on the number and type of variables. The penalty needs to be retuned each time, since the data structure and collinearity change.
+
+Adding or removing features (especially interactions) changes the complexity and the "best" tradeoff between bias and variance.
+
+The model has more or less capacity to fit the target variable, so both coefficients and MSE will shift accordingly.
+
+The LASSO models in Part II gave different results compared to the LASSO model in Part I, both in terms of selected features and validation MSE. This is expected, as LASSO's variable selection depends entirely on which features are included in each run. The optimal regularization parameter (λ) and resulting MSE also varied with each feature set, because the relationships in the data and the complexity of the model changed. Thus, using different sets of variables led to different tuning and different predictive performances, demonstrating LASSO's adaptiveness to the available feature set.
+
+## C. Elastic Net
+
+For the "Five Best Numeric + Interactions" feature set, which was my most complex and competitive scenario—these were my results:
+
+Ridge: 116,552.04
+
+LASSO: 119,669.74
+
+Elastic Net: 121,082.28
+
+In this run, Ridge gave me the lowest MSE. However, I know from experience that Elastic Net often “wins” in other situations, especially when I’m dealing with a lot of predictors that might be correlated or where some aren’t as important. That’s because Elastic Net combines Ridge’s ability to shrink correlated coefficients and LASSO’s feature selection, making it flexible in handling all types of data—whether it’s dense with relevant features or sparse with many irrelevant ones.
+
+In my case, Ridge performed best since most predictors were both relevant and highly correlated. Pure shrinkage was more effective than feature selection, so Ridge ended up with the lowest MSE. But in general, I’d reach for Elastic Net if I needed a model that adapts well to more complex and varied datasets.
+
+# Part IV: Final Model
+
+Fit your final best pipeline on the full dataset, and summarize your results in a few short sentences and a plot.
+
+Final model is Ridge with Five Best Numeric + Interactions
+
+```{python}
+numeric_vars = ["CRuns", "Hits", "CHits", "CRBI", "Walks"]
+cat_var = "Division"
+y_final = df["Salary"]
+
+df_interact = df.copy()
+for var in numeric_vars:
+    df_interact[f"{var}_x_Division"] = df[var] * (df[cat_var] == "E").astype(int)
+
+interaction_features = numeric_vars + [f"{var}_x_Division" for var in numeric_vars]
+X_final = df_interact[interaction_features]
+
+
+alphas = [0.01, 0.1, 1, 10, 100]
+
+ridgecv_pipeline = Pipeline([
+    ("scaler", StandardScaler()),
+    ("ridgecv", RidgeCV(alphas=alphas, cv=5))
+])
+
+# Fit the pipeline on your data
+ridgecv_pipeline.fit(X_final, y_final)
+
+# Extract the best alpha
+best_alpha = ridgecv_pipeline.named_steps["ridgecv"].alpha_
+print(f"The best alpha found by cross-validation is: {best_alpha}")
+```
+
+```{python}
+ridge_pipeline = Pipeline([
+    ("scaler", StandardScaler()),
+    ("ridge", Ridge(alpha=100))  
+])
+ridge_pipeline.fit(X_final, y_final)
+final_pred = ridge_pipeline.predict(X_final)
+final_mse = mean_squared_error(y_final, final_pred)
+
+
+pipeline_best = Pipeline(
+    [
+        ('preprocessin', ct),
+        ('Ridge_with_5var_interactions', Ridge(alpha=1.0))
+    ]
+)
+
+# coefficient 
+
+ridge_model = ridge_pipeline.named_steps['ridge']
+coef_df = pd.DataFrame({
+    "feature": interaction_features,
+    "coefficient": ridge_model.coef_
+}).sort_values(by='coefficient', key=abs, ascending=False)
+print(coef_df.head())
+```
+
+Players with higher Hits have the strongest positive association with salary: each standard deviation increase in Hits is linked to about a $70 rise in predicted salary, making Hits the most influential numeric predictor.
+
+CRBI (career RBIs) is next, with a substantial effect—players excelling here tend to earn about $65 more for each unit increase.
+
+Walks and CHits also positively impact salary, with increases of approximately $52 and $49, respectively, for each standard deviation.
+
+Finally, CRuns (career runs) remains important, boosting predicted salary by about $46 for higher performance.
+
+
+#### Plotting
+
+```{python}
+from plotnine import ggplot, aes, geom_point, geom_abline, labs, theme_minimal
+
+# Create a dataframe for plotting
+import pandas as pd
+plot_df = pd.DataFrame({
+    "Actual": y_final,
+    "Predicted": final_pred
+})
+
+# Plot with a 45-degree reference line
+p = (
+    ggplot(plot_df, aes(x="Actual", y="Predicted"))
+    + geom_point(alpha=0.6)
+    + geom_abline(intercept=0, slope=1, color="red", linetype="dashed")  # best-fit/reference line
+    + labs(
+        title="Ridge Model: Actual vs Predicted Salary",
+        x="Actual Salary",
+        y="Predicted Salary"
+    )
+    + theme_minimal()
+)
+
+p
+```
+
+This scatterplot shows the predicted salaries from your Ridge regression model versus the actual salaries for each player. The red dashed line represents perfect predictions—where the predicted salary equals the actual salary.
+
+Most points are tightly clustered near the red line, especially for lower and mid-range salaries, indicating that your model predicts these values well. As actual salary increases, predictions become more dispersed, with some under- and over-prediction for very high salaries. Overall, the close alignment of most points to the line suggests strong predictive performance for the majority of cases, but with increasing error for extreme salaries—typical for regression models on skewed or outlier-prone data.
+
+
+
