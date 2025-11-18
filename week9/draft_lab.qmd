@@ -1,0 +1,234 @@
+---
+title: Lab 7 Heart Attack
+format:
+    html:
+        embed-resources: true
+toc: true
+code-fold: true
+author: Mimansa Dahiya 
+
+---
+
+We will use medical data in this lab to rpedict the likelihood of a perosn experiencing an exercise-induced heart attack.
+
+The data contains information of the patienst who came in the hospital with exercise induced chest pains such as age, sex, chest pain type, resting electrocardiographic results, maximum heart rate achieved during exercise, etc.
+
+
+```{python}
+import pandas as pd
+
+ha = pd.read_csv("https://www.dropbox.com/s/aohbr6yb9ifmc8w/heart_attack.csv?dl=1")
+print(ha.info())
+print(ha.describe())
+print(ha['output'].value_counts())
+
+```
+
+# Part One: Fitting Models
+
+## Q1: KNN Classifier
+
+
+```{python}
+# processing
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.metrics import roc_auc_score
+
+numerical = ['age', 'trtbps', 'chol', 'thalach']
+categorical = ['cp', 'restecg', 'sex']  # treat sex as categorical
+
+preprocessor = ColumnTransformer([
+    ('num', StandardScaler(), numerical),
+    ('cat', OneHotEncoder(drop='first'), categorical)
+])
+```
+
+```{python}
+from sklearn.pipeline import Pipeline
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import GridSearchCV, cross_val_score
+
+X = ha.drop('output', axis=1)
+y = ha['output']
+
+knn_pipe = Pipeline([
+    ('pre', preprocessor),
+    ('knn', KNeighborsClassifier())
+])
+param_grid_knn = {'knn__n_neighbors': range(1, 21)}
+
+search_knn = GridSearchCV(knn_pipe, param_grid_knn, scoring='roc_auc', cv=5)
+search_knn.fit(X, y)
+
+print("Best K:", search_knn.best_params_)
+print("Best CV ROC-AUC:", search_knn.best_score_)
+
+y_pred_knn = search_knn.predict(X)
+```
+
+## Q2 Logistic Regression
+
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+
+lr_pipe = Pipeline([
+    ('pre', preprocessor),
+    ('lr', LogisticRegression(max_iter=300))
+])
+param_grid_lr = {'lr__C': [0.01, 0.1, 1, 10, 100]}
+search_lr = GridSearchCV(lr_pipe, param_grid_lr, scoring='roc_auc', cv=5)
+search_lr.fit(X, y)
+
+print("Best C:", search_lr.best_params_)
+print("Best CV ROC-AUC:", search_lr.best_score_)
+
+y_pred_lr = search_lr.predict(X)
+```
+
+## Q3: Decision Tree
+
+
+```{python}
+from sklearn.tree import DecisionTreeClassifier
+
+dt_pipe = Pipeline([
+    ('pre', preprocessor),  # or omit scaling with another preprocessor just for trees
+    ('dt', DecisionTreeClassifier())
+])
+param_grid_dt = {
+    'dt__max_depth': [2, 4, 6, 8, 10],
+    'dt__min_samples_leaf': [1, 5, 10]
+}
+search_dt = GridSearchCV(dt_pipe, param_grid_dt, scoring='roc_auc', cv=5)
+search_dt.fit(X, y)
+
+print("Best Params:", search_dt.best_params_)
+print("Best CV ROC-AUC:", search_dt.best_score_)
+
+y_pred_dt = search_dt.predict(X)
+
+```
+
+## Q4: Interpretation
+
+```{python}
+# coefficients and their names 
+import numpy as np
+
+feature_names = np.concatenate([numerical, 
+                                search_lr.best_estimator_.named_steps['pre']
+                                .named_transformers_['cat'].get_feature_names_out(categorical)])
+
+coefs = search_lr.best_estimator_.named_steps['lr'].coef_[0]
+coef_table = pd.DataFrame({'Variable': feature_names, 'Coefficient': coefs})
+print(coef_table.sort_values('Coefficient', key=abs, ascending=False))
+
+```
+
+The largest absolute coefficients are the most influential. Positive means higher risk, negative means protective.
+
+## Q5: ROC Curves
+
+decision tree features 
+
+```{python}
+importances = search_dt.best_estimator_.named_steps['dt'].feature_importances_
+imp_table = pd.DataFrame({'Variable': feature_names, 'Importance': importances})
+print(imp_table.sort_values('Importance', ascending=False))
+
+```
+
+```{python}
+from sklearn.metrics import roc_curve
+
+def get_roc_df(model, X, y, name):
+    y_score = model.predict_proba(X)[:,1]
+    fpr, tpr, _ = roc_curve(y, y_score)
+    return pd.DataFrame({'FPR': fpr, 'TPR': tpr, 'Model': name})
+
+roc_knn = get_roc_df(search_knn, X, y, 'KNN')
+roc_lr = get_roc_df(search_lr, X, y, 'Logistic Regression')
+roc_dt = get_roc_df(search_dt, X, y, 'Decision Tree')
+
+roc_all = pd.concat([roc_knn, roc_lr, roc_dt])
+
+from plotnine import *
+(
+    ggplot(roc_all, aes("FPR", "TPR", color='Model')) +
+    geom_line() +
+    geom_abline(linetype='dashed', color='grey') +
+    labs(title='ROC Curves: Heart Attack Models', x='False Positive Rate', y='True Positive Rate') +
+    theme_minimal()
+)
+
+```
+
+# Part Two: Metrics
+
+
+
+```{python}
+from sklearn.metrics import precision_score, recall_score, confusion_matrix
+
+def specificity_score(y_true, y_pred):
+    tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()
+    return tn/(tn + fp)
+
+metrics = {}
+for name, ypred in [('KNN', y_pred_knn), ('LR', y_pred_lr), ('DT', y_pred_dt)]:
+    prec = precision_score(y, ypred)
+    rec = recall_score(y, ypred)
+    spec = specificity_score(y, ypred)
+    metrics[name] = {'Precision':prec, 'Recall':rec, 'Specificity':spec}
+
+pd.DataFrame(metrics)
+
+```
+
+# Part Three: Discussion
+
+Based on the discussion and coefficients/feature importances:
+
+Which variable has the largest absolute coefficient in logistic regression? That is the strongest predictor. Interpret its meaning using the signs and effect sizes.
+
+Are the most important features for the tree similar or different? Why might that be?
+
+KNN does not directly provide importance, but feature selection or performance comparison can reveal variable influence.
+
+Refer to textbook sections:
+
+Precision and recall as defined in 16.5.1, ROC and AUC explained in 16.5.2, use recall for high-risk (false negatives dangerous), precision for resource conservation (false positives expensive), and interpretability for understanding root causes.
+
+
+
+# Part Four: Validation
+
+
+```{python}
+ha_validation = pd.read_csv("https://www.dropbox.com/s/jkwqdiyx6o6oad0/heart_attack_validation.csv?dl=1")
+X_val = ha_validation.drop("output", axis=1)
+y_val = ha_validation["output"]
+
+for name, mod in [('KNN',search_knn),('LR',search_lr),('DT',search_dt)]:
+    pred = mod.predict(X_val)
+    prob = mod.predict_proba(X_val)[:,1]
+    cm = confusion_matrix(y_val, pred)
+    auc = roc_auc_score(y_val, prob)
+    prec = precision_score(y_val, pred)
+    rec = recall_score(y_val, pred)
+    print(f'{name} Validation\nConfusion matrix:\n{cm}\nAUC:{auc:.3f}\nPrecision:{prec:.3f}\nRecall:{rec:.3f}\n')
+
+```
+
+# Part Five: Cohen’s Kappa
+
+
+```{python}
+from sklearn.metrics import cohen_kappa_score
+
+for name, pred in [('KNN', y_pred_knn), ('LR', y_pred_lr), ('DT', y_pred_dt)]:
+    print(f"{name} Kappa: {cohen_kappa_score(y, pred):.3f}")
+
+```
