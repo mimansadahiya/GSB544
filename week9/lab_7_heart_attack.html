@@ -2236,7 +2236,7 @@ vertical-align: -.125em;
 <p><a href="https://github.com/mimansadahiya/GSB544/blob/main/week8/lab_7_heart_attack.html" class="uri">https://github.com/mimansadahiya/GSB544/blob/main/week8/lab_7_heart_attack.html</a></p>
 <p>We will use medical data in this lab to rpedict the likelihood of a perosn experiencing an exercise-induced heart attack.</p>
 <p>The data contains information of the patienst who came in the hospital with exercise induced chest pains such as age, sex, chest pain type, resting electrocardiographic results, maximum heart rate achieved during exercise, etc.</p>
-<div id="859f65e2" class="cell" data-execution_count="1">
+<div id="961687fd" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2268,7 +2268,7 @@ memory usage: 17.2 KB</code></pre>
 <h1>Part One: Fitting Models</h1>
 <section id="q1-knn-classifier" class="level2">
 <h2 class="anchored" data-anchor-id="q1-knn-classifier">Q1: KNN Classifier</h2>
-<div id="bf7096e3" class="cell" data-execution_count="2">
+<div id="1fe7f421" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># processing</span></span>
@@ -2285,7 +2285,7 @@ memory usage: 17.2 KB</code></pre>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="7c069c2c" class="cell" data-execution_count="3">
+<div id="afb6d7c3" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
@@ -2324,7 +2324,7 @@ Best CV ROC-AUC: 0.7879434129089301</code></pre>
 </div>
 <section id="confusion-matrix-plotting" class="level4">
 <h4 class="anchored" data-anchor-id="confusion-matrix-plotting">Confusion matrix plotting</h4>
-<div id="4bab4685" class="cell" data-execution_count="4">
+<div id="24c63b13" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_confusion_matrix(y_true, y_pred, model_name):</span>
@@ -2356,7 +2356,7 @@ Best CV ROC-AUC: 0.7879434129089301</code></pre>
 <span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="384ba461" class="cell" data-execution_count="5">
+<div id="4f78b56e" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plot_confusion_matrix(y, y_pred_knn, <span class="st">&quot;KNN&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2369,7 +2369,7 @@ Best CV ROC-AUC: 0.7879434129089301</code></pre>
 </div>
 </div>
 </div>
-<div id="7615890e" class="cell" data-execution_count="6">
+<div id="c74da4b0" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>param_grid_knn2 <span class="op">=</span> {<span class="st">&#39;knn__n_neighbors&#39;</span>: [<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>, <span class="dv">13</span>, <span class="dv">15</span>, <span class="dv">17</span>, <span class="dv">19</span>, <span class="dv">21</span>]}</span>
@@ -2390,7 +2390,7 @@ Best CV ROC-AUC for new range: 0.7879434129089301</code></pre>
 </section>
 <section id="q2-logistic-regression" class="level2">
 <h2 class="anchored" data-anchor-id="q2-logistic-regression">Q2 Logistic Regression</h2>
-<div id="b64c437d" class="cell" data-execution_count="7">
+<div id="376f1e00" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LogisticRegression</span>
@@ -2414,7 +2414,7 @@ Best CV ROC-AUC for new range: 0.7879434129089301</code></pre>
 Best CV ROC-AUC: 0.863533863837312</code></pre>
 </div>
 </div>
-<div id="2e982434" class="cell" data-execution_count="8">
+<div id="95feec62" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>param_grid_lr_2 <span class="op">=</span> {<span class="st">&#39;lr__C&#39;</span>: [<span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">500</span>, <span class="dv">1000</span>]} <span class="co"># for GridSearchCV </span></span>
@@ -2432,7 +2432,7 @@ Best CV ROC-AUC for new range: 0.8646316534040672</code></pre>
 </div>
 </div>
 <p>There aren’s a lot of change in the metrics after changing the range for GridSearchCV, so we will use the original one.</p>
-<div id="2718892b" class="cell" data-execution_count="9">
+<div id="d14b08db" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>plot_confusion_matrix(y, y_pred_lr, <span class="st">&quot;Logistic Regression&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2448,7 +2448,7 @@ Best CV ROC-AUC for new range: 0.8646316534040672</code></pre>
 </section>
 <section id="q3-decision-tree" class="level2">
 <h2 class="anchored" data-anchor-id="q3-decision-tree">Q3: Decision Tree</h2>
-<div id="d8e2af03" class="cell" data-execution_count="10">
+<div id="772b074c" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.tree <span class="im">import</span> DecisionTreeClassifier</span>
@@ -2474,7 +2474,7 @@ Best CV ROC-AUC for new range: 0.8646316534040672</code></pre>
 Best CV ROC-AUC: 0.7553025641025641</code></pre>
 </div>
 </div>
-<div id="a65c7a97" class="cell" data-execution_count="11">
+<div id="19ffe2fe" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>param_grid_dt2 <span class="op">=</span> {</span>
@@ -2492,11 +2492,11 @@ Best CV ROC-AUC: 0.7553025641025641</code></pre>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code>Best Params (2nd grid): {&#39;dt__max_depth&#39;: 5, &#39;dt__min_samples_leaf&#39;: 12}
-Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
+Best CV ROC-AUC (2nd grid): 0.7547087533156498</code></pre>
 </div>
 </div>
 <p>There aren’s a lot of change in the metrics after changing the range for GridSearchCV, so we will use the original one.</p>
-<div id="09d23d16" class="cell" data-execution_count="12">
+<div id="2fbd9ba3" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plot_confusion_matrix(y, y_pred_dt, <span class="st">&quot;Decision Tree&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2513,7 +2513,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <section id="q4-interpretation" class="level2">
 <h2 class="anchored" data-anchor-id="q4-interpretation">Q4: Interpretation</h2>
 <p>Logistic Regression has the highest ROC-AUC (0.8635–0.8646), meaning it distinguishes between at-risk and not-at-risk patients better than the other models, on average, during cross-validation. KNN and Decision Tree both perform well, but not as strongly as Logistic Regression. Therefoe, we will use Logistic Regression model’s coefficient to understand best predictors.</p>
-<div id="b68f08d1" class="cell" data-execution_count="13">
+<div id="a91ab144" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># coefficients and their names </span></span>
@@ -2547,7 +2547,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <p>The most influential predictors in the logistic regression model are those with the largest absolute coefficients. In this dataset, being male (sex_1) has the strongest negative coefficient (-2.12), indicating that male patients are predicted to have a lower risk of exercise-induced heart attack. This is a surprising result, as men are usually considered more prone to heart attacks in broader clinical studies; here, it may reflect sample-specific patterns or peculiarities in the data. Other variables with negative coefficients—such as certain resting electrocardiographic results—similarly suggest protective effects, but these should be interpreted with caution due to possible sample bias.</p>
 <p>On the other hand, the chest pain type variables (cp_1, cp_2, cp_3) all have positive coefficients, meaning that having any type of angina or chest pain, compared to the baseline (“asymptomatic”), strongly increases predicted risk. In particular, typical angina (cp_1) stands out as the strongest positive predictor. These results emphasize that chest pain symptoms are highly relevant for identifying heart attack risk in this data. Taken together, while some coefficients reflect expected clinical relationships, others may be shaped by the specific characteristics or limitations of the study sample.</p>
 <p>Decision trees provide us with important features and are easily interpretable, even for those without coding experience. Let’s also look at some of the most important features identified by the decision tree model.</p>
-<div id="345b87e1" class="cell" data-execution_count="14">
+<div id="ae246224" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A ROC curve : how well your model can tell the difference between things like “at risk” and “not at risk.”</span></span>
@@ -2582,7 +2582,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <section id="q5-roc-curves" class="level2">
 <h2 class="anchored" data-anchor-id="q5-roc-curves">Q5: ROC Curves</h2>
 <p>The graph below displays the ROC curves for the three models we used in this lab: logistic regression, decision trees, and k-nearest neighbors (KNN). The leftmost curve represents the best performing model in terms of ROC. It is encouraging to see that all models have ROC curves above the diagonal line, indicating that each model is effective at distinguishing between the classes.</p>
-<div id="36610d58" class="cell" data-execution_count="15">
+<div id="612a29ec" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve</span>
@@ -2620,7 +2620,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <section id="part-two-metrics" class="level1">
 <h1>Part Two: Metrics</h1>
 <p><strong>Comparison of Precision, Recall, and Specificity Across KNN, Logistic Regression, and Decision Tree Models</strong></p>
-<div id="11547ba7" class="cell" data-execution_count="16">
+<div id="02ee8b4d" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> precision_score, recall_score, confusion_matrix</span>
@@ -2638,7 +2638,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="35">
+<div class="cell-output cell-output-display" data-execution_count="16">
 <div>
 
 
@@ -2714,7 +2714,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <h1>Part Four: Validation</h1>
 <p>Now we use each of our final models to predict heart attack risk on a holdout (validation) dataset, data not seen during training or cross-validation.</p>
 <p>For each model, we will report Confusion matrix, AUC, Precision, and Recall.</p>
-<div id="8fa8d651" class="cell" data-execution_count="17">
+<div id="af771fca" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2750,7 +2750,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 <span id="cb26-31"><a href="#cb26-31" aria-hidden="true" tabindex="-1"></a>val_df <span class="op">=</span> pd.DataFrame(results)</span>
 <span id="cb26-32"><a href="#cb26-32" aria-hidden="true" tabindex="-1"></a>val_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="36">
+<div class="cell-output cell-output-display" data-execution_count="17">
 <div>
 
 
@@ -2809,12 +2809,12 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 </div>
 </div>
 <p>Earlier (cross-validated) measures of model performance:</p>
-<div id="13c3e5a9" class="cell" data-execution_count="18">
+<div id="4d57e1eb" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="37">
+<div class="cell-output cell-output-display" data-execution_count="18">
 <div>
 
 
@@ -2861,7 +2861,7 @@ Best CV ROC-AUC (2nd grid): 0.7526397877984085</code></pre>
 </section>
 <section id="part-five-cohens-kappa" class="level1">
 <h1>Part Five: Cohen’s Kappa</h1>
-<div id="e23932e0" class="cell" data-execution_count="19">
+<div id="233d31dd" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> cohen_kappa_score</span>
