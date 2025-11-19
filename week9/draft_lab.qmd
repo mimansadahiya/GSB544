@@ -21,13 +21,11 @@ ha = pd.read_csv("https://www.dropbox.com/s/aohbr6yb9ifmc8w/heart_attack.csv?dl=
 print(ha.info())
 print(ha.describe())
 print(ha['output'].value_counts())
-
 ```
 
 # Part One: Fitting Models
 
 ## Q1: KNN Classifier
-
 
 ```{python}
 # processing
@@ -56,19 +54,73 @@ knn_pipe = Pipeline([
     ('pre', preprocessor),
     ('knn', KNeighborsClassifier())
 ])
-param_grid_knn = {'knn__n_neighbors': range(1, 21)}
+# tells range for the GridSearchCV
+# chhose smaller k (1-21) bcoz dataset is small, in larger/noisy dataset, sue larger k value
+# small k makes model sensitive to the noise
+param_grid_knn = {'knn__n_neighbors': range(1, 21)} 
+
 
 search_knn = GridSearchCV(knn_pipe, param_grid_knn, scoring='roc_auc', cv=5)
-search_knn.fit(X, y)
+search_knn.fit(X, y) # fiting to the whole data
 
 print("Best K:", search_knn.best_params_)
 print("Best CV ROC-AUC:", search_knn.best_score_)
-
+# CV = cross validaiton
+# ROC-AUC is "Area Under the Receiver Operating Characteristic Curve"
+# A value from 0.5 (no better than random guessing) up to 1.0 (perfect predictions)
+# 0.79 (rounded) means that your model is pretty good at distinguishing 
+# INTERPRETATION: If you pick a random "at-risk" and a random "not-at-risk" patient, your KNN model (with K=7) will correctly assign a higher risk score to the "at-risk" patient about 79% of the time.
 y_pred_knn = search_knn.predict(X)
 ```
+#### Confusion matrix plotting
+
+```{python}
+def plot_confusion_matrix(y_true, y_pred, model_name):
+    from sklearn.metrics import confusion_matrix
+    import pandas as pd
+    from plotnine import ggplot, aes, geom_tile, geom_text, scale_fill_gradient, labs, theme_minimal, theme
+    
+    # Get confusion matrix for binary classification
+    cm = confusion_matrix(y_true, y_pred)
+    cm_df = pd.DataFrame({
+        'True Label': ['Not at risk', 'Not at risk', 'At risk', 'At risk'],
+        'Predicted Label': ['Not at risk', 'At risk', 'Not at risk', 'At risk'],
+        'Count': cm.flatten()
+    })
+    
+    # Plot with plotnine
+    return (
+        ggplot(cm_df, aes(x='Predicted Label', y='True Label', fill='Count')) +
+        geom_tile(color='white') +
+        geom_text(aes(label='Count'), size=14, va='center', ha='center', color='black') +
+        scale_fill_gradient(low='#f7fbff', high='#08306b') +
+        labs(
+            title=f"Confusion Matrix: {model_name}",
+            x="Predicted Label",
+            y="True Label"
+        ) +
+        theme_minimal() +
+        theme(figure_size=(4, 4))
+    )
+
+```
+
+```{python}
+plot_confusion_matrix(y, y_pred_knn, "KNN")
+```
+```{python}
+param_grid_knn2 = {'knn__n_neighbors': [3, 5, 7, 9, 11, 13, 15, 17, 19, 21]}
+search_knn2 = GridSearchCV(knn_pipe, param_grid_knn2, scoring='roc_auc', cv=5)
+search_knn2.fit(X, y)
+
+print("Best K for new range:", search_knn2.best_params_)
+print("Best CV ROC-AUC for new range:", search_knn2.best_score_)
+y_pred_knn2 = search_knn2.predict(X)
+
+```
+There aren's a lot of change in the metrics after changing the range for GridSearchCV, so we will use the original one.
 
 ## Q2 Logistic Regression
-
 
 ```{python}
 from sklearn.linear_model import LogisticRegression
@@ -77,7 +129,8 @@ lr_pipe = Pipeline([
     ('pre', preprocessor),
     ('lr', LogisticRegression(max_iter=300))
 ])
-param_grid_lr = {'lr__C': [0.01, 0.1, 1, 10, 100]}
+param_grid_lr = {'lr__C': [0.01, 0.1, 1, 10, 100]} # for GridSearchCV 
+
 search_lr = GridSearchCV(lr_pipe, param_grid_lr, scoring='roc_auc', cv=5)
 search_lr.fit(X, y)
 
@@ -85,6 +138,22 @@ print("Best C:", search_lr.best_params_)
 print("Best CV ROC-AUC:", search_lr.best_score_)
 
 y_pred_lr = search_lr.predict(X)
+```
+
+```{python}
+param_grid_lr_2 = {'lr__C': [0.001, 0.01, 0.1, 0.5, 1, 5, 10, 50, 100, 500, 1000]} # for GridSearchCV 
+search_lr = GridSearchCV(lr_pipe, param_grid_lr_2, scoring='roc_auc', cv=5)
+search_lr.fit(X, y)
+
+print("Best C for new range:", search_lr.best_params_)
+print("Best CV ROC-AUC for new range:", search_lr.best_score_)
+
+y_pred_lr = search_lr.predict(X)
+```
+There aren's a lot of change in the metrics after changing the range for GridSearchCV, so we will use the original one.
+
+```{python}
+plot_confusion_matrix(y, y_pred_lr, "Logistic Regression")
 ```
 
 ## Q3: Decision Tree
@@ -111,34 +180,74 @@ y_pred_dt = search_dt.predict(X)
 
 ```
 
+```{python}
+param_grid_dt2 = {
+    'dt__max_depth': [3, 5, 7, 9, 12, 15],
+    'dt__min_samples_leaf': [2, 4, 8, 12]
+}
+
+search_dt2 = GridSearchCV(dt_pipe, param_grid_dt2, scoring='roc_auc', cv=5)
+search_dt2.fit(X, y)
+
+print("Best Params (2nd grid):", search_dt2.best_params_)
+print("Best CV ROC-AUC (2nd grid):", search_dt2.best_score_)
+
+y_pred_dt2 = search_dt2.predict(X)
+
+```
+
+There aren's a lot of change in the metrics after changing the range for GridSearchCV, so we will use the original one.
+
+```{python}
+plot_confusion_matrix(y, y_pred_dt, "Decision Tree")
+```
 ## Q4: Interpretation
+
+Logistic Regression has the highest ROC-AUC (0.8635–0.8646), meaning it distinguishes between at-risk and not-at-risk patients better than the other models, on average, during cross-validation. KNN and Decision Tree both perform well, but not as strongly as Logistic Regression. Therefoe, we will use Logistic Regression model's coefficient to understand best predictors.
 
 ```{python}
 # coefficients and their names 
 import numpy as np
 
+# combine all coefficients, numerical and categorical
 feature_names = np.concatenate([numerical, 
                                 search_lr.best_estimator_.named_steps['pre']
                                 .named_transformers_['cat'].get_feature_names_out(categorical)])
-
+#.best_estimator_: This gets the final best logistic regression pipeline 
+# .named_steps['lr']: Accesses the logistic regression model itself within your pipeline.
+#.coef_[0]: Gets the array of fitted coefficients for the model
 coefs = search_lr.best_estimator_.named_steps['lr'].coef_[0]
 coef_table = pd.DataFrame({'Variable': feature_names, 'Coefficient': coefs})
-print(coef_table.sort_values('Coefficient', key=abs, ascending=False))
-
+print(coef_table.sort_values('Coefficient', key=abs, ascending=False)) #sort by absolute value to see the best coefficient
 ```
+The most influential predictors in the logistic regression model are those with the largest absolute coefficients. In this dataset, being male (sex_1) has the strongest negative coefficient (-2.12), indicating that male patients are predicted to have a lower risk of exercise-induced heart attack. This is a surprising result, as men are usually considered more prone to heart attacks in broader clinical studies; here, it may reflect sample-specific patterns or peculiarities in the data. Other variables with negative coefficients—such as certain resting electrocardiographic results—similarly suggest protective effects, but these should be interpreted with caution due to possible sample bias.
 
-The largest absolute coefficients are the most influential. Positive means higher risk, negative means protective.
+On the other hand, the chest pain type variables (cp_1, cp_2, cp_3) all have positive coefficients, meaning that having any type of angina or chest pain, compared to the baseline ("asymptomatic"), strongly increases predicted risk. In particular, typical angina (cp_1) stands out as the strongest positive predictor. These results emphasize that chest pain symptoms are highly relevant for identifying heart attack risk in this data. Taken together, while some coefficients reflect expected clinical relationships, others may be shaped by the specific characteristics or limitations of the study sample.
 
-## Q5: ROC Curves
 
-decision tree features 
+Decision trees provide us with important features and are easily interpretable, even for those without coding experience. Let's also look at some of the most important features identified by the decision tree model.
 
 ```{python}
+# A ROC curve : how well your model can tell the difference between things like “at risk” and “not at risk.”
+# farther up : BETTER
+# top left: no mistakes
+# diagonal line: jsut guessing randomly, not helpful.
+
+# Decision trees naturally provide "feature importances" thats why we are using dt
+
+# Finds out which variables mattered most in your decision tree.
 importances = search_dt.best_estimator_.named_steps['dt'].feature_importances_
 imp_table = pd.DataFrame({'Variable': feature_names, 'Importance': importances})
 print(imp_table.sort_values('Importance', ascending=False))
-
 ```
+
+The table above shows that thalach (maximum heart rate achieved during exercise) is the most important predictor in the decision tree model, with an importance of 65%. This differs from the regression model, as each modeling approach analyzes the data differently. In our analysis, the best model based on ROC AUC was logistic regression, so we used it to interpret the most influential coefficient, as discussed earlier. It is worth noting that the third most important predictor in the decision tree is sex, which was the top predictor in logistic regression.
+
+Ultimately, the choice of the best model and key predictors depends on the analyst’s goals. For example, if we want to emphasize differences between genders, sex may be considered the most important predictor, as shown by the logistic regression model. However, if the focus is on the physical effects leading up to a heart attack, such as chest pain, cholesterol levels, and electrocardiographic results—these predictors might take precedence, especially for guiding medical practitioners.
+
+## Q5: ROC Curves
+
+The graph below displays the ROC curves for the three models we used in this lab: logistic regression, decision trees, and k-nearest neighbors (KNN). The leftmost curve represents the best performing model in terms of ROC. It is encouraging to see that all models have ROC curves above the diagonal line, indicating that each model is effective at distinguishing between the classes.
 
 ```{python}
 from sklearn.metrics import roc_curve
@@ -158,15 +267,15 @@ from plotnine import *
 (
     ggplot(roc_all, aes("FPR", "TPR", color='Model')) +
     geom_line() +
-    geom_abline(linetype='dashed', color='grey') +
+    geom_abline(linetype='dashed', color='grey') + #diagonal line
     labs(title='ROC Curves: Heart Attack Models', x='False Positive Rate', y='True Positive Rate') +
     theme_minimal()
 )
-
 ```
 
 # Part Two: Metrics
 
+**Comparison of Precision, Recall, and Specificity Across KNN, Logistic Regression, and Decision Tree Models**
 
 
 ```{python}
@@ -181,35 +290,72 @@ for name, ypred in [('KNN', y_pred_knn), ('LR', y_pred_lr), ('DT', y_pred_dt)]:
     prec = precision_score(y, ypred)
     rec = recall_score(y, ypred)
     spec = specificity_score(y, ypred)
-    metrics[name] = {'Precision':prec, 'Recall':rec, 'Specificity':spec}
+    metrics[name] = {'Precision (positive predicted value)':prec, 'Recall (True positive rate)':rec, 'Specificity (True negative rate)':spec}
 
 pd.DataFrame(metrics)
-
 ```
+
+
+1. KNN is best at avoiding false alarms but misses more real cases.
+
+2. Logistic Regression catches the most true cases of risk.
+
+3. Decision Tree makes the most mistakes overall.
 
 # Part Three: Discussion
 
-Based on the discussion and coefficients/feature importances:
+## Q1 Hospital Faces Severe Lawsuits If At-Risk Patients Are Missed
 
-Which variable has the largest absolute coefficient in logistic regression? That is the strongest predictor. Interpret its meaning using the signs and effect sizes.
+**Metric**: Prioritize Recall (Sensitivity) because missing a true “at risk” patient is very costly for the hospital, we want a model that catches as many true cases as possible, even if it means some false alarms.
 
-Are the most important features for the tree similar or different? Why might that be?
+**Model Recommendation**: Logistic Regression as it had the highest recall in your comparison.
 
-KNN does not directly provide importance, but feature selection or performance comparison can reveal variable influence.
+**Expected Score**: Expect a recall around 0.84, meaning the model will correctly identify about 84% of true heart attack risk cases.
 
-Refer to textbook sections:
+## Q2 Hospital Overfull—Only Wants Most ‘At Risk’ Patients Using Beds
 
-Precision and recall as defined in 16.5.1, ROC and AUC explained in 16.5.2, use recall for high-risk (false negatives dangerous), precision for resource conservation (false positives expensive), and interpretability for understanding root causes.
+**Metric**: Prioritize Precision as we want to minimize false positives to avoid using resources on patients who aren’t actually at risk.
 
+**Model Recommendation**: KNN as had the highest precision.
+
+**Expected Score**: KNN’s precision is about 0.86, so when it flags a patient as “at risk,” it is correct 86% of the time.
+
+## Q3 Hospital Wants to Study Root Causes of Heart Attacks 
+
+**Metric**: Prioritize Interpretability (coefficients or feature importances), ideally through a metric like feature effect size.
+
+ROC-AUC also helps if comparing overall discriminatory power.
+
+**Model Recommendation**: Logistic Regression as the coefficients directly show which biological measures (age, cholesterol, chest pain type, etc.) are strongly associated with risk.
+
+**Expected Score**: The model’s ROC-AUC is about 0.86, indicating strong overall performance, and coefficients guide which features matter most.
+
+## Q4 Compare New Doctors’ Diagnoses to Model Predictions
+
+**Metric**: Use Cohen’s Kappa: Measures agreement between two raters (doctors vs. algorithm), accounting for agreement by chance.
+
+**Model Recommendation**: Logistic Regression or KNN as both had similarly high Kappa values in your results.
+
+**Expected Score**: Expect Kappa around 0.61, meaning substantial agreement between doctors and your model. (from Part 5)
 
 
 # Part Four: Validation
 
+Now we use each of our final models to predict heart attack risk on a holdout (validation) dataset, data not seen during training or cross-validation.
+
+For each model, we will report Confusion matrix, AUC, Precision, and Recall.
 
 ```{python}
+import pandas as pd
+from sklearn.metrics import confusion_matrix, roc_auc_score, precision_score, recall_score
+
+# Load validation data
 ha_validation = pd.read_csv("https://www.dropbox.com/s/jkwqdiyx6o6oad0/heart_attack_validation.csv?dl=1")
 X_val = ha_validation.drop("output", axis=1)
 y_val = ha_validation["output"]
+
+# Initialize list to collect results
+results = []
 
 for name, mod in [('KNN',search_knn),('LR',search_lr),('DT',search_dt)]:
     pred = mod.predict(X_val)
@@ -218,17 +364,58 @@ for name, mod in [('KNN',search_knn),('LR',search_lr),('DT',search_dt)]:
     auc = roc_auc_score(y_val, prob)
     prec = precision_score(y_val, pred)
     rec = recall_score(y_val, pred)
-    print(f'{name} Validation\nConfusion matrix:\n{cm}\nAUC:{auc:.3f}\nPrecision:{prec:.3f}\nRecall:{rec:.3f}\n')
+    tn, fp, fn, tp = cm.ravel()
+    results.append({
+        'Model': name,
+        'AUC': round(auc, 3),
+        'Precision': round(prec, 3),
+        'Recall': round(rec, 3),
+        'True Negatives': tn,
+        'False Positives': fp,
+        'False Negatives': fn,
+        'True Positives': tp
+    })
 
+val_df = pd.DataFrame(results)
+val_df
 ```
 
-# Part Five: Cohen’s Kappa
+Earlier (cross-validated) measures of model performance:
 
+```{python}
+pd.DataFrame(metrics)
+```
+
+1. The validation metrics are similar to the cross-validation results.
+
+2. The ranking of models stays the same, logistic regression is still best for recall and AUC.
+
+3. There’s a slight drop in recall, which is normal when moving from training (CV) to new data, but no drastic drop, so our models are generalizing well.
+
+Therefore, yes, our cross-validated measures of model success closely matched the results we saw on the separate validation data. The models performed similarly, with only small differences in AUC, precision, and recall, and the best-performing model (logistic regression) remained the same. This shows our model selection and validation process worked correctly.
+
+
+# Part Five: Cohen’s Kappa
 
 ```{python}
 from sklearn.metrics import cohen_kappa_score
 
 for name, pred in [('KNN', y_pred_knn), ('LR', y_pred_lr), ('DT', y_pred_dt)]:
     print(f"{name} Kappa: {cohen_kappa_score(y, pred):.3f}")
-
 ```
+
+1. Cohen’s Kappa measures how much better a classifier (or two raters) agree than just random guessing.
+
+2. Scale: 1.0 (perfect agreement), 0 (only chance agreement), negative (worse than chance). 0.60–0.80 = “substantial” agreement
+
+For the scores above, both KNN and Logistic Regression have similar, substantial agreement with the true labels. Decision Tree is noticeably lower, indicating worse overall reliability. But, Logistic Regression and KNN are still the best models.
+
+We can use Kappa when class proportions are imbalanced (one class is much more common than the other), or when we want to correct for the agreement that might happen “just by chance.” 
+
+In medicine, Kappa is useful when misclassifying either class is costly, and you want a fair overall agreement score.
+
+It is also used when comparing a model’s predictions to human experts, just like our question 4 in part 3, when we were asked to compare new doctors’ diagnoses to model predictions.
+
+So, we use Kappa when one group is much bigger than the other, or when we want to know if the model is really agreeing with the truth, or just getting lucky by guessing. 
+
+
