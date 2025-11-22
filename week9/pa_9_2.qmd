@@ -1,0 +1,100 @@
+---
+title: Practice Activity 9.2
+format:
+    html:
+        embed-resources: true
+code-fold: true
+---
+
+
+```{python}
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import f1_score, roc_auc_score
+import matplotlib.pyplot as plt
+from plotnine import ggplot, aes, geom_point, labs, theme_bw
+
+```
+
+```{python}
+ha = pd.read_csv("https://www.dropbox.com/s/aohbr6yb9ifmc8w/heart_attack.csv?dl=1")
+```
+
+
+## Q1: Natural Multiclass Models
+
+```{python}
+X = ha.drop(columns=['cp', 'Name'], errors='ignore')
+y = ha['cp']
+
+# KNN (multiclass)
+knn = KNeighborsClassifier(n_neighbors=5)
+knn.fit(X, y)
+knn_acc = np.mean(cross_val_score(knn, X, y, cv=5))
+
+# Decision Tree (multiclass)
+tree = DecisionTreeClassifier(max_depth=4, random_state=42)
+tree.fit(X, y)
+tree_acc = np.mean(cross_val_score(tree, X, y, cv=5))
+
+# LDA (multiclass)
+lda = LinearDiscriminantAnalysis()
+lda.fit(X, y)
+lda_acc = np.mean(cross_val_score(lda, X, y, cv=5))
+
+print(f"KNN accuracy: {knn_acc:.3f}")
+print(f"Decision Tree accuracy: {tree_acc:.3f}")
+print(f"LDA accuracy: {lda_acc:.3f}")
+
+# Plot decision tree
+plt.figure(figsize=(14,8))
+plot_tree(tree, feature_names=X.columns, class_names=['0','1','2','3'], filled=True)
+plt.show()
+```
+
+## Q2: OvR
+
+
+```{python}
+results = {}
+for category in range(4):
+    ha[f'cp_is_{category}'] = (ha['cp'] == category).astype(int)
+    y_bin = ha[f'cp_is_{category}']
+    X_bin = ha.drop(columns=['cp', f'cp_is_{category}', 'Name'], errors='ignore')
+    X_train, X_test, y_train, y_test = train_test_split(X_bin, y_bin, test_size=0.3, random_state=42)
+    logreg = LogisticRegression(max_iter=1000)
+    logreg.fit(X_train, y_train)
+    preds = logreg.predict(X_test)
+    f1 = f1_score(y_test, preds)
+    results[f'cp_{category}'] = f1
+    print(f'F1 Score for cp={category}: {f1:.3f}')
+best_cat = max(results, key=results.get)
+print("OvR was best at distinguishing:", best_cat, "with F1 =", results[best_cat])
+```
+
+## Q3: OvO
+
+
+```{python}
+ov_pairs = [(0, 1), (0, 2), (0, 3)]
+roc_aucs = {}
+for pair in ov_pairs:
+    mask = ha['cp'].isin(pair)
+    X_ovo = ha.loc[mask].drop(columns=['cp', 'Name'], errors='ignore')
+    y_ovo = ha.loc[mask, 'cp']
+    # Binary encode (lowest value is 0, highest is 1)
+    y_ovo_bin = (y_ovo == pair[1]).astype(int)
+    X_train, X_test, y_train, y_test = train_test_split(X_ovo, y_ovo_bin, test_size=0.3, random_state=42)
+    logreg = LogisticRegression(max_iter=1000)
+    logreg.fit(X_train, y_train)
+    roc = roc_auc_score(y_test, logreg.predict_proba(X_test)[:,1])
+    roc_aucs[str(pair)] = roc
+    print(f"ROC-AUC for cp {pair[0]} vs cp {pair[1]}: {roc:.3f}")
+best_pair = max(roc_aucs, key=roc_aucs.get)
+print("OvO was best at distinguishing:", best_pair, "with ROC-AUC =", roc_aucs[best_pair])
+```
