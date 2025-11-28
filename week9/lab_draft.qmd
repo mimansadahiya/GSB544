@@ -1,0 +1,556 @@
+---
+title: Lab 8 Cannabis Data Analysis 
+format:
+    html:
+        embed-resources: true
+code-fold: true
+toc: true
+---
+
+Goal: Use all predictors, and measure classification quality using accuracy and F1 Score (balanced reporting for both classes).
+
+
+```{python}
+import pandas as pd
+import numpy as np
+
+from sklearn.model_selection import train_test_split, GridSearchCV, cross_val_score
+from sklearn.metrics import (
+    confusion_matrix, classification_report, accuracy_score,
+    f1_score
+)
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.linear_model import LogisticRegression
+
+from plotnine import ggplot, aes, geom_point, theme_minimal, labs
+
+# Load full data
+url = "https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1"
+canna = pd.read_csv(url)
+
+# Drop non‑numeric predictors, keep Type as target
+non_num_cols = ["Strain", "Effects", "Flavor"]
+canna_num = canna.drop(columns=non_num_cols)
+
+# Binary subset: indica vs sativa
+# different name for binary dataset
+binary = canna_num[canna_num["Type"].isin(["indica", "sativa"])].copy() # use isin()
+Xb = binary.drop(columns=["Type"])
+yb = binary["Type"]
+
+Xb_train, Xb_test, yb_train, yb_test = train_test_split(
+    Xb, yb, test_size=0.3, random_state=123, stratify=yb
+)
+
+```
+
+Accuracy is suitable when classes are reasonably balanced and overall correct classifications are the main concern. Macro-averaged F1 score is selected for model comparisons, as it balances performance across all classes, especially when class sizes or classification difficulty vary. F1 evaluates both precision and recall, and macro averaging ensures no single class is prioritized over others.
+
+
+
+```{python}
+def report_results(name, y_true, y_pred):
+    print(f"=== {name} ===")
+    print("Accuracy:", accuracy_score(y_true, y_pred))
+    print("Macro F1:", f1_score(y_true, y_pred, average="macro"))
+    print("Confusion matrix:\n", confusion_matrix(y_true, y_pred))
+
+```
+
+# Part One – Binary (indica vs sativa)
+
+```{python}
+lda_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler(with_mean=False)),
+    ("lda", LinearDiscriminantAnalysis())
+])
+
+lda_param_grid = {
+    "lda__solver": ["svd", "lsqr"] # what are these hyperparameter? 
+}
+# use grid? =-==
+lda_grid = GridSearchCV(
+    lda_pipe,
+    lda_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+# fitting the model
+lda_grid.fit(Xb_train, yb_train)
+# extracting the best scores 
+print("Best CV macro F1 (LDA):", lda_grid.best_score_) #.best_score_ 
+print("Best params:", lda_grid.best_params_) # .best_params_
+
+best_lda = lda_grid.best_estimator_
+yb_pred_lda = best_lda.predict(Xb_test)
+report_results("LDA (binary)", yb_test, yb_pred_lda)
+
+```
+
+**Interpretation**:
+LDA performed well on binary classification, achieving high accuracy and balanced F1 score. The confusion matrix shows more errors in predicting sativa strains—42 indica samples were misclassified as sativa, while only 15 sativa samples were misclassified as indica. This may be due to more overlap or shared effects between these classes. Most predictions were correct, indicating that the features effectively separate indica and sativa strains.
+
+## Q2: QDA
+
+
+```{python}
+
+qda_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),  # or "median"
+    ("scaler", StandardScaler(with_mean=False)),
+    ("qda", QuadraticDiscriminantAnalysis())
+])
+
+qda_param_grid = {
+    "qda__reg_param": [0.0, 0.001, 0.01, 0.1, 0.5]
+}
+
+qda_grid = GridSearchCV(
+    qda_pipe,
+    qda_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+qda_grid.fit(Xb_train, yb_train)
+
+print("Best CV macro F1 (QDA):", qda_grid.best_score_)
+print("Best params:", qda_grid.best_params_)
+
+best_qda = qda_grid.best_estimator_
+yb_pred_qda = best_qda.predict(Xb_test)
+report_results("QDA (binary)", yb_test, yb_pred_qda)
+# warning shows : this is not a fatal error—just a diagnostic about multicollinearity
+```
+
+**Interpretation**:
+QDA shows slightly lower performance compared to LDA, with more misclassifications overall. The warning about covariance matrix collinearity highlights redundancy in feature dummies, which can affect QDA accuracy. Errors are again more frequent for sativa misclassified as indica.
+## Q3: SVC (linear)
+
+```{python}
+svc_lin_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler()),
+    ("svc", SVC(kernel="linear"))
+])
+
+svc_lin_param_grid = {
+    "svc__C": [0.01, 0.1, 1, 10]
+}
+
+svc_lin_grid = GridSearchCV(
+    svc_lin_pipe,
+    svc_lin_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+svc_lin_grid.fit(Xb_train, yb_train)
+
+print("Best CV macro F1 (SVC linear):", svc_lin_grid.best_score_)
+print("Best params:", svc_lin_grid.best_params_)
+
+best_svc_lin = svc_lin_grid.best_estimator_
+yb_pred_svc_lin = best_svc_lin.predict(Xb_test)
+report_results("SVC linear (binary)", yb_test, yb_pred_svc_lin)
+
+```
+
+**Interpretation**:
+SVC with a linear kernel yields slightly higher accuracy than LDA and QDA. The confusion pattern is similar: sativa strains are misidentified more often than indica strains. Overall, the linear decision boundary fits these data well.
+
+
+## Q4: SVM (polynomial kernel)
+
+
+```{python}
+
+# Using the numeric-only version of the data
+X = canna_num.drop(columns=["Type"])
+y = canna_num["Type"]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=123, stratify=y
+)
+
+# created the splut again, didnt use from the last one
+
+svm_poly_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler()),
+    ("svm", SVC(kernel="poly"))
+])
+
+svm_poly_param_grid = {
+    "svm__C": [0.1, 1, 10],
+    "svm__degree": [2, 3, 4],
+    "svm__gamma": ["scale", "auto"]
+}
+
+svm_poly_grid = GridSearchCV(
+    svm_poly_pipe,
+    svm_poly_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+svm_poly_grid.fit(Xb_train, yb_train)
+
+print("Best CV macro F1 (SVM poly):", svm_poly_grid.best_score_)
+print("Best params:", svm_poly_grid.best_params_)
+
+best_svm_poly = svm_poly_grid.best_estimator_
+yb_pred_svm_poly = best_svm_poly.predict(Xb_test)
+report_results("SVM poly (binary)", yb_test, yb_pred_svm_poly)
+
+```
+
+**Interpretation**:
+The polynomial-kernel SVM model performs similarly to the linear SVC, with comparable accuracy and confusion structure. There is not a substantial gain in macro F1 or accuracy from using a polynomial kernel here, suggesting that the boundary between indica and sativa is mostly linear.
+
+
+# Part Two – Natural multiclass
+
+## Q1: Decision tree, plot and interpret
+
+
+```{python}
+tree = DecisionTreeClassifier(random_state=123)
+
+tree_param_grid = {
+    "max_depth": [3, 5, 8, None],
+    "min_samples_leaf": [1, 5, 10]
+}
+
+tree_grid = GridSearchCV(
+    tree,
+    tree_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+tree_grid.fit(X_train, y_train)
+
+print("Best CV macro F1 (Tree):", tree_grid.best_score_)
+print("Best params:", tree_grid.best_params_)
+
+best_tree = tree_grid.best_estimator_
+y_pred_tree = best_tree.predict(X_test)
+report_results("Decision Tree (multiclass)", y_test, y_pred_tree)
+
+```
+Top features: Sleepy, Energetic
+
+**Interpretation**:
+The tree achieves lower accuracy and macro F1 compared to binary tasks. Sleepy and Energetic are the most important features distinguishing classes. The matrix shows that hybrid samples are especially likely to be misclassified as indica or sativa, confirming that hybrids share properties and are harder to separate.
+
+```{python}
+# Feature importances from best_tree
+imp = pd.Series(best_tree.feature_importances_, index=X.columns)
+top2 = imp.sort_values(ascending=False).head(2).index.tolist()
+print("Top 2 features:", top2)
+
+# Full numeric data with Type included
+plot_df = canna_num.copy()
+plot_df["Type"] = canna["Type"]
+
+from plotnine import ggplot, aes, geom_point, position_jitter, theme_minimal, labs
+
+plot_df = canna_num.copy()
+plot_df["Type"] = canna["Type"]
+
+(
+    ggplot(plot_df, aes(x=top2[0], y=top2[1], color="Type")) +
+    geom_point(alpha=0.3, position=position_jitter(width=0.05, height=0.05)) +
+    theme_minimal() +
+    labs(title="Top two features by Type", x=top2[0], y=top2[1])
+)
+
+
+```
+
+## Q2: LDA, QDA, KNN (multiclass)
+
+### LDA:
+
+```{python}
+lda_m_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler(with_mean=False)),
+    ("lda", LinearDiscriminantAnalysis())
+])
+
+lda_m_grid = GridSearchCV(
+    lda_m_pipe,
+    {"lda__solver": ["svd", "lsqr"]},
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+lda_m_grid.fit(X_train, y_train)
+
+print("Best CV macro F1 (LDA multiclass):", lda_m_grid.best_score_)
+print("Best params:", lda_m_grid.best_params_)
+
+best_lda_m = lda_m_grid.best_estimator_
+y_pred_lda_m = best_lda_m.predict(X_test)
+report_results("LDA (multiclass)", y_test, y_pred_lda_m)
+
+```
+
+## QDA:
+
+
+```{python}
+qda_m_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler(with_mean=False)),
+    ("qda", QuadraticDiscriminantAnalysis())
+])
+
+qda_m_grid = GridSearchCV(
+    qda_m_pipe,
+    {"qda__reg_param": [0.0, 0.001, 0.01, 0.1, 0.5]},
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+qda_m_grid.fit(X_train, y_train)
+
+print("Best CV macro F1 (QDA multiclass):", qda_m_grid.best_score_)
+print("Best params:", qda_m_grid.best_params_)
+
+best_qda_m = qda_m_grid.best_estimator_
+y_pred_qda_m = best_qda_m.predict(X_test)
+report_results("QDA (multiclass)", y_test, y_pred_qda_m)
+
+```
+
+### KNN:
+
+
+```{python}
+knn_pipe = Pipeline([
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("scaler", StandardScaler()),
+    ("knn", KNeighborsClassifier())
+])
+
+knn_param_grid = {
+    "knn__n_neighbors": [3, 5, 9, 15],
+    "knn__weights": ["uniform", "distance"]
+}
+
+knn_grid = GridSearchCV(
+    knn_pipe,
+    knn_param_grid,
+    cv=5,
+    scoring="f1_macro",
+    n_jobs=-1
+)
+
+knn_grid.fit(X_train, y_train)
+
+print("Best CV macro F1 (KNN multiclass):", knn_grid.best_score_)
+print("Best params:", knn_grid.best_params_)
+
+best_knn = knn_grid.best_estimator_
+y_pred_knn = best_knn.predict(X_test)
+report_results("KNN (multiclass)", y_test, y_pred_knn)
+
+```
+
+Summary: Metrics are consistently lower than in binary classification. The confusion matrices show hybrids are most likely to be confused with indica/sativa, which reflects how hybrids blend effects and often overlap in feature space.
+## Q3 (comparison)
+
+Metrics in multiclass tasks are notably worse than in binary classification. This is mainly due to increased decision complexity: hybrids combine features of both other classes, leading to greater overlaps and more misclassifications. The confusion matrices consistently show that hybrid strains are the most likely to be misclassified, typically as indica or sativa. This demonstrates that hybrids are less distinct in feature space and their properties are distributed between the other types.
+
+
+# Part Three – Multiclass from Binary
+
+```{python}
+def make_binary_target(y, positive_label):
+    return (y == positive_label).astype(int)
+
+```
+
+## Q1: OvR – Logistic Regression and SVC
+
+```{python}
+ovr_results = []
+
+for cls in ["indica", "sativa", "hybrid"]:
+    # Binary targets: class vs rest
+    y_train_bin = make_binary_target(y_train, cls)
+    y_test_bin = make_binary_target(y_test, cls)
+
+    # Logistic Regression OvR
+    lr_pipe = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("scaler", StandardScaler()),
+        ("logreg", LogisticRegression(max_iter=1000))
+    ])
+
+    lr_grid = GridSearchCV(
+        lr_pipe,
+        {"logreg__C": [0.1, 1, 10]},
+        cv=5,
+        scoring="f1",
+        n_jobs=-1
+    )
+    lr_grid.fit(X_train, y_train_bin)
+    best_lr = lr_grid.best_estimator_
+    y_pred_lr = best_lr.predict(X_test)
+    f1_lr = f1_score(y_test_bin, y_pred_lr)
+
+    print(f"\nLogReg OvR: {cls} vs rest")
+    print("Best CV F1:", lr_grid.best_score_)
+    report_results(f"LogReg OvR {cls}", y_test_bin, y_pred_lr)
+
+    ovr_results.append(("LogReg", cls, lr_grid.best_score_, f1_lr))
+
+    # SVC OvR (linear kernel)
+    svc_pipe = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("scaler", StandardScaler()),
+        ("svc", SVC(kernel="linear"))
+    ])
+
+    svc_grid = GridSearchCV(
+        svc_pipe,
+        {"svc__C": [0.1, 1, 10]},
+        cv=5,
+        scoring="f1",
+        n_jobs=-1
+    )
+    svc_grid.fit(X_train, y_train_bin)
+    best_svc = svc_grid.best_estimator_
+    y_pred_svc = best_svc.predict(X_test)
+    f1_svc = f1_score(y_test_bin, y_pred_svc)
+
+    print(f"\nSVC OvR: {cls} vs rest")
+    print("Best CV F1:", svc_grid.best_score_)
+    report_results(f"SVC OvR {cls}", y_test_bin, y_pred_svc)
+
+    ovr_results.append(("SVC", cls, svc_grid.best_score_, f1_svc))
+
+ovr_results_df = pd.DataFrame(
+    ovr_results,
+    columns=["Model", "Positive_class", "CV_F1", "Test_F1"]
+)
+ovr_results_df
+```
+**Interpretation**:
+The OvR models do best at distinguishing hybrids from non-hybrids, likely because hybrid strains include distinct effects not present in only indica/sativa. Models are worst at pulling out sativa strains alone, likely due to the overlap in features with indica and hybrids.
+Use ovo_results_df to answer Q4 (which pair/model is easiest/hardest, does this make sense).
+
+## Q3: OvO – Logistic Regression and SVC
+
+
+```{python}
+pairs = [("indica", "sativa"),
+         ("indica", "hybrid"),
+         ("hybrid", "sativa")]
+
+ovo_results = []
+
+for c1, c2 in pairs:
+    # Subset data to just the two classes
+    mask_train = y_train.isin([c1, c2])
+    mask_test = y_test.isin([c1, c2])
+
+    X_pair_train = X_train[mask_train]
+    y_pair_train = y_train[mask_train]
+    X_pair_test = X_test[mask_test]
+    y_pair_test = y_test[mask_test]
+
+    # Logistic Regression
+    lr_pipe = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("scaler", StandardScaler()),
+        ("logreg", LogisticRegression(max_iter=1000))
+    ])
+
+    lr_grid = GridSearchCV(
+        lr_pipe,
+        {"logreg__C": [0.1, 1, 10]},
+        cv=5,
+        scoring="f1_macro",
+        n_jobs=-1
+    )
+    lr_grid.fit(X_pair_train, y_pair_train)
+    best_lr = lr_grid.best_estimator_
+    y_pred_lr = best_lr.predict(X_pair_test)
+
+    print(f"\nLogReg OvO: {c1} vs {c2}")
+    print("Best CV macro F1:", lr_grid.best_score_)
+    report_results(f"LogReg OvO {c1} vs {c2}", y_pair_test, y_pred_lr)
+
+    ovo_results.append(
+        ("LogReg", f"{c1} vs {c2}", lr_grid.best_score_,
+         f1_score(y_pair_test, y_pred_lr, average="macro"))
+    )
+
+    # SVC (linear)
+    svc_pipe = Pipeline([
+        ("imputer", SimpleImputer(strategy="most_frequent")),
+        ("scaler", StandardScaler()),
+        ("svc", SVC(kernel="linear"))
+    ])
+
+    svc_grid = GridSearchCV(
+        svc_pipe,
+        {"svc__C": [0.1, 1, 10]},
+        cv=5,
+        scoring="f1_macro",
+        n_jobs=-1
+    )
+    svc_grid.fit(X_pair_train, y_pair_train)
+    best_svc = svc_grid.best_estimator_
+    y_pred_svc = best_svc.predict(X_pair_test)
+
+    print(f"\nSVC OvO: {c1} vs {c2}")
+    print("Best CV macro F1:", svc_grid.best_score_)
+    report_results(f"SVC OvO {c1} vs {c2}", y_pair_test, y_pred_svc)
+
+    ovo_results.append(
+        ("SVC", f"{c1} vs {c2}", svc_grid.best_score_,
+         f1_score(y_pair_test, y_pred_svc, average="macro"))
+    )
+
+ovo_results_df = pd.DataFrame(
+    ovo_results,
+    columns=["Model", "Pair", "CV_F1_macro", "Test_F1_macro"]
+)
+ovo_results_df
+
+```
+
+
+**Interpretation**:
+Binary classification between indica and sativa remains the most accurate and balanced. Hybrid-related pairs are consistently hardest, with confusion matrices showing hybrids are mispredicted as sativa (and vice versa) more often than other pairs. This confirms hybrids have overlapping feature sets and are not strongly defined by any single effect or flavor word.
+
+
+
+## Q5: Documentation question 
+
+In sklearn, LogisticRegression uses a one-vs-rest (OvR) strategy by default for multiclass data
+
+
+In sklearn, SVC uses a one-vs-one (OvO) strategy automatically for multiclass input.

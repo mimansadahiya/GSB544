@@ -6,6 +6,10 @@ format:
 code-fold: true
 ---
 
+Metrics:
+
+I will use macro-averaged F1 score as the model selection metric. This metric first computes F1 separately for each class and then averages across classes, so it evaluates how well the model performs on all categories rather than emphasizing a single target class or a majority class, which matches the requirement that no single category be prioritized.
+
 # Part One: Binary Classification (Sativa vs Indica)
 
 Goal: Use all predictors, and measure classification quality using accuracy and F1 Score (balanced reporting for both classes).
