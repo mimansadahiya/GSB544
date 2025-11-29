@@ -7,7 +7,9 @@ code-fold: true
 toc: true
 ---
 
-github: <>
+github: <https://github.com/mimansadahiya/GSB544/blob/main/week9/lab_8.html>
+
+
 Goal: Use all predictors, and measure classification quality using accuracy and F1 Score (balanced reporting for both classes).
 
 
