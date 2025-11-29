@@ -1,0 +1,205 @@
+---
+title: Lab 8 
+format:
+    html:
+        embed-resources: true
+code-fold: true
+---
+
+Metrics:
+
+I will use macro-averaged F1 score as the model selection metric. This metric first computes F1 separately for each class and then averages across classes, so it evaluates how well the model performs on all categories rather than emphasizing a single target class or a majority class, which matches the requirement that no single category be prioritized.
+
+# Part One: Binary Classification (Sativa vs Indica)
+
+Goal: Use all predictors, and measure classification quality using accuracy and F1 Score (balanced reporting for both classes).
+
+```{python}
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import cross_val_score, train_test_split
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis, QuadraticDiscriminantAnalysis
+from sklearn.svm import SVC
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+from sklearn.preprocessing import StandardScaler
+
+# Load data
+df = pd.read_csv("https://www.dropbox.com/s/s2a1uoiegitupjc/cannabis_full.csv?dl=1")
+
+# Keep only Sativa & Indica rows
+df_bin = df[df['Type'].isin(['Sativa', 'Indica'])].copy()
+X_bin = df_bin.drop(columns=['Strain', 'Type'])
+y_bin = df_bin['Type']
+
+# Encode target: Indica=0, Sativa=1
+y_bin_enc = (y_bin == "Sativa").astype(int)
+
+# Train-test split for confusion matrix at the end
+Xtr, Xte, ytr, yte = train_test_split(X_bin, y_bin_enc, test_size=0.3, random_state=42)
+
+# Standardize features
+scaler = StandardScaler()
+Xtr_scaled = scaler.fit_transform(Xtr)
+Xte_scaled = scaler.transform(Xte)
+
+### Q1: LDA
+lda = LinearDiscriminantAnalysis()
+lda.fit(Xtr_scaled, ytr)
+lda_pred = lda.predict(Xte_scaled)
+lda_acc = accuracy_score(yte, lda_pred)
+lda_f1 = f1_score(yte, lda_pred)
+print("LDA Accuracy:", lda_acc)
+print("LDA F1:", lda_f1)
+print("LDA Confusion matrix:\n", confusion_matrix(yte, lda_pred))
+
+### Q2: QDA
+qda = QuadraticDiscriminantAnalysis()
+qda.fit(Xtr_scaled, ytr)
+qda_pred = qda.predict(Xte_scaled)
+qda_acc = accuracy_score(yte, qda_pred)
+qda_f1 = f1_score(yte, qda_pred)
+print("QDA Accuracy:", qda_acc)
+print("QDA F1:", qda_f1)
+print("QDA Confusion matrix:\n", confusion_matrix(yte, qda_pred))
+
+### Q3: SVC (linear kernel, tune C)
+from sklearn.model_selection import GridSearchCV
+svc = SVC(kernel="linear")
+params = {"C": [0.01, 0.1, 1, 10, 100]}
+gs_svc = GridSearchCV(svc, params, cv=5, scoring='accuracy')
+gs_svc.fit(Xtr_scaled, ytr)
+svc_best = gs_svc.best_estimator_
+svc_pred = svc_best.predict(Xte_scaled)
+svc_acc = accuracy_score(yte, svc_pred)
+svc_f1 = f1_score(yte, svc_pred)
+print("SVC Accuracy:", svc_acc)
+print("SVC F1:", svc_f1)
+print("SVC Confusion matrix:\n", confusion_matrix(yte, svc_pred))
+
+### Q4: SVM (polynomial kernel, tune degree and C)
+svc_poly = SVC(kernel="poly")
+params_poly = {"C": [0.01, 0.1, 1, 10, 100], "degree": [2,3,4]}
+gs_poly = GridSearchCV(svc_poly, params_poly, cv=5, scoring='accuracy')
+gs_poly.fit(Xtr_scaled, ytr)
+poly_best = gs_poly.best_estimator_
+poly_pred = poly_best.predict(Xte_scaled)
+poly_acc = accuracy_score(yte, poly_pred)
+poly_f1 = f1_score(yte, poly_pred)
+print("Poly SVM Accuracy:", poly_acc)
+print("Poly SVM F1:", poly_f1)
+print("Poly SVM Confusion matrix:\n", confusion_matrix(yte, poly_pred))
+
+```
+
+Metrics justification:
+
+Use accuracy for balanced multiclass problems, and F1 Score for class imbalance or if both precision and recall are important.
+
+
+
+# Part Two: Natural Multiclass (Indica, Sativa, Hybrid)
+
+
+```{python}
+# Full dataset (three types)
+X = df.drop(columns=['Strain', 'Type'])
+y = df['Type']
+
+# Encode target
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+y_enc = le.fit_transform(y)  # Indica=0, Sativa=2, Hybrid=1 or similar
+
+Xtr, Xte, ytr, yte = train_test_split(X, y_enc, test_size=0.3, random_state=42)
+Xtr_scaled = scaler.fit_transform(Xtr)
+Xte_scaled = scaler.transform(Xte)
+
+### Q1: Decision Tree (plot and interpret)
+from sklearn.tree import DecisionTreeClassifier, plot_tree
+tree = DecisionTreeClassifier(max_depth=5, random_state=42)
+tree.fit(Xtr_scaled, ytr)
+
+import matplotlib.pyplot as plt
+plt.figure(figsize=(16,8))
+plot_tree(tree, feature_names=X.columns, class_names=le.classes_, filled=True)
+plt.show()
+print("Decision Tree Confusion matrix:\n", confusion_matrix(yte, tree.predict(Xte_scaled)))
+
+### Q2: LDA, QDA, KNN
+# LDA
+lda_mc = LinearDiscriminantAnalysis()
+lda_mc.fit(Xtr_scaled, ytr)
+lda_mc_pred = lda_mc.predict(Xte_scaled)
+print("LDA MC Accuracy:", accuracy_score(yte, lda_mc_pred))
+print("LDA MC Confusion matrix:\n", confusion_matrix(yte, lda_mc_pred))
+
+# QDA
+qda_mc = QuadraticDiscriminantAnalysis()
+qda_mc.fit(Xtr_scaled, ytr)
+qda_mc_pred = qda_mc.predict(Xte_scaled)
+print("QDA MC Accuracy:", accuracy_score(yte, qda_mc_pred))
+print("QDA MC Confusion matrix:\n", confusion_matrix(yte, qda_mc_pred))
+
+# KNN (tune k)
+knn_mc = KNeighborsClassifier()
+params_knn = {"n_neighbors":list(range(1,21))}
+gs_knn = GridSearchCV(knn_mc, params_knn, cv=5, scoring='accuracy')
+gs_knn.fit(Xtr_scaled, ytr)
+knn_best = gs_knn.best_estimator_
+knn_mc_pred = knn_best.predict(Xte_scaled)
+print("KNN MC Accuracy:", accuracy_score(yte, knn_mc_pred))
+print("KNN MC Confusion matrix:\n", confusion_matrix(yte, knn_mc_pred))
+
+### Q3: Discuss which metrics improved/worsened, and which categories get mixed up according to confusion matrix
+# summarize in markdown. Usually Hybrid is 'in-between' and gets confused most.
+
+```
+
+# Part Three: Multiclass from Binary
+
+OvR (One-vs-Rest) - SVC & Logistic Regression
+
+```{python}
+from sklearn.multiclass import OneVsRestClassifier
+
+results_ovr = {}
+for model_name, base_model in [('SVC', SVC(kernel='linear')), ('LogReg', LogisticRegression(max_iter=2000))]:
+    for target in le.classes_:
+        y_ovr = (df['Type'] == target).astype(int)
+        Xtr, Xte, ytr, yte = train_test_split(X, y_ovr, test_size=0.3, random_state=42)
+        base_model.fit(Xtr, ytr)
+        preds = base_model.predict(Xte)
+        f1 = f1_score(yte, preds)
+        acc = accuracy_score(yte, preds)
+        results_ovr[f"{model_name}_{target}"] = (acc, f1)
+        print(f"{model_name} OvR for {target}: Accuracy={acc:.3f}, F1={f1:.3f}")
+
+```
+
+
+OvO (One-vs-One) - SVC & Logistic Regression
+
+
+```{python}
+from sklearn.metrics import roc_auc_score
+
+results_ovo = {}
+ovo_pairs = [('Indica', 'Sativa'), ('Indica', 'Hybrid'), ('Hybrid', 'Sativa')]
+for model_name, base_model in [('SVC', SVC(kernel='linear')), ('LogReg', LogisticRegression(max_iter=2000))]:
+    for (a,b) in ovo_pairs:
+        mask = df['Type'].isin([a,b])
+        X_pair = X[mask]
+        y_pair = (df.loc[mask, 'Type'] == b).astype(int)
+        Xtr, Xte, ytr, yte = train_test_split(X_pair, y_pair, test_size=0.3, random_state=42)
+        base_model.fit(Xtr, ytr)
+        pred_proba = base_model.decision_function(Xte) if model_name == 'SVC' else base_model.predict_proba(Xte)[:,1]
+        roc = roc_auc_score(yte, pred_proba)
+        results_ovo[f"{model_name}_{a}_vs_{b}"] = roc
+        print(f"{model_name} OvO {a} vs {b}: ROC-AUC={roc:.3f}")
+
+```
+
+Q5: How does sklearn’s LogisticRegression and SVC treat multiclass?
+LogisticRegression defaults to OvR (one-vs-rest) for multiclass (multi_class='auto' or 'ovr'), unless you specify 'multinomial'.
+
+SVC uses OvO (one-vs-one) internally for multiclass problems.
