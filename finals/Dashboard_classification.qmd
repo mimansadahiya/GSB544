@@ -1,0 +1,330 @@
+---
+title: "Classification Model Dashboard"
+author: "GSB 544 - Fall 2025"
+format:
+  dashboard:
+    theme: flatly
+    orientation: columns
+    nav-buttons: [github]
+    embed-resources: true
+    pages:
+      - id: overview
+        title: "Model Performance"
+      - id: detailed
+        title: "Detailed Analysis"
+      - id: submission
+        title: "Submission"
+---
+
+
+```{python}
+#| label: setup
+#| include: false
+
+import numpy as np
+import pandas as pd
+import plotnine as p9
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import (
+    accuracy_score, confusion_matrix, roc_auc_score,
+    precision_score, recall_score, f1_score, classification_report
+)
+import warnings
+warnings.filterwarnings("ignore")
+
+```
+
+```{python}
+#| label: load-data
+#| include: false
+
+train = pd.read_csv("CAH-201803-train.csv")
+test = pd.read_csv("CAH-201803-test.csv")
+
+target_col = "political_affiliation"
+y = train[target_col]
+X = train.drop([target_col, "id_num"], axis=1)
+
+X_test = test.drop("id_num", axis=1)
+test_ids = test["id_num"]
+
+X_train, X_valid, y_train, y_valid = train_test_split(
+    X, y, test_size=0.2, random_state=544
+)
+
+numeric_features = X_train.select_dtypes(include=["int64", "float64"]).columns.tolist()
+categorical_features = X_train.select_dtypes(include=["object"]).columns.tolist()
+
+numeric_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="median")),
+    ("scaler", StandardScaler())
+])
+
+categorical_transformer = Pipeline(steps=[
+    ("imputer", SimpleImputer(strategy="most_frequent")),
+    ("onehot", OneHotEncoder(handle_unknown="ignore", sparse_output=False))
+])
+
+preprocessor = ColumnTransformer(
+    transformers=[
+        ("num", numeric_transformer, numeric_features),
+        ("cat", categorical_transformer, categorical_features)
+    ]
+)
+
+```
+
+
+```{python}
+#| label: train-model
+#| include: false
+
+pipe = Pipeline(steps=[
+    ("preprocess", preprocessor),
+    ("model", LogisticRegression(solver="saga", max_iter=5000, random_state=544))
+])
+
+pipe.fit(X_train, y_train)
+
+y_pred = pipe.predict(X_valid)
+y_proba = pipe.predict_proba(X_valid)
+
+accuracy = accuracy_score(y_valid, y_pred)
+precision = precision_score(y_valid, y_pred, average="weighted", zero_division=0)
+recall = recall_score(y_valid, y_pred, average="weighted", zero_division=0)
+f1 = f1_score(y_valid, y_pred, average="weighted", zero_division=0)
+
+try:
+    roc_auc = roc_auc_score(y_valid, y_proba, multi_class="ovr", average="weighted")
+except:
+    roc_auc = None
+
+conf_matrix = confusion_matrix(y_valid, y_pred)
+classes = sorted(y.unique())
+
+y_test_pred = pipe.predict(X_test)
+
+submission = pd.DataFrame({
+    "id_num": test_ids,
+    target_col: y_test_pred
+})
+
+```
+
+# Model Performance {#overview}
+
+## Row {height=20%}
+
+
+```{python}
+#| content: valuebox
+#| title: "Overall Accuracy"
+
+dict(
+    value=f"{accuracy:.1%}",
+    caption="Correctly classified",
+    color="success"
+)
+
+```
+
+```{python}
+#| content: valuebox
+#| title: "Precision"
+
+dict(
+    value=f"{precision:.1%}",
+    caption="True positives rate",
+    color="primary"
+)
+
+```
+
+```{python}
+#| content: valuebox
+#| title: "Recall"
+
+dict(
+    value=f"{recall:.1%}",
+    caption="Coverage of actual cases",
+    color="info"
+)
+
+```
+
+```{python}
+#| content: valuebox
+#| title: "F1 Score"
+
+dict(
+    value=f"{f1:.3f}",
+    caption="Balance of precision & recall",
+    color="secondary"
+)
+
+```
+
+## Row {height=40%}
+
+### Column {width=50%}
+```{python}
+#| title: "Class Distribution (Training Data)"
+
+target_counts = y.value_counts().reset_index()
+target_counts.columns = ['Class', 'Count']
+
+(p9.ggplot(target_counts, p9.aes(x="Class", y="Count", fill="Class"))
+ + p9.geom_col(width=0.6)
+ + p9.geom_text(p9.aes(label="Count"), va="bottom", size=10, color="black")
+ + p9.labs(x="", y="Number of Samples", title="Is data balanced?")
+ + p9.scale_fill_manual(values={
+     "Democrat": "#3498db", 
+     "Republican": "#e74c3c", 
+     "Independent": "#2ecc71"
+ })
+ + p9.theme(figure_size=(6, 4), legend_position="none",
+            panel_background=p9.element_rect(fill="white"),
+            panel_grid_major=p9.element_line(color="#ecf0f1"))
+).draw()
+
+```
+
+### Column {width=50%}
+
+
+```{python}
+#| title: "Prediction Confidence"
+
+y_proba_max = np.max(y_proba, axis=1)
+confidence_df = pd.DataFrame({"Confidence": y_proba_max})
+
+(p9.ggplot(confidence_df, p9.aes(x="Confidence", fill="..count.."))
+ + p9.geom_histogram(bins=30, color="white", alpha=0.8)
+ + p9.scale_fill_gradient(low="#3498db", high="#e74c3c")
+ + p9.labs(x="Model Confidence Score", y="Count", title="Is model confident?")
+ + p9.theme(figure_size=(6, 4), legend_position="none",
+            panel_background=p9.element_rect(fill="white"),
+            panel_grid_major=p9.element_line(color="#ecf0f1"))
+).draw()
+
+```
+
+## Row {height=40%}
+
+### Column
+
+```{python}
+#| include: false
+
+# Create confusion matrix dataframe
+cm_df = pd.DataFrame(conf_matrix, index=classes, columns=classes)
+
+```
+
+```{python}
+#| title: "Confusion Matrix (Validation)"
+
+cm_long = cm_df.reset_index().melt(id_vars='index', var_name='Predicted', value_name='Count')
+cm_long.columns = ['Actual', 'Predicted', 'Count']
+
+(p9.ggplot(cm_long, p9.aes(x="Predicted", y="Actual", fill="Count"))
+ + p9.geom_tile(color="white", size=2)
+ + p9.geom_text(p9.aes(label="Count"), size=12, color="white")
+ + p9.scale_fill_gradient(low="#e8f8f5", high="#27ae60")
+ + p9.labs(x="Predicted Class", y="Actual Class", title="Where does model confuse classes?")
+ + p9.theme(figure_size=(7, 5), legend_position="right",
+            panel_background=p9.element_rect(fill="white"),
+            panel_grid_major=p9.element_blank())
+).draw()
+
+
+```
+
+# Detailed Analysis {#detailed}
+
+## Row {height=50%}
+
+### Column {width=50%}
+
+
+```{python}
+#| title: "Per-Class Performance Metrics"
+
+report = classification_report(y_valid, y_pred, output_dict=True)
+report_df = pd.DataFrame(report).transpose()
+report_df = report_df[report_df.index.isin(classes)].reset_index()
+report_df.columns = ['Class', 'Precision', 'Recall', 'F1-Score', 'Support']
+
+(p9.ggplot(report_df.melt(id_vars=['Class'], value_vars=['Precision', 'Recall', 'F1-Score']),
+           p9.aes(x="Class", y="value", fill="variable"))
+ + p9.geom_col(position="dodge", width=0.7)
+ + p9.scale_y_continuous(limits=[0, 1])
+ + p9.scale_fill_manual(values={
+     "Precision": "#3498db", 
+     "Recall": "#e74c3c", 
+     "F1-Score": "#2ecc71"
+ })
+ + p9.labs(x="", y="Score", fill="Metric", title="Which classes perform best?")
+ + p9.theme(figure_size=(6, 4), legend_position="bottom",
+            panel_background=p9.element_rect(fill="white"),
+            panel_grid_major=p9.element_line(color="#ecf0f1"))
+).draw()
+
+```
+
+### Column {width=50%}
+
+
+```{python}
+#| title: "Classification Report (Text)"
+
+report_str = classification_report(y_valid, y_pred)
+print(report_str)
+
+```
+
+## Row {height=50%}
+
+### Column
+
+```{python}
+#| title: "Raw Confusion Matrix Values"
+
+cm_df
+
+```
+
+# Submission {#submission}
+
+## Row {height=30%}
+
+### Model & Data Summary
+
+| Metric | Value |
+|--------|-------|
+| **Target Variable** | Political Affiliation |
+| **Classes** | Democrat, Republican, Independent |
+| **Training Samples** | 2,197 |
+| **Validation Samples** | 549 |
+| **Model Type** | Logistic Regression (Multinomial) |
+| **Preprocessing** | StandardScaler (numeric) + OneHotEncoder (categorical) |
+| **Validation Accuracy** | 62.1% |
+| **Validation F1 Score** | 0.621 |
+
+
+## Row {height=70%}
+
+### Column
+
+
+```{python}
+#| title: "Kaggle Submission File (First 20 rows)"
+
+submission.head(20)
+
+```

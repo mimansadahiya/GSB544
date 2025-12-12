@@ -2241,7 +2241,7 @@ vertical-align: -.125em;
 
 
 <p>Github link: <a href="https://github.com/mimansadahiya/GSB544/blob/main/week6/lab5.html" class="uri">https://github.com/mimansadahiya/GSB544/blob/main/week6/lab5.html</a></p>
-<div id="df779ffa" class="cell" data-execution_count="1">
+<div id="b5df6281" class="cell" data-execution_count="1">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2255,7 +2255,7 @@ vertical-align: -.125em;
 <ol type="1">
 <li>Dropped null values(no null values found)</li>
 </ol>
-<div id="998fff38" class="cell" data-execution_count="2">
+<div id="a8878c95" class="cell" data-execution_count="2">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> df.dropna() <span class="co"># no null values in the dataset</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -2264,7 +2264,7 @@ vertical-align: -.125em;
 <ol start="2" type="1">
 <li>Created dummies for sex, smoker, region and renamed columns for better understanding</li>
 </ol>
-<div id="d3828920" class="cell" data-execution_count="3">
+<div id="14d9fd0a" class="cell" data-execution_count="3">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>df_dummies <span class="op">=</span> pd.get_dummies(df, columns<span class="op">=</span>[<span class="st">&#39;sex&#39;</span>, <span class="st">&#39;smoker&#39;</span>, <span class="st">&#39;region&#39;</span>], drop_first<span class="op">=</span><span class="va">True</span>)</span>
@@ -2296,12 +2296,12 @@ memory usage: 12.3 KB</code></pre>
 <ol start="3" type="1">
 <li>Displayed some summary statistics including object types for various columns and value counts for sex and smokers</li>
 </ol>
-<div id="b32fa3bb" class="cell" data-execution_count="4">
+<div id="2deb0dd1" class="cell" data-execution_count="4">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>df_dummies.describe()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="68">
+<div class="cell-output cell-output-display" data-execution_count="4">
 <div>
 
 
@@ -2369,7 +2369,7 @@ memory usage: 12.3 KB</code></pre>
 </div>
 </div>
 </div>
-<div id="c67af228" class="cell" data-execution_count="5">
+<div id="5949ba99" class="cell" data-execution_count="5">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_dummies[<span class="st">&#39;Male&#39;</span>].value_counts())     </span>
@@ -2389,7 +2389,7 @@ Name: count, dtype: int64</code></pre>
 </section>
 <section id="plots-to-understand-patterns-in-data" class="level4">
 <h4 class="anchored" data-anchor-id="plots-to-understand-patterns-in-data">2. Plots to understand patterns in data</h4>
-<div id="e162d8ee" class="cell" data-execution_count="6">
+<div id="1296197d" class="cell" data-execution_count="6">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># types of data for plotting: numerical(discrete or continuuis), time series, categorical, paired data</span></span>
@@ -2424,7 +2424,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 <p>The plot shows that insurance charges generally increase with age for both males and females. For males, the increase is steady and nearly linear, with charges starting low at younger ages and rising toward $20,000 by age 70. For females, charges are consistently higher across all ages and the data appears to form two separate upward trends, suggesting another factor may be influencing charges for different groups of women. Overall, insurance costs for females remain above those for males at every age.</p>
 <p>Now lets look at BMI and age together</p>
-<div id="db3f42b6" class="cell" data-execution_count="7">
+<div id="c1274f72" class="cell" data-execution_count="7">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
@@ -2456,7 +2456,7 @@ Name: count, dtype: int64</code></pre>
 </div>
 <p>The scatter plot does not reveal a very distinct pattern—both males and females appear to be evenly dispersed overall. However, it’s noticeable that there are more data points in the younger (ages 10–30) and older (ages 50–70) age groups. The points are more concentrated near these extremes rather than in the middle age range. This suggests that the dataset contains more information about individuals who are either relatively young or elderly—groups that typically experience greater variability in insurance costs due to developing or changing health risks.</p>
 <p>Now lets see how the pattern is affected by people who smoke</p>
-<div id="56c357e8" class="cell" data-execution_count="8">
+<div id="a24e2dd5" class="cell" data-execution_count="8">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> <span class="op">*</span></span>
@@ -2492,7 +2492,7 @@ Name: count, dtype: int64</code></pre>
 <section id="how-does-age-impact-insurance-charges" class="level3">
 <h3 class="anchored" data-anchor-id="how-does-age-impact-insurance-charges">1. How Does Age Impact Insurance Charges?</h3>
 <p>Importing essential libraries</p>
-<div id="b4cdca2b" class="cell" data-execution_count="9">
+<div id="cd70971a" class="cell" data-execution_count="9">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
@@ -2504,7 +2504,7 @@ Name: count, dtype: int64</code></pre>
 </details>
 </div>
 <p>Model with pipelines</p>
-<div id="af0e6596" class="cell" data-execution_count="10">
+<div id="7beed946" class="cell" data-execution_count="10">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Preparing the data</span></span>
@@ -2514,7 +2514,7 @@ Name: count, dtype: int64</code></pre>
 <span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="a00ef057" class="cell" data-execution_count="11">
+<div id="d4da7b31" class="cell" data-execution_count="11">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># pipeline for structure</span></span>
@@ -2551,7 +2551,7 @@ Coefficient for age: 3481.01</code></pre>
 </section>
 <section id="how-does-age-and-sex-together-impact-insurance-charges" class="level3">
 <h3 class="anchored" data-anchor-id="how-does-age-and-sex-together-impact-insurance-charges">2. How Does Age and Sex Together Impact Insurance Charges?</h3>
-<div id="b2b4e550" class="cell" data-execution_count="12">
+<div id="d8e8f662" class="cell" data-execution_count="12">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -2603,7 +2603,7 @@ Coefficient for sex: 801.75</code></pre>
 </section>
 <section id="how-does-smoking-impact-insurance-charges" class="level3">
 <h3 class="anchored" data-anchor-id="how-does-smoking-impact-insurance-charges">3. How Does Smoking Impact Insurance Charges?</h3>
-<div id="dc55ee36" class="cell" data-execution_count="13">
+<div id="c1c04d42" class="cell" data-execution_count="13">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeating the same code for this model as well, but replaced sex with smokers for explanatory variables</span></span>
@@ -2655,7 +2655,7 @@ Coefficient for smokers: 9386.85</code></pre>
 <h2 class="anchored" data-anchor-id="part-three-multiple-linear-models">Part Three: Multiple Linear Models</h2>
 <section id="effect-of-age-and-bmi-on-charges" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-age-and-bmi-on-charges">1. Effect of Age and BMI on Charges</h3>
-<div id="436b7720" class="cell" data-execution_count="14">
+<div id="d614f263" class="cell" data-execution_count="14">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># repeating the same code for this model as well, but added sex as explanatory variable</span></span>
@@ -2703,7 +2703,7 @@ Coefficient for bmi: 1354.12</code></pre>
 </section>
 <section id="effect-of-age-and-age2-on-charges" class="level3">
 <h3 class="anchored" data-anchor-id="effect-of-age-and-age2-on-charges">2. Effect of Age and Age^2 on Charges</h3>
-<div id="8080ff74" class="cell" data-execution_count="15">
+<div id="dbdea5d2" class="cell" data-execution_count="15">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>df_dummies[<span class="st">&#39;age_squared&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;age&#39;</span>] <span class="op">**</span> <span class="dv">2</span></span>
@@ -2715,7 +2715,7 @@ Coefficient for bmi: 1354.12</code></pre>
 <span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>X_train, X_test, y_train, y_test <span class="op">=</span> train_test_split(X, y, test_size<span class="op">=</span><span class="fl">0.2</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="2e64760e" class="cell" data-execution_count="16">
+<div id="be8378fe" class="cell" data-execution_count="16">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>pipeline <span class="op">=</span> Pipeline([</span>
@@ -2754,7 +2754,7 @@ R-squared: 0.13</code></pre>
 </section>
 <section id="polynomial-model-degree-4" class="level3">
 <h3 class="anchored" data-anchor-id="polynomial-model-degree-4">3. Polynomial model (degree 4)</h3>
-<div id="5d6179b8" class="cell" data-execution_count="17">
+<div id="b265117e" class="cell" data-execution_count="17">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Use only &#39;age&#39; to fit the polynomial</span></span>
@@ -2791,7 +2791,7 @@ R-squared: 0.14</code></pre>
 </section>
 <section id="polynomial-model-for-age-degree-12" class="level3">
 <h3 class="anchored" data-anchor-id="polynomial-model-for-age-degree-12">4. Polynomial model for age (degree 12)</h3>
-<div id="f9518587" class="cell" data-execution_count="18">
+<div id="a5f025f7" class="cell" data-execution_count="18">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> df_dummies[[<span class="st">&#39;age&#39;</span>]]</span>
@@ -2827,12 +2827,12 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="comparison-of-mse-and-r-squared" class="level3">
 <h3 class="anchored" data-anchor-id="comparison-of-mse-and-r-squared">5. Comparison of MSE and R-squared</h3>
-<div id="291b080b" class="cell" data-execution_count="19">
+<div id="58673cef" class="cell" data-execution_count="19">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>results_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="83">
+<div class="cell-output cell-output-display" data-execution_count="19">
 <div>
 
 
@@ -2892,7 +2892,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="plotting-degree-12-for-age" class="level3">
 <h3 class="anchored" data-anchor-id="plotting-degree-12-for-age">6. Plotting degree 12 for age</h3>
-<div id="b06bb4f8" class="cell" data-execution_count="20">
+<div id="04231cd2" class="cell" data-execution_count="20">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -2930,13 +2930,13 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="part-four-new-data" class="level2">
 <h2 class="anchored" data-anchor-id="part-four-new-data">Part Four: New data</h2>
-<div id="9d8dc67c" class="cell" data-execution_count="21">
+<div id="6d4c94c1" class="cell" data-execution_count="21">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> pd.read_csv(<span class="st">&quot;https://www.dropbox.com/s/sky86agc4s8c6qe/insurance_costs_2.csv?dl=1&quot;</span>)</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>df_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="85">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <div>
 
 
@@ -3060,7 +3060,7 @@ R-squared: 0.12</code></pre>
 </div>
 </div>
 <p>Data CLeaning</p>
-<div id="a7dd9332" class="cell" data-execution_count="22">
+<div id="2bf1d064" class="cell" data-execution_count="22">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>df_new <span class="op">=</span> df.dropna() <span class="co"># no null values in the dataset</span></span>
@@ -3079,7 +3079,7 @@ R-squared: 0.12</code></pre>
 </div>
 <section id="age-as-predictor" class="level3">
 <h3 class="anchored" data-anchor-id="age-as-predictor">Age as predictor</h3>
-<div id="326afa83" class="cell" data-execution_count="23">
+<div id="80ca9e59" class="cell" data-execution_count="23">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>results_df_new <span class="op">=</span> pd.DataFrame(columns<span class="op">=</span>[<span class="st">&#39;Model&#39;</span>, <span class="st">&#39;MSE&#39;</span>, <span class="st">&#39;Interpretation&#39;</span>]) <span class="co">#empty dataframe to store MSEs</span></span>
@@ -3107,7 +3107,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="age-and-bmi-as-predictor" class="level3">
 <h3 class="anchored" data-anchor-id="age-and-bmi-as-predictor">Age and BMI as predictor</h3>
-<div id="7c37bc72" class="cell" data-execution_count="24">
+<div id="fb3ac14f" class="cell" data-execution_count="24">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> df_dummies_new[[<span class="st">&#39;age&#39;</span>, <span class="st">&#39;bmi&#39;</span>]]</span>
@@ -3137,7 +3137,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="age-bmi-and-smoking-as-predictors" class="level3">
 <h3 class="anchored" data-anchor-id="age-bmi-and-smoking-as-predictors">Age, BMI and Smoking as predictors</h3>
-<div id="0585ee8b" class="cell" data-execution_count="25">
+<div id="25422954" class="cell" data-execution_count="25">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>X_test <span class="op">=</span> df_dummies_new[[<span class="st">&#39;age&#39;</span>, <span class="st">&#39;bmi&#39;</span>, <span class="st">&#39;Smokes&#39;</span>]]</span>
@@ -3166,7 +3166,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="age-bmi-age-bmi-smoker" class="level3">
 <h3 class="anchored" data-anchor-id="age-bmi-age-bmi-smoker">Age, BMI, (Age + BMI)* Smoker</h3>
-<div id="5d0222bd" class="cell" data-execution_count="26">
+<div id="f1d1856b" class="cell" data-execution_count="26">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Preparing the data:</span></span>
@@ -3177,7 +3177,7 @@ R-squared: 0.12</code></pre>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true" tabindex="-1"></a>df_dummies_new.<span class="bu">eval</span>(<span class="st">&#39;bmi_smoker = bmi * Smokes&#39;</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>df_dummies</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="90">
+<div class="cell-output cell-output-display" data-execution_count="26">
 <div>
 
 
@@ -3360,7 +3360,7 @@ R-squared: 0.12</code></pre>
 </div>
 </div>
 </div>
-<div id="44dbd406" class="cell" data-execution_count="27">
+<div id="5125b189" class="cell" data-execution_count="27">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> df_dummies[[<span class="st">&#39;age&#39;</span>, <span class="st">&#39;bmi&#39;</span>, <span class="st">&#39;age_smoker&#39;</span>, <span class="st">&#39;bmi_smoker&#39;</span>]]</span>
@@ -3388,12 +3388,12 @@ R-squared: 0.12</code></pre>
 </div>
 </div>
 <p>Comparison of MSEs</p>
-<div id="9c843184" class="cell" data-execution_count="28">
+<div id="894ce61c" class="cell" data-execution_count="28">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>results_df_new</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="92">
+<div class="cell-output cell-output-display" data-execution_count="28">
 <div>
 
 
@@ -3440,7 +3440,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="age-bmi-smoker-age-bmi-smoker" class="level3">
 <h3 class="anchored" data-anchor-id="age-bmi-smoker-age-bmi-smoker">Age, BMI, Smoker, (age + bmi)* smoker</h3>
-<div id="7034e2fb" class="cell" data-execution_count="29">
+<div id="78bf7968" class="cell" data-execution_count="29">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>X_train <span class="op">=</span> df_dummies[[<span class="st">&#39;age&#39;</span>, <span class="st">&#39;bmi&#39;</span>, <span class="st">&#39;Smokes&#39;</span>, <span class="st">&#39;age_smoker&#39;</span>, <span class="st">&#39;bmi_smoker&#39;</span> ]]</span>
@@ -3469,7 +3469,7 @@ R-squared: 0.12</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>MSE : 18674284.77</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="93">
+<div class="cell-output cell-output-display" data-execution_count="29">
 <div>
 
 
@@ -3565,7 +3565,7 @@ R-squared: 0.12</code></pre>
 </section>
 <section id="plotting-for-best-model-for-part-4" class="level3">
 <h3 class="anchored" data-anchor-id="plotting-for-best-model-for-part-4">Plotting for best model for part 4</h3>
-<div id="763da586" class="cell" data-execution_count="30">
+<div id="716c07ec" class="cell" data-execution_count="30">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># using residuals and y_pred</span></span>
@@ -3596,7 +3596,7 @@ R-squared: 0.12</code></pre>
 <section id="part-five-full-exploration" class="level2">
 <h2 class="anchored" data-anchor-id="part-five-full-exploration">Part Five: Full Exploration</h2>
 <p>From part one, we found that a high degree polynomial model using age alone gave the best fit, while part two showed that including interaction terms between age, BMI, and smoker status improved prediction accuracy. Based on these results, the best model should include a polynomial term for age and interaction terms for age and BMI with smoker status. Additionally, since the initial plots indicated that sex has a noticeable effect—particularly with some females showing higher charges—it makes sense to add sex as a predictor. Therefore, the optimal model would combine polynomial age terms, BMI, sex, smoker status, and their interactions to best capture the factors affecting insurance charges.</p>
-<div id="9b5ad52f" class="cell" data-execution_count="31">
+<div id="2abe1903" class="cell" data-execution_count="31">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df_dummies.<span class="bu">eval</span>(<span class="st">&#39;age_sex = age * Male&#39;</span>, inplace<span class="op">=</span><span class="va">True</span>)</span>
@@ -3649,7 +3649,7 @@ R-squared: 0.88</code></pre>
 </div>
 </div>
 <p>Note: Using degree 12 for all variables resulted in a very high R-squared (0.95), showing excellent fit and precision. However, because degree 12 is quite extreme for most modeling situations, I also tested degree 3, which still explained a large portion of the variation in the data and provided a more balanced, practical model.</p>
-<div id="3179583d" class="cell" data-execution_count="32">
+<div id="47fe5b71" class="cell" data-execution_count="32">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>plot_df <span class="op">=</span> pd.DataFrame({<span class="st">&#39;y_pred&#39;</span>: y_pred, <span class="st">&#39;residuals&#39;</span>: residuals})</span>
